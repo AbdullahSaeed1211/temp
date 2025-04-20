@@ -424,14 +424,14 @@ bar
     title Feature Importance in Stroke Prediction Model
     axis bottom
     stack
-        Age                 : 25
-        Avg Glucose Level   : 20
-        Hypertension        : 15
-        Heart Disease       : 15
-        BMI                 : 10
-        Smoking Status      : 8
-        Gender              : 4
-        Other Factors       : 3
+        Age                 : 25 "#4285F4"
+        Avg Glucose Level   : 20 "#EA4335"
+        Hypertension        : 15 "#FBBC05"
+        Heart Disease       : 15 "#34A853"
+        BMI                 : 10 "#5F6368"
+        Smoking Status      : 8 "#8AB4F8"
+        Gender              : 4 "#F6AEA9"
+        Other Factors       : 3 "#CEEAD6"
 ```
 
 **Model Serialization:**
@@ -500,9 +500,9 @@ bar
     title Impact of Data Augmentation on Model Performance
     axis bottom
     stack
-        No Augmentation      : 87
-        Basic Augmentation   : 92
-        Advanced Augmentation: 95
+        No Augmentation      : 87 "#F06292"
+        Basic Augmentation   : 92 "#9575CD"
+        Advanced Augmentation: 95 "#4DD0E1"
 ```
 
 **Model Conversion for Deployment:**
@@ -582,9 +582,9 @@ Further analysis of misclassifications revealed interesting patterns:
 
 **Impact of Class Weighting:**
 
-The Alzheimer's dataset exhibited significant class imbalance, particularly for the moderate dementia category. Table 18 demonstrates the impact of different class weighting strategies:
+The Alzheimer's dataset exhibited significant class imbalance, particularly for the moderate dementia category. Table 4 demonstrates the impact of different class weighting strategies:
 
-**Table 18: Impact of Class Weighting Strategies**
+**Table 4: Impact of Class Weighting Strategies**
 
 | Weighting Strategy | Overall Accuracy | Non-Demented | Very Mild | Mild | Moderate |
 |--------------------|------------------|--------------|-----------|------|----------|
@@ -599,7 +599,7 @@ The custom weighting strategy (giving progressively higher weights to classes wi
 
 Given the correlation between age and Alzheimer's disease, the model's performance was analyzed across different age groups:
 
-**Table 19: Performance Across Age Groups**
+**Table 5: Performance Across Age Groups**
 
 | Age Group | Accuracy | Precision | Recall | F1 Score |
 |-----------|----------|-----------|--------|----------|
@@ -1110,43 +1110,44 @@ The BrainWise architecture follows a modern, distributed approach that separates
 ```mermaid
 flowchart TD
     subgraph Client["Client Layer"]
-        UI[UI Components]
-        Form[Form Management]
-        ClientState[Client State]
-        Validation[Form Validation]
-        ClientFetch[Data Fetching]
+        direction TB
+        UI[UI Components]:::clientNode
+        Form[Form Management]:::clientNode
+        ClientState[Client State]:::clientNode
+        Validation[Form Validation]:::clientNode
+        ClientFetch[Data Fetching]:::clientNode
     end
 
     subgraph NextServer["Next.js Server"]
         subgraph ServerRendering["Server Rendering"]
-            SSR[Server-Side Rendering]
-            RSC[React Server Components]
-            ISR[Incremental Static Regeneration]
+            SSR[Server-Side Rendering]:::renderNode
+            RSC[React Server Components]:::renderNode
+            ISR[Incremental Static Regeneration]:::renderNode
         end
         
         subgraph APILayer["API Layer"]
-            APIRoutes[API Route Handlers]
-            Authentication[Authentication]
-            Middleware[API Middleware]
+            APIRoutes[API Route Handlers]:::apiNode
+            Authentication[Authentication]:::apiNode
+            Middleware[API Middleware]:::apiNode
         end
         
         subgraph DataLayer["Data Layer"]
-            DBAccess[Database Access]
-            Caching[Data Caching]
-            ApiIntegration[External API Integration]
+            DBAccess[Database Access]:::dataNode
+            Caching[Data Caching]:::dataNode
+            ApiIntegration[External API Integration]:::dataNode
         end
     end
 
     subgraph MLServices["ML Services (Hugging Face)"]
-        StrokeAPI[Stroke Prediction API]
-        TumorAPI[Brain Tumor Detection API]
-        AlzheimersAPI[Alzheimer's Detection API]
+        StrokeAPI[Stroke Prediction API]:::mlNode
+        TumorAPI[Brain Tumor Detection API]:::mlNode
+        AlzheimersAPI[Alzheimer's Detection API]:::mlNode
     end
 
     subgraph ExternalServices["External Services"]
-        MongoDB[(MongoDB Atlas)]
-        UploadCare[UploadCare CDN]
-        SemanticScholar[Semantic Scholar API]
+        MongoDB[(MongoDB Atlas)]:::databaseNode
+        UploadCare[UploadCare CDN]:::externalNode
+        SemanticScholar[Semantic Scholar API]:::externalNode
     end
 
     UI --> Form
@@ -1173,6 +1174,14 @@ flowchart TD
     ApiIntegration --> SemanticScholar
     
     ServerRendering --> DataLayer
+    
+    classDef clientNode fill:#E3F2FD,stroke:#1565C0,color:#0D47A1
+    classDef renderNode fill:#E8F5E9,stroke:#388E3C,color:#1B5E20
+    classDef apiNode fill:#FFFDE7,stroke:#FBC02D,color:#F57F17
+    classDef dataNode fill:#FFEBEE,stroke:#D32F2F,color:#B71C1C
+    classDef mlNode fill:#F3E5F5,stroke:#8E24AA,color:#4A148C
+    classDef externalNode fill:#FFF3E0,stroke:#FF9800,color:#E65100
+    classDef databaseNode fill:#E0F7FA,stroke:#0097A7,color:#006064
 ```
 
 The architecture consists of four primary layers:
@@ -1245,43 +1254,43 @@ flowchart TD
         direction TB
         
         subgraph Pages["Page Components"]
-            HomePage[Home Page]
-            DashboardPage[Dashboard Page]
-            PredictorPage[Predictor Page]
-            ResearchPage[Research Page]
-            SettingsPage[Settings Page]
+            HomePage[Home Page]:::pageNode
+            DashboardPage[Dashboard Page]:::pageNode
+            PredictorPage[Predictor Page]:::pageNode
+            ResearchPage[Research Page]:::pageNode
+            SettingsPage[Settings Page]:::pageNode
         end
         
         subgraph Layouts["Layout Components"]
-            MainLayout[Main Layout]
-            DashboardLayout[Dashboard Layout]
-            PredictorLayout[Predictor Layout]
+            MainLayout[Main Layout]:::layoutNode
+            DashboardLayout[Dashboard Layout]:::layoutNode
+            PredictorLayout[Predictor Layout]:::layoutNode
         end
         
         subgraph SharedUI["Shared UI Components"]
             direction TB
-            Button[Button]
-            Card[Card]
-            Input[Input]
-            Select[Select]
-            Slider[Slider]
-            Alert[Alert]
-            Modal[Modal]
-            Toast[Toast]
+            Button[Button]:::uiNode
+            Card[Card]:::uiNode
+            Input[Input]:::uiNode
+            Select[Select]:::uiNode
+            Slider[Slider]:::uiNode
+            Alert[Alert]:::uiNode
+            Modal[Modal]:::uiNode
+            Toast[Toast]:::uiNode
         end
         
         subgraph Forms["Form Components"]
-            StrokeForm[Stroke Prediction Form]
-            HealthMetricsForm[Health Metrics Form]
-            UploadForm[Image Upload Form]
-            AuthForms[Authentication Forms]
+            StrokeForm[Stroke Prediction Form]:::formNode
+            HealthMetricsForm[Health Metrics Form]:::formNode
+            UploadForm[Image Upload Form]:::formNode
+            AuthForms[Authentication Forms]:::formNode
         end
         
         subgraph Domain["Domain-Specific Components"]
-            HealthMetricChart[Health Metric Chart]
-            RiskIndicator[Risk Indicator]
-            ResultsDisplay[Results Display]
-            ImagePreview[Image Preview]
+            HealthMetricChart[Health Metric Chart]:::domainNode
+            RiskIndicator[Risk Indicator]:::domainNode
+            ResultsDisplay[Results Display]:::domainNode
+            ImagePreview[Image Preview]:::domainNode
         end
     end
     
@@ -1291,6 +1300,12 @@ flowchart TD
     Pages --> Forms
     Forms --> SharedUI
     Domain --> SharedUI
+    
+    classDef pageNode fill:#E8EAF6,stroke:#3949AB,color:#1A237E
+    classDef layoutNode fill:#E0F2F1,stroke:#00897B,color:#004D40
+    classDef uiNode fill:#F3E5F5,stroke:#8E24AA,color:#4A148C
+    classDef formNode fill:#FFF3E0,stroke:#FF9800,color:#E65100
+    classDef domainNode fill:#E8F5E9,stroke:#43A047,color:#1B5E20
 ```
 
 **Server Layer Components:**
@@ -1345,28 +1360,28 @@ flowchart TD
         direction TB
         
         subgraph API["API Layer"]
-            Endpoints[API Endpoints]
-            Validation[Request Validation]
-            ResponseFormat[Response Formatting]
+            Endpoints[API Endpoints]:::apiNode
+            Validation[Request Validation]:::apiNode
+            ResponseFormat[Response Formatting]:::apiNode
         end
         
         subgraph Inference["Inference Layer"]
-            ModelLoader[Model Loader]
-            Preprocessor[Input Preprocessor]
-            ModelInference[Model Inference]
-            Postprocessor[Output Postprocessor]
+            ModelLoader[Model Loader]:::inferenceNode
+            Preprocessor[Input Preprocessor]:::inferenceNode
+            ModelInference[Model Inference]:::inferenceNode
+            Postprocessor[Output Postprocessor]:::inferenceNode
         end
         
         subgraph Monitoring["Monitoring Layer"]
-            Logger[Request Logger]
-            ErrorTracker[Error Tracker]
-            PerformanceMetrics[Performance Metrics]
+            Logger[Request Logger]:::monitoringNode
+            ErrorTracker[Error Tracker]:::monitoringNode
+            PerformanceMetrics[Performance Metrics]:::monitoringNode
         end
         
         subgraph ModelAssets["Model Assets"]
-            TrainedModel[Trained Model]
-            Metadata[Model Metadata]
-            Preprocessors[Preprocessor Definitions]
+            TrainedModel[Trained Model]:::assetNode
+            Metadata[Model Metadata]:::assetNode
+            Preprocessors[Preprocessor Definitions]:::assetNode
         end
     end
     
@@ -1374,6 +1389,11 @@ flowchart TD
     Inference --> ModelAssets
     API --> Monitoring
     Inference --> Monitoring
+    
+    classDef apiNode fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1
+    classDef inferenceNode fill:#F3E5F5,stroke:#8E24AA,color:#4A148C
+    classDef monitoringNode fill:#FFF8E1,stroke:#FFB300,color:#FF6F00
+    classDef assetNode fill:#E0F2F1,stroke:#00897B,color:#004D40
 ```
 
 #### 4.2.3. Cross-Cutting Concerns
@@ -1413,16 +1433,19 @@ The BrainWise system implements several key data flow patterns to handle differe
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant UI as User Interface
-    participant API as Next.js API Route
-    participant ML as Stroke Prediction API
+    participant User as 👤 User
+    participant UI as 🖥️ User Interface
+    participant API as 🔄 Next.js API Route
+    participant ML as 🧠 Stroke Prediction API
     
     User->>UI: Enter health data
+    Note over UI: Client validation
     UI->>UI: Validate input
     UI->>API: Submit validated data
+    Note over API: Server processing
     API->>API: Authorize request
     API->>ML: Forward prediction request
+    Note over ML: Model execution
     ML->>ML: Preprocess data
     ML->>ML: Execute prediction model
     ML->>ML: Calculate risk factors
@@ -1437,12 +1460,12 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant UI as User Interface
-    participant Upload as Upload Service
-    participant API as Next.js API Route
-    participant ML as Brain Scan API
-    participant DB as Database
+    participant User as 👤 User
+    participant UI as 🖥️ User Interface
+    participant Upload as 📤 Upload Service
+    participant API as 🔄 Next.js API Route
+    participant ML as 🧠 Brain Scan API
+    participant DB as 💾 Database
     
     User->>UI: Select and upload scan
     UI->>Upload: Direct upload to CDN
@@ -1469,11 +1492,11 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant UI as User Interface
-    participant API as Next.js API Route
-    participant DB as Database
-    participant Chart as Data Visualization
+    participant User as 👤 User
+    participant UI as 🖥️ User Interface
+    participant API as 🔄 Next.js API Route
+    participant DB as 💾 Database
+    participant Chart as 📊 Data Visualization
     
     User->>UI: Enter health measurement
     UI->>UI: Validate input
@@ -1618,6 +1641,11 @@ flowchart TD
         MobileForm --> MobileResults
         MobileResults --> MobileVisualization
     end
+    
+    classDef formNode fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1
+    classDef vizNode fill:#F3E5F5,stroke:#8E24AA,color:#4A148C
+    classDef resultNode fill:#E8F5E9,stroke:#43A047,color:#1B5E20
+    classDef combinedNode fill:#FFF8E1,stroke:#FFB300,color:#FF6F00
 ```
 
 #### 4.3.3. Accessibility Considerations
@@ -1662,28 +1690,32 @@ flowchart TD
         direction TB
         
         subgraph FastAPI["FastAPI Application"]
-            Endpoints[API Endpoints]
-            Middleware[Middleware]
-            ErrorHandling[Error Handling]
+            Endpoints[API Endpoints]:::apiNode
+            Middleware[Middleware]:::apiNode
+            ErrorHandling[Error Handling]:::apiNode
         end
         
         subgraph ModelInfrastructure["Model Infrastructure"]
-            ModelLoader[Model Loader]
-            Preprocessor[Preprocessor]
-            Inference[Inference Engine]
-            Postprocessor[Postprocessor]
+            ModelLoader[Model Loader]:::modelNode
+            Preprocessor[Preprocessor]:::modelNode
+            Inference[Inference Engine]:::modelNode
+            Postprocessor[Postprocessor]:::modelNode
         end
         
         subgraph DockerContainer["Docker Container"]
-            Requirements[Dependencies]
-            Environment[Environment Configuration]
-            EntryPoint[Application Entry Point]
+            Requirements[Dependencies]:::dockerNode
+            Environment[Environment Configuration]:::dockerNode
+            EntryPoint[Application Entry Point]:::dockerNode
         end
     end
     
     FastAPI --> ModelInfrastructure
     FastAPI --> DockerContainer
     ModelInfrastructure --> DockerContainer
+    
+    classDef apiNode fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1
+    classDef modelNode fill:#F3E5F5,stroke:#8E24AA,color:#4A148C
+    classDef dockerNode fill:#E8F5E9,stroke:#43A047,color:#1B5E20
 ```
 
 Each model was containerized with its specific dependencies, ensuring reproducibility and isolation. Table 6 details the specific configurations for each model:
@@ -1942,14 +1974,14 @@ The continuous integration and continuous deployment (CI/CD) pipeline automated 
 
 ```mermaid
 flowchart TD
-    Code[Code Changes] --> Build[Build Process]
-    Build --> Test[Automated Testing]
-    Test --> QADeploy[Deploy to QA]
-    QADeploy --> QATests[QA Testing]
-    QATests --> StagingDeploy[Deploy to Staging]
-    StagingDeploy --> UAT[User Acceptance Testing]
-    UAT --> ProdDeploy[Deploy to Production]
-    ProdDeploy --> Monitoring[Production Monitoring]
+    Code[Code Changes]:::codeNode --> Build[Build Process]:::buildNode
+    Build --> Test[Automated Testing]:::testNode
+    Test --> QADeploy[Deploy to QA]:::deployNode
+    QADeploy --> QATests[QA Testing]:::testNode
+    QATests --> StagingDeploy[Deploy to Staging]:::deployNode
+    StagingDeploy --> UAT[User Acceptance Testing]:::testNode
+    UAT --> ProdDeploy[Deploy to Production]:::prodNode
+    ProdDeploy --> Monitoring[Production Monitoring]:::monitorNode
     
     subgraph Automation["Automated Checks"]
         Build
@@ -1970,6 +2002,18 @@ flowchart TD
         ProdDeploy
         Monitoring
     end
+    
+    classDef codeNode fill:#E8EAF6,stroke:#3949AB,color:#1A237E
+    classDef buildNode fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1
+    classDef testNode fill:#F3E5F5,stroke:#8E24AA,color:#4A148C
+    classDef deployNode fill:#FFF8E1,stroke:#FFB300,color:#FF6F00
+    classDef prodNode fill:#E8F5E9,stroke:#43A047,color:#1B5E20
+    classDef monitorNode fill:#FFEBEE,stroke:#E53935,color:#B71C1C
+    
+    classDef Automation fill:#FAFAFA,stroke:#9E9E9E,color:#212121
+    classDef QAEnvironment fill:#E0F7FA,stroke:#00ACC1,color:#006064
+    classDef StagingEnvironment fill:#FFF3E0,stroke:#FF9800,color:#E65100
+    classDef ProductionEnvironment fill:#EFEBE9,stroke:#795548,color:#3E2723
 ```
 
 **Performance Optimizations:**
