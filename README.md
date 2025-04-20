@@ -2996,3 +2996,129 @@ For broader impact, several scaling and integration approaches could be pursued:
 3. **Whitelabel Solutions**: Developing configurable versions that healthcare organizations could deploy under their own branding would facilitate institutional adoption.
 
 4. **Public Health Partnerships**: Collaborating with public health agencies to deploy population-level brain health monitoring could support early intervention initiatives.
+
+### 7.5. Research Extensions
+
+The BrainWise platform establishes a foundation for several promising research extensions:
+
+1. **Multimodal Data Integration**: Future research could explore the integration of additional data modalities beyond MRI scans and clinical parameters, including genetic markers, lifestyle data from wearables, and social determinants of health. This multimodal approach could enhance prediction accuracy and provide more personalized risk assessments.
+
+2. **Longitudinal Predictive Analytics**: Building on the current models, research could focus on developing predictive capabilities that track neurological health trajectories over time, potentially identifying subtle changes before clinical symptoms appear.
+
+3. **Federated Learning Implementation**: To address privacy concerns while expanding training data availability, research into federated learning approaches could enable model training across multiple healthcare institutions without sharing sensitive patient data.
+
+4. **Explainable AI Advancements**: Further research into explainable AI techniques specific to neurological applications could enhance transparency and trust, particularly for clinical use cases where understanding model reasoning is crucial.
+
+5. **Personalized Intervention Recommendation Systems**: Building upon risk prediction, research could develop AI-driven systems that recommend personalized interventions based on individual risk profiles and ongoing monitoring data.
+
+6. **Cross-Condition Pattern Recognition**: Research into neural networks capable of identifying patterns across different neurological conditions could potentially discover previously unknown relationships between disease processes.
+
+7. **Real-World Implementation Studies**: Systematic research into the implementation of AI-based neurological assessment tools in diverse healthcare settings could identify best practices for integration into clinical workflows.
+
+8. **Automated Longitudinal Monitoring**: Developing algorithms that automatically detect significant changes in neurological health metrics over time could enable more proactive clinical intervention.
+
+9. **Population Health Applications**: Research extending BrainWise towards population-level risk stratification could help healthcare systems allocate resources more effectively and develop targeted preventive programs.
+
+10. **Low-Resource Implementation Models**: Exploring adaptations of the BrainWise approach for low-resource settings could address global disparities in neurological care access.
+
+## REFERENCES
+
+[1] World Health Organization. (2021). Neurological disorders: public health challenges. Geneva: WHO Press.
+
+[2] Feigin, V. L., Nichols, E., Alam, T., Bannick, M. S., Beghi, E., Blake, N., ... & Vos, T. (2019). Global, regional, and national burden of neurological disorders, 1990–2016: a systematic analysis for the Global Burden of Disease Study 2016. The Lancet Neurology, 18(5), 459-480.
+
+[3] Ostrom, Q. T., Patil, N., Cioffi, G., Waite, K., Kruchko, C., & Barnholtz-Sloan, J. S. (2020). CBTRUS Statistical Report: Primary Brain and Other Central Nervous System Tumors Diagnosed in the United States in 2013–2017. Neuro-Oncology, 22(Supplement_1), iv1-iv96.
+
+[4] Alzheimer's Disease International. (2021). World Alzheimer Report 2021: Journey through the diagnosis of dementia. London: ADI.
+
+[5] World Stroke Organization. (2022). Global Stroke Fact Sheet. Geneva: WSO.
+
+[6] GBD 2019 Stroke Collaborators. (2021). Global, regional, and national burden of stroke and its risk factors, 1990–2019: a systematic analysis for the Global Burden of Disease Study 2019. The Lancet Neurology, 20(10), 795-820.
+
+[7] American Heart Association. (2021). Heart Disease and Stroke Statistics—2021 Update. Circulation, 143(8), e254-e743.
+
+[8] Ostrom, Q. T., Gittleman, H., Truitt, G., Boscia, A., Kruchko, C., & Barnholtz-Sloan, J. S. (2018). CBTRUS Statistical Report: Primary Brain and Other Central Nervous System Tumors Diagnosed in the United States in 2011–2015. Neuro-Oncology, 20(suppl_4), iv1-iv86.
+
+[9] Louis, D. N., Perry, A., Reifenberger, G., Von Deimling, A., Figarella-Branger, D., Cavenee, W. K., ... & Ellison, D. W. (2016). The 2016 World Health Organization Classification of Tumors of the Central Nervous System: a summary. Acta neuropathologica, 131(6), 803-820.
+
+[10] Davis, F. G., Freels, S., Grutsch, J., Barlas, S., & Brem, S. (1998). Survival rates in patients with primary malignant brain tumors stratified by patient age and tumor histological type: an analysis based on Surveillance, Epidemiology, and End Results (SEER) data, 1973-1991. Journal of neurosurgery, 88(1), 1-10.
+
+[11] Alzheimer's Association. (2021). 2021 Alzheimer's disease facts and figures. Alzheimer's & Dementia, 17(3), 327-406.
+
+[12] Jack Jr, C. R., Bennett, D. A., Blennow, K., Carrillo, M. C., Dunn, B., Haeberlein, S. B., ... & Silverberg, N. (2018). NIA-AA Research Framework: Toward a biological definition of Alzheimer's disease. Alzheimer's & Dementia, 14(4), 535-562.
+
+[13] Bateman, R. J., Xiong, C., Benzinger, T. L., Fagan, A. M., Goate, A., Fox, N. C., ... & Morris, J. C. (2012). Clinical and biomarker changes in dominantly inherited Alzheimer's disease. New England Journal of Medicine, 367(9), 795-804.
+
+[14] Jiang, F., Jiang, Y., Zhi, H., Dong, Y., Li, H., Ma, S., ... & Wang, Y. (2017). Artificial intelligence in healthcare: past, present and future. Stroke and vascular neurology, 2(4), 230-243.
+
+[15] Jamthikar, A., Gupta, D., Khanna, N. N., Araki, T., Saba, L., Nicolaides, A., ... & Suri, J. S. (2019). A special report on changing trends in preventive stroke/cardiovascular risk assessment via B-mode ultrasonography. Current atherosclerosis reports, 21(7), 25.
+
+[16] Wang, Y., Wang, L., Rastegar-Mojarad, M., Moon, S., Shen, F., Afzal, N., ... & Liu, H. (2018). Clinical information extraction applications: A literature review. Journal of biomedical informatics, 77, 34-49.
+
+[17] Khan, H. A., Jue, W., Mushtaq, M., & Mushtaq, M. U. (2020). Brain tumor classification in MRI image using convolutional neural network. Mathematical Biosciences and Engineering, 17(5), 6203-6216.
+
+[18] Deepak, S., & Ameer, P. M. (2019). Brain tumor classification using deep CNN features via transfer learning. Computers in biology and medicine, 111, 103345.
+
+[19] Ebrahimi-Ghahnavieh, A., Luo, S., & Chiong, R. (2020). Transfer learning for Alzheimer's disease detection on MRI images. IEEE International Conference on Healthcare Informatics.
+
+[20] Jo, T., Nho, K., & Saykin, A. J. (2019). Deep learning in Alzheimer's disease: diagnostic classification and prognostic prediction using neuroimaging data. Frontiers in aging neuroscience, 11, 220.
+
+[21] Yang, S., & Bero, L. (2019). Recognition of mobile health applications for dementia: systematic review, meta-analysis, and content evaluation. BMJ open, 9(1), e023667.
+
+[22] Brewer, J. B. (2009). Fully-automated volumetric MRI with normative ranges: translation to clinical practice. Behavioural neurology, 21(1-2), 21-28.
+
+[23] Weiner, M. W., Nosheny, R., Camacho, M., Truran-Sacrey, D., Mackin, R. S., Flenniken, D., ... & Maruff, P. (2018). The Brain Health Registry: an internet-based platform for recruitment, assessment, and longitudinal monitoring of participants for neuroscience studies. Alzheimer's & Dementia, 14(8), 1063-1076.
+
+[24] Gorgolewski, K. J., Alfaro-Almagro, F., Auer, T., Bellec, P., Capotă, M., Chakravarty, M. M., ... & Poldrack, R. A. (2017). BIDS apps: Improving ease of use, accessibility, and reproducibility of neuroimaging data analysis methods. PLoS computational biology, 13(3), e1005209.
+
+[25] Dorsey, E. R., & Topol, E. J. (2020). Telemedicine 2020 and the next decade. The Lancet, 395(10227), 859.
+
+[26] Litjens, G., Kooi, T., Bejnordi, B. E., Setio, A. A. A., Ciompi, F., Ghafoorian, M., ... & Sánchez, C. I. (2017). A survey on deep learning in medical image analysis. Medical image analysis, 42, 60-88.
+
+[27] Saxena, P., Singh, D., & Patro, K. K. (2020). CNN based approach for brain tumor detection using MRI. International conference on computational intelligence in data science.
+
+[28] Swati, Z. N. K., Zhao, Q., Kabir, M., Ali, F., Ali, Z., Ahmed, S., & Lu, J. (2019). Brain tumor classification for MR images using transfer learning and fine-tuning. Computerized Medical Imaging and Graphics, 75, 34-46.
+
+[29] Pereira, S., Pinto, A., Alves, V., & Silva, C. A. (2016). Brain tumor segmentation using convolutional neural networks in MRI images. IEEE transactions on medical imaging, 35(5), 1240-1251.
+
+[30] Razzak, M. I., Naz, S., & Zaib, A. (2018). Deep learning for medical image processing: Overview, challenges and the future. Classification in BioApps, 323-350.
+
+[31] Holzinger, A., Langs, G., Denk, H., Zatloukal, K., & Müller, H. (2019). Causability and explainability of artificial intelligence in medicine. Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery, 9(4), e1312.
+
+[32] Kaur, R., Kaur, L., & Gupta, S. (2018). Enhanced K-mean clustering algorithm to reduce time complexity for numeric values. International Journal of Advanced Research in Computer Science and Software Engineering, 4(5).
+
+[33] Chen, M., Hao, Y., Hwang, K., Wang, L., & Wang, L. (2017). Disease prediction by machine learning over big data from healthcare communities. IEEE Access, 5, 8869-8879.
+
+[34] Sung, S. F., Lin, C. Y., Hu, Y. H., Chang, E. Y. L., & Chen, C. H. (2020). Artificial intelligence-enabled stroke risk stratification in atrial fibrillation using electrocardiogram. Journal of Clinical Medicine, 9(12), 3960.
+
+[35] Tama, B. A., Im, S., & Lee, S. (2020). Improving an Intelligent Detection System for Coronary Heart Disease Using a Two-Tier Classifier Ensemble. BioMed Research International, 2020.
+
+[36] Ahmad, M. A., Eckert, C., & Teredesai, A. (2018). Interpretable machine learning in healthcare. Proceedings of the 2018 ACM International Conference on Bioinformatics, Computational Biology, and Health Informatics, 559-560.
+
+[37] Kelly, C. J., Karthikesalingam, A., Suleyman, M., Corrado, G., & King, D. (2019). Key challenges for delivering clinical impact with artificial intelligence. BMC medicine, 17(1), 1-9.
+
+[38] Mikowski, M., & Powell, J. (2014). Single page web applications: JavaScript end-to-end. Manning Publications Co.
+
+[39] Abramov, D., & Poulton, G. (2022). React Server Components: A new model for building applications. React Advanced Conference Proceedings.
+
+[40] Harrington, E. (2021). Modern API design with Node.js, GraphQL, and Apollo. O'Reilly Media, Inc.
+
+[41] Biørn-Hansen, A., Majchrzak, T. A., & Grønli, T. M. (2017). Progressive web apps: The possible web-native apps solution? 13th International Conference on Web Information Systems and Technologies.
+
+[42] Wang, L., Zhan, Y., & Li, Y. (2019). Optimizing content delivery networks for web performance: A multi-objective approach. IEEE/ACM International Symposium on Quality of Service, 1-10.
+
+[43] Sammarco, M., Adamsen, D., & Crispo, B. (2020). Analyzing web framework security with static analysis: The case of modern JavaScript web frameworks. ACM Transactions on the Web, 14(2), 1-28.
+
+[44] Kim, M., Yun, J., Cho, Y., Shin, K., Jang, R., Bae, H. J., & Kim, N. (2019). Deep learning in medical imaging. Neurospine, 16(4), 657.
+
+[45] Zhang, Y., & Gable, G. G. (2017). A systematic framework for user experience evaluation of mHealth services. PACIS 2017 Proceedings, 125.
+
+[46] Panch, T., Szolovits, P., & Atun, R. (2018). Artificial intelligence, machine learning and health systems. Journal of global health, 8(2).
+
+[47] Beede, E., Baylor, E., Hersch, F., Iurchenko, A., Wilcox, L., Ruamviboonsuk, P., & Vardoulakis, L. M. (2020). A human-centered evaluation of a deep learning system deployed in clinics for the detection of diabetic retinopathy. CHI Conference on Human Factors in Computing Systems, 1-12.
+
+[48] Kelly, C. J., Karthikesalingam, A., Suleyman, M., Corrado, G., & King, D. (2019). Key challenges for delivering clinical impact with artificial intelligence. BMC medicine, 17(1), 1-9.
+
+[49] Zhou, N., Zhang, C. T., Lv, H. Y., Hao, C. X., Li, T. J., Zhu, J. J., ... & Wang, H. M. (2019). Concordance study between IBM Watson for Oncology and clinical practice for patients with cancer in China. The oncologist, 24(6), 812.
+
+[50] Rajkomar, A., Oren, E., Chen, K., Dai, A. M., Hajaj, N., Hardt, M., ... & Dean, J. (2018). Scalable and accurate deep learning with electronic health records. NPJ Digital Medicine, 1(1), 18.
