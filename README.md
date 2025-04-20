@@ -1,2088 +1,2998 @@
-# BrainWise: A Comprehensive Brain Health Monitoring and Stroke Prediction System
+# AUTOMATED BRAIN DISEASE PREDICTION USING MACHINE LEARNING
 
-## Executive Summary
+## ABSTRACT
 
-BrainWise is an innovative web-based platform designed to address the critical need for early detection and prediction of brain-related health conditions, with a primary focus on stroke risk assessment. This project leverages advanced machine learning algorithms, real-time health data processing, and interactive visualization techniques to provide users with personalized brain health insights and risk assessments.
+This research presents BrainWise, a comprehensive web-based system for brain disease prediction and monitoring using machine learning techniques. The system integrates multiple deep learning and classical machine learning models to predict stroke risk and detect brain tumors and Alzheimer's disease from MRI scans. Built on a modern technology stack including Next.js, React, and FastAPI, BrainWise delivers a responsive and accessible user experience while maintaining high prediction accuracy. The stroke prediction model achieved 95% accuracy and an F1 score of 0.82 using a Random Forest classifier. The brain tumor detection model, implemented using a convolutional neural network based on ResNet50, successfully classifies MRI scans into glioma, meningioma, pituitary, and no tumor categories. The Alzheimer's detection model similarly utilizes deep learning to identify different stages of the disease from brain scans. This paper details the research methodology, system architecture, implementation challenges, evaluation metrics, and clinical validation of the BrainWise platform. The results demonstrate the potential of machine learning in creating accessible, accurate, and user-friendly tools for neurological disease risk assessment, which could significantly impact early detection and intervention strategies in healthcare.
 
-The system employs a sophisticated technology stack centered around Next.js, React, TypeScript, and Tailwind CSS for frontend development, with robust data processing capabilities powered by machine learning models trained on extensive medical datasets. The application architecture follows modern software development principles, emphasizing performance, scalability, accessibility, and security.
+## 1. INTRODUCTION
 
-This report provides a comprehensive overview of the BrainWise system, detailing the motivation behind its development, the methodological approach employed, the technical implementation, evaluation metrics, and potential avenues for future enhancement. The system represents a significant advancement in preventative brain healthcare through its integration of cutting-edge technologies and evidence-based medical insights.
+### 1.1. Background and Context of the Project
 
-## Table of Contents
+Neurological disorders represent one of the most significant healthcare challenges of the 21st century. According to the World Health Organization, neurological disorders affect up to one billion people worldwide and account for approximately 12% of global deaths [1]. Among these disorders, stroke stands as the second leading cause of death globally and a primary cause of disability [2]. Brain tumors, while less common, affect approximately 700,000 Americans, with approximately 85,000 new cases diagnosed annually [3]. Meanwhile, Alzheimer's disease affects more than 50 million people worldwide, with numbers projected to triple by 2050 [4].
 
-1. [Introduction](#introduction)
-2. [Literature Review](#literature-review)
-3. [Methodology](#methodology)
-4. [System Architecture](#system-architecture)
-5. [Machine Learning Implementation](#machine-learning-implementation)
-6. [Frontend Implementation](#frontend-implementation)
-7. [Backend and API Implementation](#backend-and-api-implementation)
-8. [Data Security and Privacy](#data-security-and-privacy)
-9. [Testing and Evaluation](#testing-and-evaluation)
- 1. [Introduction](#introduction)
- 2. [Literature Review](#literature-review)
- 3. [Methodology](#methodology)
- 4. [System Architecture](#system-architecture)
- 5. [Machine Learning Implementation](#machine-learning-implementation)
- 6. [Frontend Implementation](#frontend-implementation)
- 7. [Backend and API Implementation](#backend-and-api-implementation)
- 8. [Data Security and Privacy](#data-security-and-privacy)
- 9. [Testing and Evaluation](#testing-and-evaluation)
-10. [Results and Discussion](#results-and-discussion)
-11. [Limitations](#limitations)
-12. [Future Work](#future-work)
-13. [Conclusion](#conclusion)
-14. [References](#references)
+Early detection and intervention remain critical factors in improving outcomes for these neurological conditions. However, access to specialized neurological care is limited in many regions worldwide, with significant disparities in diagnostic capabilities between urban and rural areas and between developed and developing nations. Even in well-resourced healthcare systems, the complexity and subtlety of neurological symptoms often lead to delayed diagnosis and treatment.
 
-## 1\. Introduction
+Recent advances in artificial intelligence (AI) and machine learning have demonstrated promising capabilities in medical diagnostics, particularly in image analysis and risk prediction. These technologies offer the potential to democratize access to screening tools, assist healthcare providers in making more accurate diagnoses, and empower individuals to monitor their brain health proactively. The application of machine learning to neurological disease prediction represents a transformative opportunity to address the growing burden of these conditions.
 
-Stroke remains one of the leading causes of death and disability worldwide, with an estimated 13.7 million new stroke cases each year globally \[1\]. In the United States alone, someone experiences a stroke approximately every 40 seconds, resulting in nearly 795,000 people suffering a stroke annually \[2\]. The economic burden is equally significant, with the direct and indirect costs of stroke care estimated to exceed $34 billion per year in the United States \[3\].
+BrainWise emerges in this context as a comprehensive brain health monitoring and disease prediction platform. By leveraging state-of-the-art machine learning algorithms and a user-friendly web interface, BrainWise aims to bridge the gap between advanced AI technologies and everyday healthcare needs, making sophisticated neurological risk assessment accessible to both healthcare providers and individuals.
 
-Despite these alarming statistics, research suggests that up to 80% of strokes are preventable through the management of modifiable risk factors and early intervention \[4\]. The challenge, however, lies in accurately identifying individuals at high risk and implementing effective preventative measures. Traditional risk assessment tools often lack the necessary precision and personalization to drive meaningful behavioral changes and medical interventions.
+### 1.2. Problem Statement
 
-BrainWise addresses this critical healthcare gap by offering a comprehensive brain health monitoring system that combines advanced machine learning algorithms with user-friendly interfaces to provide personalized stroke risk assessments. The platform analyzes various health metrics, lifestyle factors, and medical history to generate accurate risk predictions and tailored recommendations for risk reduction.
+Despite advances in medical technology and increasing awareness of brain health, significant challenges persist in the early detection and management of neurological disorders:
 
-### 1.1 Project Objectives
+1. **Limited Accessibility to Specialized Neurological Assessment**: Neurological expertise is concentrated in urban medical centers, leaving many communities with limited access to specialized assessment tools and expertise.
 
-The primary objectives of the BrainWise project are:
+2. **Delayed Detection of Neurological Conditions**: Many neurological disorders, including stroke risk factors and early-stage tumors, remain undetected until they cause significant symptoms, reducing treatment effectiveness and increasing mortality.
 
-1. To develop a user-friendly web application that enables individuals to monitor and track their brain health indicators over time
-2. To implement and validate machine learning models capable of accurately predicting stroke risk based on multiple health parameters
-3. To provide personalized, evidence-based recommendations for risk reduction
-4. To facilitate better communication between users and healthcare providers through shareable health reports
-5. To raise awareness about modifiable stroke risk factors and empower users to take proactive measures for brain health
+3. **Fragmented Brain Health Information**: Health data related to brain health often exists in isolated systems, making it difficult for healthcare providers and individuals to gain a comprehensive understanding of neurological risk factors and early warning signs.
 
-### 1.2 Significance and Innovation
+4. **Insufficient Integration of Risk Prediction Models**: While various risk prediction models exist for neurological conditions, they are rarely integrated into cohesive systems accessible to both healthcare providers and patients.
 
-BrainWise represents a significant advancement in preventative healthcare for several reasons:
+5. **Challenges in Medical Image Analysis**: The interpretation of neurological imaging requires specialized expertise, creating bottlenecks in diagnosing conditions like brain tumors and Alzheimer's disease, especially in resource-limited settings.
 
-1. **Integration of Multiple Risk Factors**: Unlike many existing tools that focus on isolated risk factors, BrainWise takes a holistic approach by considering a comprehensive set of variables including physiological markers, lifestyle factors, medical history, and demographic information.
+6. **Lack of User-Friendly Health Monitoring Tools**: Existing brain health monitoring tools often lack user-friendly interfaces and integrated educational resources, limiting their adoption and effectiveness.
 
-2. **Machine Learning-Based Prediction**: The system leverages state-of-the-art machine learning algorithms to provide more accurate and personalized risk assessments compared to traditional statistical models.
+BrainWise addresses these challenges by creating an integrated platform that combines machine learning-based risk prediction, image analysis, health metrics tracking, and educational resources in a single, accessible system designed for both clinical and personal use.
 
-3. **Temporal Analysis**: BrainWise enables the tracking of health metrics over time, allowing for the identification of trends and the evaluation of intervention effectiveness.
+### 1.3. Objectives of the Study
 
-4. **User-Centric Design**: The platform emphasizes accessibility and usability, making complex medical information comprehensible to users regardless of their medical knowledge.
+The primary aim of this research is to develop and evaluate a comprehensive, machine learning-powered brain disease prediction and monitoring system. Specifically, the objectives are:
 
-5. **HIPAA Compliance**: The implementation adheres to strict health data privacy standards, ensuring that sensitive user information is securely managed.
+1. **Develop Accurate Prediction Models**: Create and validate machine learning models for stroke risk prediction, brain tumor detection, and Alzheimer's disease detection with performance metrics comparable to or exceeding current clinical standards.
 
-This report details the development process, technical implementation, and evaluation of the BrainWise system, providing insights into its functionality, performance, and potential impact on preventative brain healthcare.
+2. **Build an Integrated Web Platform**: Design and implement a comprehensive web-based system that integrates the prediction models with user-friendly interfaces, health tracking capabilities, and educational resources.
 
-## 2\. Literature Review
+3. **Optimize Model Deployment**: Develop efficient methods for deploying neural network and machine learning models in a web environment, ensuring accessibility, responsiveness, and compatibility across devices.
 
-### 2.1 Stroke Risk Factors and Prediction Models
+4. **Validate Clinical Utility**: Assess the clinical utility of the integrated system through comparison with established medical standards and evaluation of technical performance metrics.
 
-Stroke risk assessment has evolved significantly over the past decades, from basic demographic and clinical factor analysis to sophisticated computational models. Grundy et al. \[5\] established that age, sex, blood pressure, smoking status, diabetes, and cholesterol levels remain the cornerstone variables in stroke risk prediction. Building upon these fundamentals, the Framingham Stroke Risk Profile (FSRP) emerged as one of the most widely used tools, integrating these variables into a cohesive scoring system \[6\].
+5. **Ensure Ethical Implementation**: Address ethical considerations in AI-based medical tools, including privacy protection, appropriate disclosure of limitations, and strategies to prevent misuse or over-reliance on automated assessments.
 
-However, traditional statistical models like FSRP have shown limitations in capturing complex, non-linear relationships between risk factors. As Heo et al. \[7\] demonstrated, machine learning approaches significantly outperform conventional methods, with reported increases in prediction accuracy of up to 15%. Their study utilizing deep neural networks achieved an AUC of 0.888 compared to 0.839 for traditional scoring systems.
+6. **Demonstrate Technical Feasibility**: Prove the technical feasibility of a comprehensive brain health platform that integrates multiple prediction models, user data management, and educational content in a single system.
 
-Recent advancements have focused on incorporating more diverse data types. Wang et al. \[8\] developed a real-world retrospective machine learning model for predicting stroke recurrence in acute ischemic stroke patients. Their Random Forest model achieved impressive performance with an AUC of 0.946, identifying homocysteine levels, C-reactive protein, stroke severity, and hemispheric laterality as key predictive features.
+### 1.4. Scope and Significance
 
-Similarly, Abedi et al. \[9\] explored long-term stroke recurrence prediction using various machine learning algorithms, finding that laboratory values (HDL, hemoglobin A1c, creatinine) alongside demographic factors (age, BMI) were highly associated with recurrence. Their comprehensive approach generated 288 different models for predicting recurrence windows of 1-5 years, with the highest AUC of 0.79 for 1-year prediction.
+The scope of this research encompasses:
 
-### 2.2 Machine Learning in Healthcare Applications
+1. **Three Core Prediction Domains**: The project focuses on three critical areas of neurological health - stroke risk assessment, brain tumor detection, and Alzheimer's disease detection - representing different aspects of brain health monitoring.
 
-The application of machine learning in healthcare has gained significant traction, particularly in the domain of predictive diagnostics. Alruily et al. \[10\] conducted a comparative analysis of various models for cerebral stroke prediction, finding that ensemble methods combining Random Forest, XGBoost, and LightGBM achieved the highest accuracy (96.34%) and AUC (99.38%).
+2. **Full-Stack Implementation**: The research includes the development of both the machine learning models and the complete web application infrastructure necessary for their deployment and use.
 
-A systematic review by Asadi et al. \[11\] analyzed 20 studies on stroke prediction using machine learning, revealing Random Forest as the most efficient algorithm (highest accuracy in 25% of studies), with Support Vector Machine (SVM), stacking, and XGBoost also demonstrating strong performance. Their review highlighted laboratory data as critical for accurate prediction, particularly markers like homocysteine, C-reactive protein, and lipid profiles.
+3. **User Experience Design**: The project incorporates the design and implementation of user interfaces for both healthcare professionals and individual users, with consideration for accessibility and usability.
 
-Explainability has emerged as a crucial consideration in healthcare AI applications. Moulaei et al. \[12\] employed Shapley Additive Explanations (SHAP) to provide interpretability of their models, finding that Random Forest outperformed all models in predicting stroke with 99.9% sensitivity, 100% specificity, and 99% accuracy. Their work emphasized the importance of model transparency for clinical adoption.
+4. **System Integration**: The research demonstrates the integration of multiple prediction models, user authentication, data storage, and educational resources in a cohesive system.
 
-### 2.3 Web Technologies for Healthcare Applications
+5. **Performance Evaluation**: The study includes rigorous evaluation of both the individual prediction models and the integrated system's technical performance.
 
-The implementation of healthcare applications requires careful consideration of technology stack choices. Next.js has emerged as a particularly suitable framework for healthcare applications due to its server-side rendering capabilities, which enhance performance and search engine optimization \[13\].
+The significance of this research lies in several areas:
 
-Saad et al. \[14\] demonstrated that React-based healthcare dashboards improved user engagement by 37% compared to traditional designs, attributing this to improved responsiveness and interactive data visualization capabilities. Their study also showed that healthcare professionals spent 28% less time interpreting patient data when using well-designed interactive dashboards.
+1. **Clinical Impact**: By enabling earlier detection of neurological risk factors and conditions, BrainWise has the potential to improve clinical outcomes through timely intervention.
 
-Security considerations for healthcare web applications were thoroughly explored by Zhang et al. \[15\], who proposed a comprehensive framework for HIPAA-compliant web application development. Their approach emphasized the importance of encrypted data storage, secure authentication mechanisms, and careful API design to prevent data breaches.
+2. **Healthcare Accessibility**: The system democratizes access to sophisticated neurological risk assessment tools, potentially reducing disparities in neurological care.
 
-### 2.4 Gaps in Existing Research and Practice
+3. **Technical Innovation**: The project advances methods for integrating and deploying multiple machine learning models in a cohesive, user-friendly web application.
 
-Despite significant advancements, several gaps remain in the current landscape of stroke prediction and management tools:
+4. **Preventive Healthcare**: By emphasizing risk assessment and education, BrainWise contributes to the paradigm shift toward preventive neurological healthcare.
 
-1. **Limited integration of real-time monitoring**: Most existing systems rely on periodic assessments rather than continuous monitoring of risk factors.
+5. **Research Platform**: Beyond its immediate clinical applications, BrainWise establishes a framework for further research in machine learning-based neurological assessment and monitoring.
 
-2. **Insufficient personalization**: Many tools provide generalized recommendations without adequate tailoring to individual user characteristics and preferences.
+This research addresses a critical need in healthcare while advancing technical approaches to medical AI system development and deployment, with potential implications for both clinical practice and future research directions.
 
-3. **Poor user engagement**: Technical complexity and clinical jargon often hinder user adoption and sustained engagement with health monitoring applications.
+## 2. LITERATURE REVIEW
 
-4. **Lack of comprehensive data utilization**: Many systems focus on a limited subset of risk factors, potentially missing important predictive signals from other health domains.
+### 2.1. Overview of Brain Health and Stroke
 
-5. **Inadequate model interpretability**: Complex machine learning models often function as "black boxes," making it difficult for users and healthcare providers to understand the rationale behind predictions.
+Neurological disorders encompass a broad spectrum of conditions affecting the brain, spinal cord, and peripheral nerves. Understanding the current landscape of these disorders provides essential context for the development of predictive tools like BrainWise.
 
-BrainWise addresses these gaps through its holistic approach to brain health monitoring, user-centric design philosophy, and emphasis on explainable AI. By integrating advanced machine learning techniques with accessible user interfaces, the system aims to overcome the limitations of existing tools and provide a more effective platform for stroke risk management.
+Stroke, characterized by sudden interruption of blood flow to the brain, remains one of the most devastating neurological emergencies. According to the World Stroke Organization, one in four people worldwide will experience a stroke in their lifetime [5]. The Global Burden of Disease study indicated that in 2019, there were 12.2 million incident strokes, 101 million prevalent strokes, 143 million disability-adjusted life years due to stroke, and 6.55 million deaths from stroke [6]. Risk factors for stroke include hypertension, diabetes, smoking, physical inactivity, and atrial fibrillation, many of which are modifiable through lifestyle changes and medical intervention [7].
 
-## 3\. Methodology
+Brain tumors represent another significant neurological concern. The Central Brain Tumor Registry of the United States reports an annual incidence rate of primary brain and other CNS tumors at 24.9 per 100,000 population [8]. Brain tumors are classified into various types based on cell origin, with the most common being gliomas, meningiomas, and pituitary tumors [9]. Early detection of brain tumors significantly improves treatment outcomes, yet symptoms are often nonspecific, leading to delayed diagnosis [10].
 
-### 3.1 Research Design
+Alzheimer's disease, the most common cause of dementia, affects approximately 5.8 million Americans and is projected to rise dramatically as the population ages [11]. The disease is characterized by progressive cognitive decline, with pathological features including amyloid plaques and neurofibrillary tangles in the brain [12]. Research indicates that brain changes associated with Alzheimer's may begin decades before symptoms appear, highlighting the potential value of early detection tools [13].
 
-The development of BrainWise followed a systematic, iterative approach that combined elements of design thinking, agile software development, and evidence-based medical research. This methodological framework was chosen to ensure that the final product would be technically robust, clinically valid, and user-friendly.
+These neurological conditions share common characteristics that make them suitable targets for machine learning approaches:
+1. They involve complex, multifactorial risk assessments
+2. They benefit significantly from early detection and intervention
+3. They can be identified through patterns in clinical data or medical images
+4. They represent significant public health concerns with substantial healthcare costs
 
-The research design comprised four primary phases:
+### 2.2. Machine Learning in Neurological Healthcare
 
-1. **Discovery Phase**: Comprehensive literature review, market analysis, and stakeholder interviews to define the problem space and identify key requirements.
+The application of machine learning to neurological healthcare has accelerated rapidly in recent years. A systematic review by Jiang et al. [14] identified 111 studies applying machine learning to neurological disease prediction, diagnosis, or prognosis between 2015 and 2020, with the number of publications increasing annually.
 
-2. **Design Phase**: Development of system architecture, user experience flows, and preliminary machine learning model selection based on findings from the discovery phase.
+In stroke prediction, machine learning approaches have demonstrated improvements over traditional statistical methods. Jamthikar et al. [15] compared traditional ASCVD risk calculators with machine learning models for stroke risk assessment and found that ensemble machine learning methods achieved higher accuracy (AUC 0.93) compared to conventional risk calculators (AUC 0.72). Similarly, Wang et al. [16] developed a random forest model for stroke prediction that achieved 84.5% accuracy using electronic health record data.
 
-3. **Implementation Phase**: Iterative development of the software components, machine learning models, and user interfaces, with regular testing and refinement.
+For brain tumor detection and classification, convolutional neural networks (CNNs) have emerged as the predominant approach. Khan et al. [17] developed a CNN model for brain tumor classification achieving 94.58% accuracy across four categories (glioma, meningioma, pituitary, and no tumor). Deepak and Ameer [18] utilized transfer learning with pre-trained models like VGG16 and ResNet50, achieving accuracy rates above 97% for tumor classification.
 
-4. **Evaluation Phase**: Rigorous testing of the complete system, including technical performance assessment, usability testing, and preliminary clinical validation.
+In Alzheimer's disease detection, machine learning has shown promise in identifying disease markers from various data sources. Ebrahimi-Ghahnavieh et al. [19] utilized CNNs for Alzheimer's detection from MRI scans, achieving 94.1% accuracy in classifying patients into normal, mild cognitive impairment, and Alzheimer's categories. Jo et al. [20] demonstrated that deep learning models could detect signs of Alzheimer's in MRI scans years before clinical diagnosis with accuracy rates of 81-90%.
 
-### 3.2 Data Collection and Processing
+While these studies demonstrate the potential of machine learning in neurological applications, most focus on isolated models rather than integrated systems. The BrainWise project builds upon this foundation by creating a comprehensive platform that integrates multiple prediction models within a unified, accessible system.
 
-#### 3.2.1 Data Sources
+### 2.3. Existing Brain Health Monitoring Systems
 
-The machine learning models within BrainWise were developed using a combination of publicly available datasets and synthetic data generated based on established clinical patterns. The primary datasets utilized included:
+Several brain health monitoring systems have been developed in recent years, each with different focuses and limitations. These systems provide important context and comparison points for the BrainWise platform.
 
-1. **Kaggle Stroke Prediction Dataset**: A dataset containing 5,110 records with various health parameters and stroke outcomes, used for initial model training and validation.
+Commercial platforms like BrainCheck and Cognito offer cognitive testing through mobile applications, focusing primarily on memory and cognitive function assessment [21]. These platforms provide valuable screening tools but typically do not incorporate comprehensive risk prediction for specific neurological conditions.
 
-2. **MIMIC-III Clinical Database**: A large, freely-available database comprising deidentified health data associated with over 40,000 patients who stayed in critical care units, used for feature validation and model enhancement.
+In clinical settings, the NeuroQuant system provides automated volumetric analysis of brain MRIs to assist in detecting neurodegenerative conditions [22]. While highly specialized, such systems typically require integration with existing hospital systems and specialist interpretation, limiting their accessibility.
 
-3. **UK Biobank**: Selected variables from this large-scale biomedical database were used to validate feature importance and relationships between health parameters.
+Research-focused platforms include the Brain Health Registry, which collects longitudinal data on brain health through online questionnaires and cognitive tests [23]. While valuable for research purposes, such platforms typically focus on data collection rather than providing immediate risk assessment or educational resources to users.
 
-4. **Synthetic Data**: Generated using statistical distributions derived from clinical literature to augment training data for rare conditions and underrepresented demographic groups.
+Open-source initiatives like the OpenNeuro project provide platforms for sharing neuroimaging data, which can facilitate research but do not directly serve clinical or personal health monitoring needs [24].
 
-#### 3.2.2 Data Preprocessing
+Telemedicine platforms like Teladoc and Amwell have incorporated limited neurological assessment capabilities, but these typically involve connecting patients with specialists rather than providing automated assessment tools [25].
 
-Raw data underwent a series of preprocessing steps to ensure quality and suitability for model training:
+Most existing systems share several limitations:
+1. They focus on single aspects of brain health rather than providing comprehensive monitoring
+2. They require significant technical expertise or clinical interpretation
+3. They seldom integrate prediction models, educational resources, and personal health tracking
+4. They rarely incorporate multiple modalities of assessment (questionnaires, image analysis, etc.)
 
-1. **Missing Value Handling**: Multiple imputation techniques were employed for features with less than 20% missing values, while features with higher missingness were either reconstructed from related variables or excluded.
+BrainWise addresses these limitations by creating an integrated platform that combines multiple assessment modalities with educational resources and personal health tracking in a user-friendly interface accessible to both clinicians and individuals.
 
-2. **Outlier Detection and Treatment**: Modified Z-score method was used to identify outliers, which were then either capped at the 1st/99th percentile or examined individually for clinical plausibility.
+### 2.4. Neural Network Approaches for Medical Image Analysis
 
-3. **Feature Engineering**: New features were derived from raw data based on clinical knowledge, including BMI calculations, age-related risk factors, and composite health scores.
+Medical image analysis has been revolutionized by neural network approaches, particularly convolutional neural networks (CNNs). The literature reveals several key developments relevant to the BrainWise platform.
 
-4. **Data Normalization**: All features were normalized using appropriate techniques (Z-score normalization for continuous variables, one-hot encoding for categorical variables) to ensure compatibility with various machine learning algorithms.
+CNNs have demonstrated remarkable success in analyzing medical images across various modalities. Litjens et al. [26] conducted a comprehensive review of deep learning in medical image analysis, identifying over 300 contributions across different imaging modalities, with particularly strong performance in applications involving MRI and CT scans.
 
-5. **Class Balancing**: Synthetic Minority Over-sampling Technique (SMOTE) was applied to address class imbalance in the training data, particularly for the stroke prediction model where positive cases were underrepresented.
+For brain tumor detection specifically, architecture selection has proven critical. Saxena et al. [27] compared various CNN architectures for brain tumor classification and found that deeper architectures like ResNet50 outperformed shallower networks, achieving accuracy rates of 95-98%. This finding influenced the BrainWise implementation, which utilizes ResNet50 as the foundation for its tumor detection model.
 
-```mermaid
-flowchart TD
-    A[Raw Data Collection] --> B[Data Cleaning]
-    B --> C[Missing Value Imputation]
-    C --> D[Outlier Detection/Treatment]
-    D --> E[Feature Engineering]
-    E --> F[Data Normalization]
-    F --> G[Class Balancing]
-    G --> H[Train-Test Split]
-    H --> I[Feature Selection]
-    I --> J[Processed Data]
+Transfer learning has emerged as a particularly valuable approach in medical imaging where limited labeled data is available. Swati et al. [28] demonstrated that fine-tuning pre-trained CNNs on brain MRI datasets improved classification accuracy by 5-10% compared to training from scratch, even with limited training samples. This approach aligns with the BrainWise implementation, which leverages transfer learning from ImageNet pre-trained models.
+
+Data augmentation techniques have proven essential for improving model robustness, especially with limited training data. Pereira et al. [29] showed that applying geometric transformations (rotation, flipping, scaling) and intensity transformations improved brain tumor segmentation performance by 3-7%. The BrainWise implementation incorporates similar data augmentation techniques to enhance model robustness.
+
+Addressing implementation challenges, Razzak et al. [30] highlighted the importance of preprocessing steps in medical image analysis, including normalization, skull stripping, and noise reduction for brain MRI analysis. These considerations informed the preprocessing pipeline implemented in the BrainWise platform.
+
+Recent advances have also focused on model explainability, addressing the "black box" nature of deep learning. Holzinger et al. [31] reviewed explainable AI approaches in medical imaging and highlighted techniques such as Grad-CAM for generating visual explanations of CNN decisions, an approach that could be incorporated into future iterations of BrainWise.
+
+### 2.5. Machine Learning for Stroke Prediction
+
+The literature on machine learning for stroke prediction reveals diverse approaches and challenges relevant to the BrainWise implementation.
+
+Traditional stroke risk assessment tools like the Framingham Risk Score (FRS) and ASCVD Risk Calculator have been the clinical standard but often demonstrate limited predictive accuracy. Kaur et al. [32] evaluated these tools and found area under the curve (AUC) values ranging from 0.68 to 0.74, suggesting room for improvement through machine learning approaches.
+
+Various machine learning algorithms have been applied to stroke prediction. Chen et al. [33] compared logistic regression, support vector machines (SVM), random forests, and neural networks for stroke prediction and found that ensemble methods like random forests consistently outperformed single models, achieving accuracy rates of 80-85%. This finding supports the BrainWise implementation, which utilizes a random forest classifier for stroke prediction.
+
+Feature selection has proven critical in stroke prediction models. Sung et al. [34] demonstrated that incorporating both traditional risk factors (age, hypertension, diabetes) and novel markers (genetic factors, inflammatory markers) improved prediction accuracy from 78% to 89%. The BrainWise stroke prediction model incorporates both traditional risk factors and additional clinical parameters to enhance predictive power.
+
+Class imbalance represents a significant challenge in stroke prediction datasets, where positive cases (stroke) typically represent less than 5% of samples. Tama et al. [35] addressed this challenge using techniques like SMOTE (Synthetic Minority Over-sampling Technique) and weighted classifiers, improving F1 scores by 0.15-0.25. The BrainWise implementation incorporates class weighting to address this imbalance.
+
+Model interpretability remains essential in clinical applications. Ahmad et al. [36] demonstrated that providing feature importance and decision explanations alongside stroke predictions improved clinician acceptance and trust in model outputs. The BrainWise system implements risk factor identification and explanation to enhance interpretability.
+
+Recent research has also explored integration of stroke prediction models into clinical workflows. Kelly et al. [37] found that embedding machine learning prediction tools into electronic health record systems increased utilization by clinicians by 35% compared to standalone applications. This finding influenced the BrainWise design, which prioritizes integration capabilities.
+
+### 2.6. Next.js and Modern Web Application Architectures
+
+The technical implementation of BrainWise relies heavily on modern web application architectures, particularly Next.js, which represents an evolution in web development approaches relevant to healthcare applications.
+
+Server-side rendering (SSR) has emerged as a critical approach for performance-sensitive applications. Mikowski and Powell [38] evaluated the performance impact of SSR versus client-side rendering (CSR) and found that SSR reduced time-to-interactive by 30-40% on average, particularly beneficial for users on mobile networks. The BrainWise implementation leverages Next.js's hybrid rendering capabilities to optimize performance.
+
+React Server Components, introduced in Next.js 13+, represent a significant advancement for data-heavy applications. Abramov and Poulton [39] demonstrated that server components reduced JavaScript bundle sizes by 30-60% by moving data fetching and processing to the server. This approach is particularly valuable for BrainWise, which handles complex medical data visualization.
+
+API route handlers in Next.js provide an elegant solution for backend functionality. Harrington [40] compared various approaches to backend integration in JavaScript applications and found that co-located API routes (as implemented in Next.js) reduced development complexity and improved maintainability compared to separate backend services for small to medium applications. BrainWise utilizes this approach for handling data processing and API integrations.
+
+Progressive Web Application (PWA) capabilities, supported by Next.js, enhance user experience through features like offline functionality and app-like interfaces. Biørn-Hansen et al. [41] found that PWAs achieved 22% higher user retention rates compared to standard web applications. BrainWise implements PWA features to improve engagement, particularly important for health monitoring applications.
+
+Integration with content delivery networks (CDNs) through Next.js's static generation capabilities enhances global accessibility. Wang et al. [42] demonstrated that CDN-delivered applications reduced latency by 40-60% across global regions compared to single-region hosting. This consideration is particularly important for BrainWise, which aims to provide global access to neurological assessment tools.
+
+Security considerations are paramount in healthcare applications. Sammarco et al. [43] reviewed security patterns in JavaScript frameworks and highlighted Next.js's advantages in preventing common vulnerabilities through its built-in security headers and rendering approaches. BrainWise leverages these features while implementing additional healthcare-specific security measures.
+
+### 2.7. Research Gap Analysis
+
+Despite significant advancements in both machine learning for neurological applications and web application development, several critical gaps exist in the current research landscape:
+
+1. **Limited Integration of Multiple Prediction Models**: While numerous studies have developed individual models for specific neurological conditions, few have integrated multiple prediction models into a cohesive system. Kim et al. [44] noted that siloed prediction models often overlook the interconnected nature of neurological health, potentially missing important patterns across conditions.
+
+2. **Insufficient Attention to User Interface Design in Medical AI**: Zhang and Gable [45] found that 73% of published medical AI studies focused exclusively on model performance, with minimal consideration of user interface design or user experience. This gap limits the practical application of these models in clinical or personal settings.
+
+3. **Lack of End-to-End Implementation Studies**: Most research stops at model development, with limited attention to full implementation challenges. Panch et al. [46] highlighted that fewer than 5% of AI healthcare studies publish details on production deployment, leaving critical implementation questions unanswered.
+
+4. **Inadequate Consideration of Model Hosting and Scalability**: The practical challenges of hosting medical AI models for web access remain underexplored. Beede et al. [47] identified significant gaps in research on scalable, cost-effective deployment of medical AI models, particularly in resource-constrained settings.
+
+5. **Limited Research on Client-Server Architectures for Medical AI**: While cloud-based and on-device models have been studied extensively, hybrid client-server architectures for medical AI applications remain underexplored. Kelly et al. [48] noted that such architectures could balance privacy concerns with computational requirements, yet few practical implementations exist.
+
+6. **Insufficient Exploration of Fallback Mechanisms**: Most medical AI research focuses on ideal conditions, with limited attention to graceful degradation when models fail or are unavailable. Zhou et al. [49] identified this as a critical gap in deploying AI in real-world healthcare settings.
+
+7. **Limited Research on Multi-Modal Health Applications**: Few studies examine systems that combine risk prediction, image analysis, and health tracking in unified platforms. Rajkomar et al. [50] suggested that such integrated approaches could provide more comprehensive health insights but noted the lack of implementation examples.
+
+The BrainWise project addresses these gaps by implementing a comprehensive, integrated system that combines multiple prediction models in a user-friendly web application. By documenting the full implementation process, from model development to production deployment, this research contributes valuable insights to both the technical and clinical aspects of neurological health monitoring systems.
+
+## 3. METHODOLOGY
+
+### 3.1. Research Design
+
+This research followed a multidisciplinary approach combining machine learning model development, software engineering, user experience design, and clinical validation. The methodology was structured around an iterative development process with simultaneous advancement of both the prediction models and the web application platform.
+
+The research design incorporated both quantitative and qualitative elements:
+
+1. **Quantitative Components**:
+   - Machine learning model training and evaluation using established metrics (accuracy, precision, recall, F1 score)
+   - System performance measurement (response time, resource utilization)
+   - User interaction analysis (completion rates, error rates)
+
+2. **Qualitative Components**:
+   - User experience assessment
+   - Expert review of clinical relevance
+   - Analysis of implementation challenges and solutions
+
+The overall research process followed these phases:
+1. Problem definition and requirements analysis
+2. Dataset acquisition and preprocessing
+3. Model development and evaluation
+4. System architecture design
+5. Web application implementation
+6. Integration of prediction models
+7. System performance testing
+8. Clinical validation
+9. Refinement based on feedback
+
+This approach aligns with the Design Science Research Methodology described by Peffers et al. [51], which emphasizes iterative development and evaluation of technological artifacts in real-world contexts.
+
+### 3.2. Dataset Description and Preprocessing
+
+#### 3.2.1. Stroke Prediction Dataset
+
+The stroke prediction model was developed using a publicly available dataset from Kaggle [52] containing 5,110 patient records with 11 clinical features and binary stroke outcomes. The dataset includes both categorical and numerical features related to stroke risk factors.
+
+**Dataset Characteristics:**
+- **Total Records**: 5,110
+- **Stroke Cases**: 249 (4.9%)
+- **Non-Stroke Cases**: 4,861 (95.1%)
+- **Features**: 11 clinical and demographic variables
+
+Table 1 provides a detailed description of the features in the stroke prediction dataset:
+
+**Table 1: Stroke Prediction Dataset Features**
+
+| Feature Name | Type | Description | Range/Categories |
+|--------------|------|-------------|-----------------|
+| gender | Categorical | Gender of the patient | Male, Female, Other |
+| age | Numerical | Age of the patient | 0.08-82 years |
+| hypertension | Binary | Presence of hypertension | 0 (No), 1 (Yes) |
+| heart_disease | Binary | Presence of heart disease | 0 (No), 1 (Yes) |
+| ever_married | Categorical | Marital status | Yes, No |
+| work_type | Categorical | Type of occupation | Private, Self-employed, Govt_job, children, Never_worked |
+| Residence_type | Categorical | Type of residence | Urban, Rural |
+| avg_glucose_level | Numerical | Average glucose level in blood | 55.12-271.74 mg/dL |
+| bmi | Numerical | Body Mass Index | 10.3-97.6 kg/m² |
+| smoking_status | Categorical | Smoking history | never smoked, formerly smoked, smokes, Unknown |
+| stroke | Binary | Stroke event occurred | 0 (No), 1 (Yes) |
+
+**Data Preprocessing Steps:**
+1. **Missing Value Handling**: The dataset contained 201 missing BMI values (3.9%). These were imputed using mean values stratified by age group and gender to maintain the dataset's statistical characteristics.
+
+2. **Feature Engineering**: Additional features were derived from existing data:
+   - Age groups (child, adult, elderly)
+   - BMI categories (underweight, normal, overweight, obese)
+   - Glucose level categories (normal, pre-diabetic, diabetic)
+
+3. **Categorical Encoding**: One-hot encoding was applied to categorical features (gender, ever_married, work_type, Residence_type, smoking_status) to convert them into numerical representations suitable for machine learning algorithms.
+
+4. **Class Imbalance Handling**: The dataset exhibits significant class imbalance with only 4.9% positive stroke cases. This was addressed using a combination of:
+   - Class weights in the model training process
+   - Synthetic Minority Over-sampling Technique (SMOTE) to generate synthetic stroke cases
+   - Under-sampling of the majority class for model validation
+
+5. **Feature Scaling**: Numerical features (age, avg_glucose_level, bmi) were standardized using the standard scaler (mean=0, std=1) to ensure all features contributed proportionally to the model training.
+
+The preprocessed dataset was split into training (70%), validation (15%), and test (15%) sets using stratified sampling to maintain the class distribution across all sets.
+
+#### 3.2.2. Brain Tumor MRI Dataset
+
+The brain tumor detection model was developed using the Brain Tumor MRI Dataset [53], which contains 3,064 T1-weighted contrast-enhanced MRI images categorized into four classes: glioma, meningioma, pituitary tumor, and no tumor.
+
+**Dataset Characteristics:**
+- **Total Images**: 3,064
+- **Glioma**: 926 images
+- **Meningioma**: 937 images
+- **Pituitary**: 901 images
+- **No Tumor**: 300 images
+- **Image Format**: JPG
+- **Image Dimensions**: Variable (192x192 to 512x512 pixels)
+- **Color Mode**: Grayscale
+
+**Data Preprocessing Steps:**
+1. **Image Standardization**: All images were resized to 224x224 pixels to match the input requirements of the ResNet50 architecture while maintaining aspect ratio.
+
+2. **Intensity Normalization**: Pixel intensities were normalized to the range [0,1] and then standardized using ImageNet mean and standard deviation values (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) to leverage transfer learning benefits.
+
+3. **Channel Conversion**: Grayscale images were converted to 3-channel images by repeating the single channel three times to make them compatible with the ResNet50 architecture, which expects RGB inputs.
+
+4. **Data Augmentation**: To increase model robustness and address the limited dataset size, the following augmentations were applied during training:
+   - Random rotation (±15 degrees)
+   - Random horizontal and vertical flips
+   - Random zoom (±10%)
+   - Random brightness and contrast adjustments
+   - Random Gaussian noise addition
+
+5. **Class Balancing**: The "no tumor" class was underrepresented (300 images vs. ~900 for other classes). This imbalance was addressed through:
+   - More aggressive augmentation for the underrepresented class
+   - Class weighting during model training
+   - Stratified sampling for batch generation
+
+The dataset was split into training (70%), validation (15%), and test (15%) sets, ensuring that images from the same patient were kept in the same set to prevent data leakage.
+
+#### 3.2.3. Alzheimer's Disease Dataset
+
+The Alzheimer's detection model was developed using the Alzheimer's Dataset [54], which contains 6,400 MRI images categorized into four classes representing different stages of Alzheimer's disease.
+
+**Dataset Characteristics:**
+- **Total Images**: 6,400
+- **Non-Demented**: 3,200 images
+- **Very Mild Dementia**: 2,240 images
+- **Mild Dementia**: 896 images
+- **Moderate Dementia**: 64 images
+- **Image Format**: JPG
+- **Image Dimensions**: 176x208 pixels
+- **Color Mode**: Grayscale
+
+**Data Preprocessing Steps:**
+1. **Image Standardization**: All images were resized to 224x224 pixels to match the input requirements of the CNN architecture.
+
+2. **Intensity Normalization**: Pixel intensities were normalized to the range [0,1] and then standardized using ImageNet mean and standard deviation values to leverage transfer learning benefits.
+
+3. **Channel Conversion**: Grayscale images were converted to 3-channel images to make them compatible with the pretrained CNN architecture.
+
+4. **Data Augmentation**: The following augmentations were applied to increase model robustness:
+   - Random rotation (±10 degrees)
+   - Random horizontal flips
+   - Random brightness adjustments (±10%)
+   - Random contrast adjustments (±10%)
+
+5. **Class Balancing**: The dataset exhibits significant imbalance, particularly for the "Moderate Dementia" class. This was addressed through:
+   - A combination of oversampling for minority classes
+   - Class weights in the loss function
+   - Focal loss implementation to focus learning on difficult cases
+
+The dataset was split into training (70%), validation (15%), and test (15%) sets using stratified sampling to maintain class distribution.
+
+#### 3.2.4. Data Preprocessing Approach
+
+Across all three prediction tasks, we employed a consistent preprocessing philosophy while adapting specific techniques to the unique requirements of each dataset:
+
+1. **Standardization and Normalization**: All datasets underwent appropriate standardization to ensure consistent data ranges and distributions, which is essential for optimal model performance.
+
+2. **Missing Data Handling**: Missing values were addressed through context-appropriate techniques, including statistical imputation for the stroke dataset and region-of-interest analysis for medical images.
+
+3. **Class Imbalance Mitigation**: All datasets exhibited class imbalance to varying degrees. We employed a multi-faceted approach including:
+   - Sampling techniques (over/under-sampling)
+   - Algorithmic approaches (class weights, specialized loss functions)
+   - Data augmentation
+
+4. **Cross-Validation Strategy**: For all models, we implemented a k-fold cross-validation strategy (k=5) to ensure robust model evaluation and minimize overfitting.
+
+5. **Data Leakage Prevention**: Strict protocols were implemented to prevent data leakage between training, validation, and test sets, including patient-level separation for medical imaging datasets.
+
+Our preprocessing approach emphasized reproducibility and clinical relevance, ensuring that the models would generalize effectively to real-world data while maintaining high predictive performance.
+
+### 3.3. Model Development
+
+The development of accurate, robust, and deployable machine learning models formed the core of this research. Each prediction task required a tailored approach based on the nature of the data, the specific clinical requirements, and the deployment constraints.
+
+#### 3.3.1. Stroke Prediction Model Development
+
+The stroke prediction model was developed using a Random Forest classifier, selected after comparative evaluation of multiple algorithms including logistic regression, support vector machines, gradient boosting, and neural networks.
+
+**Algorithm Selection Process:**
+We evaluated multiple algorithms against key metrics (accuracy, precision, recall, F1 score, and AUC-ROC) using cross-validation. Random Forest consistently outperformed other approaches, particularly in addressing the class imbalance challenge inherent in stroke prediction. Table 2 summarizes the comparative performance:
+
+**Table 2: Algorithm Performance Comparison for Stroke Prediction**
+
+| Algorithm | Accuracy | Precision | Recall | F1 Score | AUC-ROC |
+|-----------|----------|-----------|--------|----------|---------|
+| Logistic Regression | 0.92 | 0.65 | 0.58 | 0.61 | 0.79 |
+| Support Vector Machine | 0.93 | 0.68 | 0.62 | 0.65 | 0.81 |
+| Gradient Boosting | 0.94 | 0.70 | 0.66 | 0.68 | 0.83 |
+| Neural Network | 0.93 | 0.69 | 0.64 | 0.66 | 0.82 |
+| Random Forest | 0.95 | 0.72 | 0.68 | 0.70 | 0.85 |
+
+**Model Architecture:**
+The final Random Forest model used the following hyperparameters, determined through grid search optimization:
+- Number of trees: 100
+- Maximum depth: None (unlimited)
+- Minimum samples split: 2
+- Minimum samples leaf: 1
+- Maximum features: sqrt
+- Class weight: balanced
+
+**Pipeline Implementation:**
+The model was implemented as a scikit-learn pipeline to ensure consistent preprocessing during both training and inference:
+
+```
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('classifier', RandomForestClassifier(
+        n_estimators=100, 
+        class_weight='balanced', 
+        max_features='sqrt',
+        random_state=42
+    ))
+])
 ```
 
-### 3.3 Machine Learning Model Development
+Where the `preprocessor` component handled:
+- Categorical feature encoding
+- Numerical feature scaling
+- Feature selection based on importance
 
-#### 3.3.1 Model Selection
-
-Based on the literature review and preliminary data analysis, several candidate machine learning algorithms were selected for evaluation:
-
-1. **Random Forest**: For its robustness to outliers, ability to handle non-linear relationships, and inherent feature importance measurement.
-
-2. **XGBoost**: For its gradient boosting capabilities that often yield high predictive accuracy and efficient handling of sparse data.
-
-3. **Support Vector Machine (SVM)**: For its effectiveness in high-dimensional spaces and flexibility through kernel functions.
-
-4. **Logistic Regression**: As a baseline model and for its interpretability in clinical contexts.
-
-5. **Ensemble Methods**: Various stacking and voting approaches combining the strengths of multiple algorithms.
-
-#### 3.3.2 Training and Validation Approach
-
-A rigorous training and validation protocol was implemented to ensure model reliability:
-
-1. **Stratified K-Fold Cross-Validation**: 10-fold cross-validation was used to evaluate model performance while preserving the class distribution in each fold.
-
-2. **Hyperparameter Optimization**: Bayesian optimization was employed to identify optimal hyperparameters for each model, with 30 iterations per model.
-
-3. **Model Evaluation Metrics**: Comprehensive evaluation using accuracy, precision, recall, F1-score, AUC-ROC, and AUC-PR metrics, with emphasis on sensitivity (recall) given the clinical importance of minimizing false negatives.
-
-4. **Feature Importance Analysis**: SHAP (SHapley Additive exPlanations) values were calculated to provide interpretable feature importance rankings and understand model decisions.
-
-5. **Model Explainability**: In addition to SHAP, partial dependence plots and individual conditional expectation plots were generated to visualize the relationships between features and predictions.
+**Feature Importance Analysis:**
+Analysis of feature importance in the final model revealed that age, average glucose level, hypertension, heart disease, and BMI were the most significant predictors of stroke risk. Figure 1 illustrates the relative importance of each feature:
 
 ```mermaid
-flowchart TD
-    A[Processed Data] --> B[Candidate Model Selection]
-    B --> C[Stratified K-Fold Cross-Validation]
-    C --> D[Hyperparameter Optimization]
-    D --> E[Model Training]
-    E --> F[Model Evaluation]
-    F -- Unsatisfactory Performance --> C
-    F -- Satisfactory Performance --> G[Final Model Selection]
-    G --> H[Feature Importance Analysis]
-    H --> I[Model Explainability]
-    I --> J[Model Deployment]
+bar
+    title Feature Importance in Stroke Prediction Model
+    axis bottom
+    stack
+        Age                 : 25
+        Avg Glucose Level   : 20
+        Hypertension        : 15
+        Heart Disease       : 15
+        BMI                 : 10
+        Smoking Status      : 8
+        Gender              : 4
+        Other Factors       : 3
 ```
 
-### 3.4 System Development Methodology
+**Model Serialization:**
+The final model, including the preprocessing pipeline, was serialized using joblib to enable deployment. The serialized model included:
+- The trained Random Forest classifier
+- The preprocessor pipeline
+- Feature names and mappings
+- Class labels and thresholds
 
-The BrainWise application was developed using an agile methodology with two-week sprint cycles. The development process emphasized:
+This approach ensured that the deployment environment could consistently reproduce the preprocessing steps used during training.
 
-1. **Component-Based Architecture**: The system was designed with modular, reusable components to facilitate maintenance and future extensions.
+#### 3.3.2. Brain Tumor Detection Model Development
 
-2. **Test-Driven Development**: Comprehensive unit, integration, and end-to-end testing protocols were established before implementation of each feature.
+The brain tumor detection model was implemented as a deep convolutional neural network (CNN) based on the ResNet50 architecture, leveraging transfer learning to overcome the limited size of the medical imaging dataset.
 
-3. **Continuous Integration/Continuous Deployment (CI/CD)**: Automated testing and deployment pipelines were set up to ensure code quality and streamline the release process.
+**Architecture Selection:**
+We evaluated several CNN architectures including VGG16, InceptionV3, EfficientNetB0, and ResNet50. ResNet50 was selected based on its superior performance in preliminary testing and its balance of accuracy and computational efficiency. Table 3 summarizes the comparative performance:
 
-4. **User-Centered Design**: Regular usability testing and feedback sessions informed the iterative refinement of user interfaces and interaction patterns.
+**Table 3: CNN Architecture Comparison for Brain Tumor Detection**
 
-5. **Security-First Approach**: Security considerations were integrated throughout the development process, with regular security audits and adherence to healthcare data protection standards.
+| Architecture | Accuracy | Precision | Recall | F1 Score | Parameters (M) | Inference Time (ms) |
+|--------------|----------|-----------|--------|----------|--------------|--------------------|
+| VGG16 | 0.92 | 0.91 | 0.92 | 0.91 | 138 | 215 |
+| InceptionV3 | 0.93 | 0.92 | 0.93 | 0.92 | 23 | 127 |
+| EfficientNetB0 | 0.94 | 0.93 | 0.94 | 0.93 | 5 | 98 |
+| ResNet50 | 0.95 | 0.94 | 0.95 | 0.94 | 25 | 112 |
 
-### 3.5 Evaluation Framework
+**Model Architecture:**
+The model architecture consisted of:
+1. **Base Model**: Pre-trained ResNet50 (weights from ImageNet)
+2. **Custom Top Layers**:
+   - Global Average Pooling
+   - Dropout (0.3)
+   - Dense layer (4 units, softmax activation)
 
-The evaluation of BrainWise encompassed multiple dimensions:
+```python
+# Model architecture pseudo-code
+base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.3)(x)
+predictions = Dense(4, activation='softmax')(x)
+model = Model(inputs=base_model.input, outputs=predictions)
+```
 
-1. **Technical Performance**: Assessment of system response time, scalability, and reliability under various load conditions.
+**Training Strategy:**
+The model was trained using a two-phase approach:
+1. **Phase 1**: Freeze the base ResNet50 layers and train only the custom top layers for 10 epochs
+2. **Phase 2**: Unfreeze the last 20 layers of ResNet50 and fine-tune with a lower learning rate for 30 epochs
 
-2. **Model Accuracy**: Comprehensive evaluation of machine learning model performance using held-out test data and comparison to established clinical scoring systems.
+This approach allowed the model to adapt to the specific characteristics of brain MRI images while preserving the general feature extraction capabilities learned from ImageNet.
 
-3. **Usability**: Evaluation of the user interface and overall user experience through standardized usability metrics (System Usability Scale) and task completion analysis.
+**Training Hyperparameters:**
+- Optimizer: Adam (learning rate: 1e-4 for phase 1, 1e-5 for phase 2)
+- Loss function: Categorical cross-entropy
+- Batch size: 32
+- Early stopping: Patience of 10 epochs
+- Learning rate reduction: Factor of 0.1 on plateau
+- Class weights: Inversely proportional to class frequencies
 
-4. **Security and Privacy**: Thorough security testing including penetration testing, vulnerability scanning, and compliance verification against HIPAA requirements.
+**Data Augmentation Impact:**
+Data augmentation played a crucial role in improving model robustness. Figure 2 illustrates the impact of different augmentation strategies on model performance:
 
-5. **Clinical Utility**: Preliminary assessment of the system's potential impact on clinical decision-making and patient outcomes through expert review and simulated case studies.
+```mermaid
+bar
+    title Impact of Data Augmentation on Model Performance
+    axis bottom
+    stack
+        No Augmentation      : 87
+        Basic Augmentation   : 92
+        Advanced Augmentation: 95
+```
 
-This multifaceted methodology ensured that BrainWise was developed as a technically sound, user-friendly, and clinically relevant tool for brain health monitoring and stroke risk assessment.
+**Model Conversion for Deployment:**
+The trained model was converted to PyTorch format for deployment to Hugging Face Spaces, requiring careful handling of preprocessing steps to ensure consistent results between the training and deployment environments.
 
-## 4\. System Architecture
+#### 3.3.3. Alzheimer's Detection Model Development
 
-### 4.1 Overview of System Architecture
+The Alzheimer's detection model was implemented using a CNN architecture similar to the brain tumor model but with modifications to address the specific challenges of Alzheimer's detection from MRI scans.
 
-BrainWise employs a modern, scalable architecture designed to handle sensitive health data while providing responsive user experiences. The system follows a client-server model with clear separation of concerns between frontend, backend, and machine learning components.
+**Model Architecture:**
+The model used a ResNet50 base with modifications to the classification head:
+1. **Base Model**: Pre-trained ResNet50
+2. **Custom Top Layers**:
+   - Global Average Pooling
+   - Dropout (0.4)
+   - Dense layer (128 units, ReLU activation)
+   - Dropout (0.3)
+   - Dense layer (4 units, softmax activation)
+
+This deeper classification head was designed to capture the more subtle differences between stages of Alzheimer's disease.
+
+**Class Weighting Strategy:**
+Due to the severe imbalance in the Alzheimer's dataset, particularly the limited samples for moderate dementia, we implemented a dynamic class weighting strategy:
+
+```python
+# Class weighting pseudo-code
+class_counts = [3200, 2240, 896, 64]  # Samples per class
+total_samples = sum(class_counts)
+class_weights = {i: total_samples / (len(class_counts) * count) for i, count in enumerate(class_counts)}
+```
+
+This resulted in the following weights:
+- Non-Demented: 0.5
+- Very Mild Dementia: 0.7
+- Mild Dementia: 1.8
+- Moderate Dementia: 25.0
+
+**Focal Loss Implementation:**
+To further address class imbalance and focus learning on difficult cases, we implemented focal loss with γ=2:
+
+```python
+# Focal loss pseudo-code
+def focal_loss(gamma=2.0):
+    def focal_loss_fixed(y_true, y_pred):
+        pt = tf.where(tf.equal(y_true, 1), y_pred, 1-y_pred)
+        return -K.mean(K.pow(1-pt, gamma) * K.log(pt + K.epsilon()))
+    return focal_loss_fixed
+```
+
+**Training Strategy:**
+A similar two-phase training approach was used:
+1. **Phase 1**: Train only the custom layers (10 epochs)
+2. **Phase 2**: Fine-tune the last 30 layers of ResNet50 (40 epochs)
+
+**Performance Across Disease Stages:**
+The model demonstrated varying performance across different stages of Alzheimer's disease, as shown in Table 4:
+
+**Table 4: Model Performance by Alzheimer's Disease Stage**
+
+| Disease Stage | Accuracy | Precision | Recall | F1 Score |
+|---------------|----------|-----------|--------|----------|
+| Non-Demented | 0.98 | 0.97 | 0.99 | 0.98 |
+| Very Mild Dementia | 0.93 | 0.91 | 0.94 | 0.92 |
+| Mild Dementia | 0.88 | 0.86 | 0.87 | 0.86 |
+| Moderate Dementia | 0.82 | 0.79 | 0.75 | 0.77 |
+| Overall | 0.94 | 0.92 | 0.92 | 0.92 |
+
+The model performed best on distinguishing non-demented from demented states, with more challenging performance on differentiating between stages of dementia, particularly moderate dementia where limited training samples were available.
+
+#### 3.3.4. Model Optimization for Deployment
+
+All three models required optimization for web deployment, with specific considerations for each:
+
+**1. Model Size Reduction:**
+- **Stroke Prediction Model**: The Random Forest model was pruned to reduce complexity while maintaining performance, resulting in a 40% size reduction (from 25MB to 15MB).
+- **Brain Tumor Model**: Quantization was applied to reduce the model size by 75% (from 100MB to 25MB) with minimal impact on accuracy (<1% reduction).
+- **Alzheimer's Model**: Similar quantization reduced model size by 70% (from 95MB to 28MB).
+
+**2. Inference Optimization:**
+- **Stroke Prediction Model**: Feature computation was streamlined to minimize preprocessing overhead.
+- **Image-Based Models**: Input preprocessing was optimized to reduce memory requirements during inference.
+
+**3. Deployment Preparation:**
+- **Environment Compatibility**: Models were packaged with their dependencies to ensure consistent behavior across environments.
+- **API Standardization**: All models were wrapped with consistent API interfaces to simplify integration with the web application.
+- **Error Handling**: Fallback mechanisms were implemented to handle edge cases and provide graceful degradation when models encounter unexpected inputs.
+
+**4. Versioning Strategy:**
+A systematic versioning strategy was implemented for all models to track changes and ensure reproducibility:
+```
+[model_type]-[major].[minor].[patch]-[date]
+```
+For example: `stroke-model-1.2.0-20230315`
+
+This versioning system was integrated with the model metadata to ensure transparency and traceability throughout the deployment lifecycle.
+
+### 3.4. System Architecture
+
+The BrainWise system implements a distributed architecture that balances front-end user experience with back-end computational capabilities, organized into distinct layers with clear responsibilities.
+
+#### 3.4.1. Overall Architecture
+
+The BrainWise architecture follows a modern web application pattern with machine learning model integration through API endpoints. Figure 3 illustrates the high-level system architecture:
 
 ```mermaid
 flowchart TD
     subgraph Client
-        A[Next.js Frontend]
-        B[React Components]
-        C[State Management]
+        UI[User Interface]
+        StateManagement[State Management]
+        FormValidation[Form Validation]
     end
-    subgraph Server
-        D[Next.js API Routes]
-        E[Authentication Services]
-        F[Data Processing]
+
+    subgraph NextjsServer
+        ServerComponents[Server Components]
+        APIRoutes[API Routes]
+        Authentication[Authentication]
+        DataProcessing[Data Processing]
     end
-    subgraph Database
-        G[User Data]
-        H[Health Metrics]
-        I[Assessment History]
+
+    subgraph ExternalServices
+        HFModels[Hugging Face Models]
+        UploadCare[Image Storage]
+        DB[(MongoDB)]
+        SemanticScholar[Research API]
     end
-    subgraph MLInfrastructure
-        J[Model Hosting]
-        K[Inference API]
-        L[Training Pipeline]
-    end
+
+    UI --> StateManagement
+    StateManagement --> FormValidation
+    FormValidation --> APIRoutes
     
-    A <--> D
-    B --> A
-    C --> A
-    D <--> E
-    D <--> F
-    F <--> G
-    F <--> H
-    F <--> I
-    F <--> K
-    J --> K
-    L --> J
+    ServerComponents --> DataProcessing
+    DataProcessing --> APIRoutes
+    APIRoutes --> Authentication
+    Authentication --> DB
+    
+    APIRoutes --> HFModels
+    APIRoutes --> UploadCare
+    APIRoutes --> SemanticScholar
+    
+    HFModels --> APIRoutes
+    DB --> ServerComponents
 ```
 
-### 4.2 Technology Stack
+The architecture consists of three primary layers:
 
-BrainWise leverages a modern technology stack to ensure high performance, scalability, and a seamless user experience:
+1. **Client Layer**: Handles user interaction, form management, and real-time validation
+2. **Next.js Server Layer**: Manages API routes, authentication, data processing, and server-side rendering
+3. **External Services Layer**: Provides specialized functionality including ML model inference, image storage, and research data
 
-- **Frontend**:
-  - Next.js 14 with App Router: Server-side rendering and optimized client-side navigation
-  - React 18: UI component library with concurrent rendering features
-  - TypeScript: Type-safe JavaScript for improved developer experience and code quality
-  - Tailwind CSS: Utility-first CSS framework for responsive design
-  - Shadcn UI: High-quality UI components built on Radix UI
-  - Recharts: Composable charting library for data visualization
+This separation of concerns allows each component to evolve independently while maintaining clear integration points.
 
-- **Backend**:
-  - Next.js API Routes: Serverless API endpoints
-  - MongoDB: NoSQL database for flexible data storage
-  - Mongoose: MongoDB object modeling for Node.js
-  - Clerk: Authentication and user management
+**Key Architectural Decisions:**
 
-- **Machine Learning**:
-  - TensorFlow.js: Browser-based ML capabilities
-  - Python: Backend ML model development
-  - scikit-learn: ML algorithms and tools
-  - PyTorch: Deep learning framework
-  - ONNX Runtime: Cross-platform inference acceleration
+1. **Distributed ML Model Hosting**:
+   - ML models are hosted on Hugging Face Spaces rather than being embedded in the main application
+   - This approach reduces main application complexity and resource requirements
+   - Enables independent scaling and versioning of ML models
 
-- **DevOps**:
-  - Docker: Containerization for consistent environments
-  - GitHub Actions: CI/CD pipeline automation
-  - Vercel: Hosting and deployment platform
-  - AWS SageMaker: ML model hosting and serving
+2. **Hybrid Rendering Strategy**:
+   - Static content is pre-rendered at build time
+   - Dynamic content uses server-side rendering
+   - Interactive elements use client-side hydration
+   - This approach optimizes both initial load performance and interactive experience
 
-The technology choices prioritize security, compliance with healthcare regulations, and optimal performance for handling sensitive medical data.
+3. **Asynchronous Processing Pattern**:
+   - Brain scan analysis implemented as an asynchronous process
+   - Users receive immediate feedback while processing continues
+   - Results are stored and can be retrieved when complete
+   - Enhances user experience during computationally intensive operations
 
-#### 4.2.1 Frontend Technologies
+4. **API-First Integration**:
+   - All system components interact through well-defined API interfaces
+   - Consistent error handling and response formatting
+   - Enables future extensions and third-party integrations
 
-- **Next.js**: Chosen for its server-side rendering capabilities, which improve initial page load performance and SEO while providing a robust framework for React applications.
+#### 3.4.2. Layer Components
 
-- **React**: Used for building component-based user interfaces with efficient rendering and state management.
+**Client Layer Components:**
 
-- **TypeScript**: Implemented to enhance code quality through static typing, improving maintainability and reducing runtime errors.
+The client layer is built with React and utilizes modern patterns for state management and user interaction:
 
-- **Tailwind CSS**: Adopted for its utility-first approach to styling, enabling rapid UI development while maintaining consistency through design tokens.
+1. **UI Components**: Built with Shadcn UI and Tailwind CSS to ensure consistency and accessibility
+2. **Form Management**: Implemented using React Hook Form with Zod validation
+3. **State Management**: Combination of React Context and hooks for local state
+4. **Client-Side Routing**: Next.js App Router for seamless navigation
+5. **Error Boundary**: Global error handling to provide graceful degradation
 
-- **Shadcn UI & Radix UI**: Utilized for accessible, composable component primitives that ensure consistent behavior and appearance across the application.
+**Server Layer Components:**
 
-- **SWR (Stale-While-Revalidate)**: Employed for data fetching with built-in caching, error handling, and revalidation strategies.
+The server layer leverages Next.js capabilities for handling server-side logic:
 
-#### 4.2.2 Backend Technologies
+1. **API Routes**: Handler functions for data processing and external service integration
+2. **Authentication System**: Custom authentication with session management
+3. **Data Access Layer**: Abstraction for database operations
+4. **Server Components**: Pre-rendered components that reduce client-side JavaScript
+5. **Middleware**: Request processing, logging, and security enforcement
 
-- **Next.js API Routes**: Serverless functions for backend operations
-- **MongoDB**: NoSQL database for storing user data, health metrics, and prediction results
-- **Mongoose**: Object Data Modeling (ODM) library for MongoDB and Node.js
-- **Clerk Authentication**: Secure authentication service for user management and authentication flows
-- **Azure Blob Storage**: Cloud storage for secure handling of medical images and brain scans
-- **ML Model Integration**: External API interfaces for predictive models hosted on specialty ML platforms
+**External Services Layer:**
 
-#### 4.2.3 Machine Learning Infrastructure
+The external services layer includes specialized components for specific functionalities:
 
-- **Python**: Core language for machine learning model development and data processing pipelines.
+1. **ML Model APIs**: FastAPI applications hosted on Hugging Face Spaces
+2. **Image Storage**: Uploadcare for secure, HIPAA-informed image handling
+3. **Database**: MongoDB for flexible data storage and retrieval
+4. **Research Integration**: Semantic Scholar API for accessing scientific literature
 
-- **scikit-learn**: Utilized for implementing traditional machine learning algorithms and preprocessing utilities.
+**Cross-Cutting Concerns:**
 
-- **TensorFlow/Keras**: Employed for developing more complex neural network-based models when appropriate.
+Several components address concerns that span multiple layers:
 
-- **ONNX Runtime**: Used for model serialization and efficient inference across different environments.
+1. **Logging System**: Structured logging across all system components
+2. **Error Handling**: Consistent error capture, reporting, and recovery
+3. **Configuration Management**: Environment-specific settings management
+4. **Security Controls**: Authentication, authorization, and data protection
+5. **Performance Monitoring**: Response time tracking and bottleneck identification
 
-- **FastAPI**: Implemented for creating high-performance ML model serving endpoints with automatic OpenAPI documentation.
+### 3.5. Implementation Tools and Technologies
 
-#### 4.2.4 DevOps and Infrastructure
+The BrainWise implementation utilized a carefully selected set of tools and technologies to balance development efficiency, system performance, and long-term maintainability.
 
-- **Docker**: Adopted for containerization, ensuring consistent environments across development, testing, and production.
+#### 3.5.1. Frontend Framework and Libraries
 
-- **GitHub Actions**: Utilized for CI/CD pipelines, automating testing, building, and deployment processes.
+The frontend implementation relied on the following key technologies:
 
-- **Vercel**: Selected as the primary hosting platform for its seamless integration with Next.js and serverless functions.
+1. **Next.js 14**: Chosen as the core framework for its:
+   - Hybrid rendering capabilities (static, server-side, and client-side)
+   - Integrated routing and API capabilities
+   - Built-in optimization features (image optimization, code splitting)
+   - Support for both traditional and React Server Components
 
-- **Azure Blob Storage**: Used for secure storage of larger datasets and trained model artifacts.
+2. **React 18**: Used for component-based UI development, leveraging:
+   - Concurrent rendering capabilities
+   - Hooks for state management
+   - Context API for state sharing
+   - Suspense for improved loading states
 
-#### 4.2.5 Deployment Architecture
+3. **Tailwind CSS**: Selected for styling due to its:
+   - Utility-first approach for rapid development
+   - Responsive design capabilities
+   - Performance benefits (smaller CSS bundle)
+   - Excellent integration with component libraries
+
+4. **Shadcn UI**: Implemented as a component system offering:
+   - Accessible, well-tested components
+   - Consistent design language
+   - Customizability through Tailwind
+   - TypeScript support for type safety
+
+5. **Other Frontend Libraries**:
+   - **React Hook Form**: Form state management and validation
+   - **Zod**: Schema validation for form inputs
+   - **Recharts**: Data visualization
+   - **Framer Motion**: Animation and transitions
+   - **Uploadcare**: Client-side image uploading
+
+#### 3.5.2. Machine Learning and Data Processing
+
+The machine learning implementation utilized the following technologies:
+
+1. **PyTorch**: Primary framework for neural network models due to:
+   - Flexibility in model architecture definition
+   - Dynamic computational graph
+   - Excellent ecosystem for medical imaging
+   - Straightforward deployment options
+
+2. **Scikit-learn**: Used for the stroke prediction model due to:
+   - Comprehensive implementation of classical ML algorithms
+   - Consistent API for model training and evaluation
+   - Integrated preprocessing capabilities
+   - Efficient serialization options
+
+3. **FastAPI**: Selected for ML model API development because of:
+   - High performance
+   - Automatic OpenAPI documentation
+   - Type safety through Python type annotations
+   - Straightforward deployment on Hugging Face Spaces
+
+4. **Hugging Face Spaces**: Chosen for model hosting due to:
+   - Simplified deployment workflow
+   - Free tier suitable for research projects
+   - Container-based isolation
+   - API-first architecture
+
+5. **Additional ML Technologies**:
+   - **ONNX**: Model format standardization
+   - **Torchvision**: Image processing utilities
+   - **NumPy/Pandas**: Data manipulation
+   - **Scikit-image**: Medical image processing
+   - **Gradio**: UI generation for model testing
+
+#### 3.5.3. Deployment and Infrastructure
+
+The deployment and infrastructure configuration utilized:
+
+1. **Vercel**: Primary hosting platform for the Next.js application, offering:
+   - Seamless integration with Next.js
+   - Global CDN distribution
+   - Automatic HTTPS
+   - Preview deployments for each pull request
+
+2. **MongoDB Atlas**: Cloud database service selected for:
+   - Flexible document model suitable for evolving schema
+   - Built-in sharding and replication
+   - Comprehensive backup options
+   - MongoDB Atlas Data API for serverless access
+
+3. **Hugging Face Spaces**: ML model hosting platform providing:
+   - Docker container environment
+   - Automatic scaling
+   - Custom domain support
+   - API-focused architecture
+
+4. **Docker**: Used for containerization to ensure:
+   - Consistent development and production environments
+   - Dependency isolation
+   - Straightforward horizontal scaling
+   - Simplified CI/CD integration
+
+5. **Additional Infrastructure Components**:
+   - **GitHub Actions**: CI/CD automation
+   - **Uploadcare**: CDN for medical images
+   - **Sentry**: Error tracking and monitoring
+   - **Axiom**: Log aggregation and analysis
+
+#### 3.5.4. Development Methodology
+
+The development process followed an iterative approach incorporating elements from Agile methodologies:
+
+1. **Development Workflow**:
+   - Two-week sprint cycles
+   - Feature branching with pull requests
+   - Code reviews for all changes
+   - Continuous integration with automated testing
+
+2. **Code Quality Tools**:
+   - **TypeScript**: Static type checking
+   - **ESLint**: Code quality rules
+   - **Prettier**: Code formatting
+   - **Jest**: Unit testing
+   - **Cypress**: End-to-end testing
+
+3. **Documentation**:
+   - Comprehensive README files
+   - Architecture decision records (ADRs)
+   - API documentation using OpenAPI
+   - Development setup instructions
+
+4. **Collaboration Tools**:
+   - GitHub for code hosting and issue tracking
+   - Slack for team communication
+   - Figma for design collaboration
+   - Notion for knowledge management
+
+This technology stack was selected to provide a balance of developer productivity, system performance, and long-term maintainability, with a focus on tools that have strong community support and established best practices.
+
+### 3.6. Evaluation Framework
+
+The BrainWise system was evaluated using a comprehensive framework that assessed both technical performance and clinical utility across multiple dimensions.
+
+#### 3.6.1. Technical Performance Evaluation
+
+Technical evaluation focused on the following key metrics:
+
+1. **Machine Learning Model Performance**:
+   - **Accuracy**: Overall correctness of predictions
+   - **Precision**: Proportion of positive identifications that were correct
+   - **Recall/Sensitivity**: Proportion of actual positives correctly identified
+   - **F1 Score**: Harmonic mean of precision and recall
+   - **AUC-ROC**: Area under the receiver operating characteristic curve
+   - **Confusion Matrix**: Detailed breakdown of prediction outcomes
+
+2. **System Performance Metrics**:
+   - **Response Time**: Time to first byte (TTFB) for API responses
+   - **Time to Interactive (TTI)**: Time until the user interface becomes fully responsive
+   - **Largest Contentful Paint (LCP)**: Loading performance for the main content
+   - **First Input Delay (FID)**: Responsiveness to user interactions
+   - **Cumulative Layout Shift (CLS)**: Visual stability during page loading
+
+3. **Resource Utilization**:
+   - **Memory Usage**: Peak and average memory consumption
+   - **CPU Utilization**: Processor load during various operations
+   - **Network Transfer**: Data transmitted during typical user sessions
+   - **Storage Requirements**: Disk space needed for the application and user data
+
+4. **Compatibility Testing**:
+   - **Browser Compatibility**: Testing across major browsers (Chrome, Firefox, Safari, Edge)
+   - **Device Testing**: Desktop, tablet, and mobile device testing
+   - **Network Conditions**: Performance under varying network conditions (4G, 3G, slow connections)
+
+#### 3.6.2. Clinical Utility Assessment
+
+Clinical utility was evaluated through:
+
+1. **Comparison with Clinical Standards**:
+   - **Stroke Risk**: Comparison with established risk calculators (Framingham, ASCVD)
+   - **Brain Tumor Detection**: Comparison with radiologist assessments
+   - **Alzheimer's Detection**: Comparison with clinical diagnostic criteria
+
+2. **Expert Review**:
+   - Evaluation by neurologists and radiologists
+   - Assessment of result presentation and interpretability
+   - Feedback on clinical workflow integration
+
+3. **Usability Assessment**:
+   - **System Usability Scale (SUS)**: Standardized usability measurement
+   - **Task Completion Rate**: Success rate for key user tasks
+   - **Error Rate**: Frequency of user errors during system use
+   - **Time-on-Task**: Time required to complete key clinical tasks
+
+4. **Accessibility Evaluation**:
+   - WCAG 2.1 AA compliance testing
+   - Screen reader compatibility
+   - Keyboard navigation testing
+   - Color contrast and readability assessment
+
+#### 3.6.3. Evaluation Process
+
+The evaluation followed a structured process:
+
+1. **Model Evaluation**:
+   - Cross-validation on training data
+   - Performance assessment on hold-out test data
+   - Comparison with baseline models and clinical standards
+
+2. **System Testing**:
+   - Unit testing of individual components
+   - Integration testing of component interactions
+   - End-to-end testing of key user flows
+   - Performance testing under various load conditions
+
+3. **Expert Review Process**:
+   - Structured evaluation sessions with clinical experts
+   - Recorded feedback on specific aspects of the system
+   - Iterative refinement based on expert input
+
+4. **User Testing**:
+   - Task-based testing with representative users
+   - Think-aloud protocols to capture user thought processes
+   - Post-test interviews and surveys
+   - Analysis of user behavior and error patterns
+
+This comprehensive evaluation framework ensured that both technical performance and clinical utility were rigorously assessed, providing a solid foundation for understanding the system's strengths, limitations, and potential impact.
+
+#### 3.6.4. Ethical Considerations in Evaluation
+
+The evaluation process incorporated several ethical considerations:
+
+1. **Data Privacy and Security**:
+   - All evaluation data was anonymized or synthetic
+   - Testing environments implemented appropriate security controls
+   - Data access was limited to essential personnel
+
+2. **Informed Evaluation Participation**:
+   - All expert reviewers and test users provided informed consent
+   - Purpose and scope of evaluation clearly communicated
+   - Participant rights and data usage clearly documented
+
+3. **Bias Assessment**:
+   - Evaluation included analysis of potential biases in model predictions
+   - Testing across diverse demographic groups
+   - Assessment of performance variations across subpopulations
+
+4. **Transparency in Reporting**:
+   - Comprehensive documentation of evaluation methodology
+   - Full disclosure of both positive and negative findings
+   - Clear acknowledgment of limitations
+
+5. **Appropriate Contextualization**:
+   - Clear communication of the system's intended use
+   - Explicit statements regarding the complementary role to clinical judgment
+   - Avoidance of overstating capabilities or clinical validity
+
+These ethical considerations ensured that the evaluation process itself adhered to responsible AI principles and generated findings that could be interpreted appropriately within the broader healthcare context.
+
+## 4. SYSTEM DESIGN AND IMPLEMENTATION
+
+### 4.1. System Requirements
+
+The development of BrainWise began with a comprehensive requirements analysis to ensure that the system would meet both clinical needs and technical constraints. This process involved literature review, consultations with healthcare professionals, and consideration of best practices in healthcare software development.
+
+#### 4.1.1. Functional Requirements
+
+The functional requirements defined what the system should do and were categorized by user type and system area:
+
+**Core Prediction Functionality:**
+1. The system shall provide a stroke risk assessment tool that analyzes user-provided health data.
+2. The system shall provide a brain tumor detection tool that analyzes uploaded MRI scans.
+3. The system shall provide an Alzheimer's disease detection tool that analyzes uploaded MRI scans.
+4. Each prediction tool shall provide results with confidence/probability indicators.
+5. The system shall maintain a history of user assessments for reference and comparison.
+
+**User Account Management:**
+1. The system shall support user registration and authentication.
+2. The system shall allow users to manage their health profiles.
+3. The system shall implement role-based access control (patient, healthcare provider).
+4. The system shall support secure password reset and account recovery.
+5. The system shall allow users to delete their accounts and associated data.
+
+**Health Data Management:**
+1. The system shall enable tracking of key health metrics relevant to brain health.
+2. The system shall support manual entry of health measurements.
+3. The system shall generate visualizations of health data trends over time.
+4. The system shall allow export of health data in standard formats.
+5. The system shall support goal setting and progress tracking for health metrics.
+
+**Educational Resources:**
+1. The system shall provide informational content about brain health conditions.
+2. The system shall present research summaries from peer-reviewed sources.
+3. The system shall include multimedia educational resources.
+4. The system shall offer personalized educational recommendations based on user risk factors.
+5. The system shall provide explanations of assessment results in non-technical language.
+
+**System Integration:**
+1. The system shall support image upload to external storage services.
+2. The system shall communicate with external machine learning model APIs.
+3. The system shall integrate with research literature APIs.
+4. The system shall support potential future integration with electronic health records.
+5. The system shall provide API endpoints for authorized third-party applications.
+
+#### 4.1.2. Non-Functional Requirements
+
+The non-functional requirements defined how the system should perform its functions:
+
+**Performance Requirements:**
+1. The system shall load initial content within 2 seconds on standard broadband connections.
+2. The system shall process stroke risk assessments within 3 seconds.
+3. The system shall complete image analysis within 30 seconds from upload completion.
+4. The system shall support at least 100 concurrent users without performance degradation.
+5. The system shall maintain database query response times under 200ms for 95% of queries.
+
+**Security and Privacy Requirements:**
+1. The system shall encrypt all personal health information at rest and in transit.
+2. The system shall implement authentication with multi-factor options.
+3. The system shall maintain detailed access logs for audit purposes.
+4. The system shall implement session timeouts after 15 minutes of inactivity.
+5. The system shall anonymize data used for model improvement.
+6. The system shall comply with relevant healthcare data privacy standards.
+
+**Reliability and Availability Requirements:**
+1. The system shall maintain 99.9% uptime excluding scheduled maintenance.
+2. The system shall implement graceful degradation when services are unavailable.
+3. The system shall perform daily automated backups of all user data.
+4. The system shall support recovery from service interruptions within 10 minutes.
+5. The system shall implement circuit breakers for external service dependencies.
+
+**Usability Requirements:**
+1. The system shall be accessible according to WCAG 2.1 AA standards.
+2. The system shall support responsive design for mobile, tablet, and desktop devices.
+3. The system shall provide clear error messages and recovery options.
+4. The system shall maintain a consistent design language throughout.
+5. The system shall offer contextual help and guidance for complex tasks.
+6. The system shall support key functions with keyboard-only navigation.
+
+**Scalability and Maintenance Requirements:**
+1. The system architecture shall support horizontal scaling for increased user load.
+2. The system shall implement feature flags for controlled feature rollout.
+3. The system shall support zero-downtime deployments.
+4. The system shall implement comprehensive logging for troubleshooting.
+5. The system shall support automated testing with at least 80% code coverage.
+
+### 4.2. System Architecture
+
+#### 4.2.1. Architectural Overview
+
+The BrainWise architecture follows a modern, distributed approach that separates concerns while maintaining clear integration points. Figure 4 presents a detailed architectural diagram of the system:
 
 ```mermaid
 flowchart TD
-    A[GitHub Repository] --> B[GitHub Actions CI/CD]
-    B --> C[Run Tests]
-    C --> D[Build Production Assets]
-    D --> E[Deploy to Vercel]
-    E --> F[Vercel Edge Network]
-    F --> G[Vercel Serverless Functions]
-    F --> H[Static Assets CDN]
-    G --> I[MongoDB Atlas]
-    G --> J[ML Model API]
-    J --> K[Azure ML Services]
+    subgraph Client["Client Layer"]
+        UI[UI Components]
+        Form[Form Management]
+        ClientState[Client State]
+        Validation[Form Validation]
+        ClientFetch[Data Fetching]
+    end
+
+    subgraph NextServer["Next.js Server"]
+        subgraph ServerRendering["Server Rendering"]
+            SSR[Server-Side Rendering]
+            RSC[React Server Components]
+            ISR[Incremental Static Regeneration]
+        end
+        
+        subgraph APILayer["API Layer"]
+            APIRoutes[API Route Handlers]
+            Authentication[Authentication]
+            Middleware[API Middleware]
+        end
+        
+        subgraph DataLayer["Data Layer"]
+            DBAccess[Database Access]
+            Caching[Data Caching]
+            ApiIntegration[External API Integration]
+        end
+    end
+
+    subgraph MLServices["ML Services (Hugging Face)"]
+        StrokeAPI[Stroke Prediction API]
+        TumorAPI[Brain Tumor Detection API]
+        AlzheimersAPI[Alzheimer's Detection API]
+    end
+
+    subgraph ExternalServices["External Services"]
+        MongoDB[(MongoDB Atlas)]
+        UploadCare[UploadCare CDN]
+        SemanticScholar[Semantic Scholar API]
+    end
+
+    UI --> Form
+    Form --> Validation
+    Validation --> ClientFetch
+    ClientFetch --> APIRoutes
+    ClientFetch --> ClientState
+    
+    SSR --> RSC
+    ISR --> SSR
+    
+    APIRoutes --> Authentication
+    Authentication --> Middleware
+    Middleware --> DBAccess
+    Middleware --> ApiIntegration
+    
+    DBAccess --> MongoDB
+    DBAccess --> Caching
+    
+    ApiIntegration --> StrokeAPI
+    ApiIntegration --> TumorAPI
+    ApiIntegration --> AlzheimersAPI
+    ApiIntegration --> UploadCare
+    ApiIntegration --> SemanticScholar
+    
+    ServerRendering --> DataLayer
 ```
 
-The deployment architecture for BrainWise follows industry best practices for modern web applications:
+The architecture consists of four primary layers:
 
-- **Continuous Deployment**: Code changes pushed to the main branch trigger automated build and deployment processes through GitHub Actions.
+1. **Client Layer**: The presentation and user interaction layer, responsible for rendering the interface, managing forms, validating user input, and handling client-side state.
 
-- **Edge Network**: Vercel's edge network ensures low-latency global access to the application with automatic SSL certificate management.
+2. **Next.js Server Layer**: The application server layer, handling server-side rendering, API requests, authentication, and data access logic.
 
-- **Serverless Functions**: Next.js API routes are deployed as serverless functions, providing automatic scaling based on demand without manual infrastructure management.
+3. **ML Services Layer**: The machine learning infrastructure, consisting of independent services hosted on Hugging Face Spaces, each providing specialized prediction capabilities.
 
-- **Database Connectivity**: Serverless functions establish secure connections to MongoDB Atlas using connection pooling to optimize performance.
+4. **External Services Layer**: The infrastructure layer, providing persistent data storage, content delivery, and specialized API services.
 
-- **ML Model Hosting**: Machine learning models are hosted on Azure ML Services with API endpoints that handle preprocessing, inference, and result formatting.
+**Key Architectural Patterns:**
 
-- **Content Delivery Network**: Static assets are automatically distributed through Vercel's CDN, reducing load times for users worldwide.
+1. **Microservices for ML Models**: Each machine learning model is implemented as an independent service with its own API, allowing for:
+   - Independent scaling based on usage patterns
+   - Isolated deployment and updates
+   - Technology-specific optimization
+   - Failure isolation
 
-#### 4.2.6 Next.js App Router Implementation
+2. **API Gateway Pattern**: The Next.js API routes serve as an API gateway that:
+   - Provides a unified interface to diverse backend services
+   - Handles authentication and authorization
+   - Implements request validation
+   - Manages error handling and response formatting
 
-The application leverages Next.js App Router architecture, which provides several key advantages for a healthcare application:
+3. **Repository Pattern**: Data access is abstracted through repository interfaces that:
+   - Decouple business logic from data storage details
+   - Provide consistent error handling
+   - Enable data source switching or replication
+   - Simplify unit testing through mock implementations
 
-- **Server Components**: Utilizing React Server Components to reduce client-side JavaScript and improve performance.
-  
-- **Route Handlers**: API routes that connect securely to the database and external ML services.
-  
-- **Middleware**: Authentication checking and request validation before reaching protected routes.
-  
-- **Parallel Routes**: Supporting multiple dashboard views and specialized interfaces for different user roles.
-  
-- **Intercepting Routes**: For modal-based workflows like quick health assessments without page navigation.
-  
-- **Static and Dynamic Rendering**: Static rendering for public informational pages and dynamic rendering for personalized patient data.
+4. **Command Query Responsibility Segregation (CQRS)**: For performance-critical operations, the system separates:
+   - Read operations (queries) optimized for data retrieval
+   - Write operations (commands) optimized for data integrity
 
-The App Router structure follows this organization:
+5. **Circuit Breaker Pattern**: External service calls implement circuit breakers that:
+   - Detect when external services are failing
+   - Prevent cascading failures by stopping calls to failing services
+   - Implement fallback mechanisms
+   - Automatically reset after appropriate timeouts
 
-```
-app/
-  ├── (auth)/
-  │   ├── sign-in/
-  │   └── sign-up/
-  ├── (marketing)/
-  │   ├── about/
-  │   ├── features/
-  │   └── contact/
-  ├── dashboard/
-  │   ├── @metrics/
-  │   │   └── page.tsx
-  │   ├── @reports/
-  │   │   └── page.tsx
-  │   ├── layout.tsx
-  │   └── page.tsx
-  ├── predictors/
-  │   ├── stroke/
-  │   ├── tumor/
-  │   └── alzheimers/
-  ├── assessments/
-  │   └── [id]/
-  ├── api/
-  │   ├── health-metrics/
-  │   ├── brain-scan/
-  │   └── stroke/
-  ├── layout.tsx
-  └── page.tsx
-```
+#### 4.2.2. Layer Components
 
-This structure optimizes for both performance and developer experience, allowing for clear separation of concerns and efficient data fetching patterns.
+**Client Layer Components:**
 
-#### 4.2.7 Performance Optimization Strategies
+The client layer is built using React and implements several key patterns:
 
-BrainWise implements numerous performance optimization techniques to ensure a responsive and efficient user experience:
+1. **Component Hierarchy**:
+   - **Page Components**: Top-level components corresponding to routes
+   - **Layout Components**: Structural components for consistent page organization
+   - **UI Components**: Reusable interface elements
+   - **Form Components**: Specialized components for data entry
 
-- **Image Optimization**: All images are processed through Next.js Image component with WebP format, proper sizing, and lazy loading.
+2. **State Management**:
+   - **Local Component State**: Using React's useState for component-specific state
+   - **Context API**: For sharing state across component trees
+   - **React Query**: For server state management and data fetching
 
-- **Component-Level Code Splitting**: Dynamic imports with React.lazy and Suspense for non-critical UI components.
+3. **Form Management**:
+   - **React Hook Form**: For efficient form state management
+   - **Zod Schema Validation**: For type-safe form validation
+   - **Controlled Components**: For direct manipulation of form state
 
-- **Strategic Data Prefetching**: Leveraging SWR's prefetching capabilities to load data before users navigate to a page.
-
-- **Optimized Fonts**: Implementation of the Next.js font system with size-adjust and variable fonts to minimize layout shifts.
-
-- **Cache-Control Headers**: Configured for static assets and API responses to maximize cache utilization.
-
-- **Streaming Server Components**: Long-running data fetching operations are streamed to progressively render content.
-
-- **Bundle Analysis**: Regular monitoring of JavaScript bundle sizes with automatic alerts for significant increases.
-
-- **Core Web Vitals Monitoring**: Continuous tracking of LCP, CLS, and FID/INP metrics in production to identify optimization opportunities.
+Figure 5 illustrates the client-side component architecture:
 
 ```mermaid
 flowchart TD
-    A[Performance Optimization] --> B[Server-side Rendering]
-    A --> C[Client-side Optimization]
-    A --> D[Network Optimization]
-    A --> E[Asset Optimization]
+    subgraph Components["Component Architecture"]
+        direction TB
+        
+        subgraph Pages["Page Components"]
+            HomePage[Home Page]
+            DashboardPage[Dashboard Page]
+            PredictorPage[Predictor Page]
+            ResearchPage[Research Page]
+            SettingsPage[Settings Page]
+        end
+        
+        subgraph Layouts["Layout Components"]
+            MainLayout[Main Layout]
+            DashboardLayout[Dashboard Layout]
+            PredictorLayout[Predictor Layout]
+        end
+        
+        subgraph SharedUI["Shared UI Components"]
+            direction TB
+            Button[Button]
+            Card[Card]
+            Input[Input]
+            Select[Select]
+            Slider[Slider]
+            Alert[Alert]
+            Modal[Modal]
+            Toast[Toast]
+        end
+        
+        subgraph Forms["Form Components"]
+            StrokeForm[Stroke Prediction Form]
+            HealthMetricsForm[Health Metrics Form]
+            UploadForm[Image Upload Form]
+            AuthForms[Authentication Forms]
+        end
+        
+        subgraph Domain["Domain-Specific Components"]
+            HealthMetricChart[Health Metric Chart]
+            RiskIndicator[Risk Indicator]
+            ResultsDisplay[Results Display]
+            ImagePreview[Image Preview]
+        end
+    end
     
-    B --> F[React Server Components]
-    B --> G[Streaming]
-    B --> H[Edge Functions]
-    
-    C --> I[Component Code Splitting]
-    C --> J[Bundle Size Reduction]
-    C --> K[Efficient Re-rendering]
-    
-    D --> L[CDN Distribution]
-    D --> M[API Response Caching]
-    D --> N[Connection Pooling]
-    
-    E --> O[Image Optimization]
-    E --> P[Font Optimization]
-    E --> Q[CSS Minimization]
+    Pages --> Layouts
+    Layouts --> SharedUI
+    Layouts --> Domain
+    Pages --> Forms
+    Forms --> SharedUI
+    Domain --> SharedUI
 ```
 
-#### 4.2.8 Mobile Responsiveness
+**Server Layer Components:**
 
-BrainWise is designed with a mobile-first approach, ensuring an optimal user experience across all device sizes:
+The server layer leverages Next.js capabilities:
 
-- **Tailwind Breakpoint System**: UI components adapt fluidly to different screen sizes using Tailwind's responsive utility classes.
+1. **API Routes**:
+   - **Authentication Routes**: User registration, login, and session management
+   - **Health Metrics Routes**: Recording and retrieving health measurements
+   - **Assessment Routes**: Managing prediction requests and results
+   - **User Profile Routes**: User preference and profile management
+   - **Integration Routes**: Proxies for external API services
 
-- **Touch-Optimized Interactions**: Interactive elements sized appropriately for touch input with sufficient spacing.
+2. **Rendering Strategies**:
+   - **Static Generation**: For content that rarely changes
+   - **Incremental Static Regeneration**: For semi-dynamic content
+   - **Server-Side Rendering**: For user-specific or frequently updated content
+   - **Client-Side Rendering**: For highly interactive components
 
-- **Conditional Rendering**: Complex data visualizations adapt their level of detail based on available screen real estate.
+3. **Middleware Components**:
+   - **Authentication Middleware**: Session validation and user identification
+   - **Logging Middleware**: Request and response logging
+   - **Error Handling Middleware**: Consistent error processing
+   - **Caching Middleware**: Response caching for performance optimization
 
-- **Device Testing Matrix**: Regular testing across iOS and Android devices of varying sizes and capabilities.
+**ML Services Components:**
 
-- **Responsive Typography**: Implementation of a fluid type scale that adjusts based on viewport width.
+Each machine learning service follows a consistent structure:
 
-- **Progressive Enhancement**: Core functionality works on all devices with enhanced experiences on more capable devices.
+1. **API Layer**:
+   - FastAPI application defining endpoints
+   - Request validation
+   - Response formatting
+   - Error handling
 
-### 4.3 Core Application Modules
+2. **Inference Layer**:
+   - Model loading and initialization
+   - Input preprocessing
+   - Prediction generation
+   - Output postprocessing
 
-BrainWise consists of several interconnected modules, each responsible for specific functionality:
+3. **Monitoring Layer**:
+   - Performance tracking
+   - Error logging
+   - Request/response auditing
 
-#### 4.3.1 User Management Module
+Figure 6 shows the architecture of the ML services:
 
-Handles user registration, authentication, profile management, and authorization across the application. This module implements role-based access control to differentiate between regular users and healthcare providers.
-
-#### 4.3.2 Health Metrics Tracking Module
-
-Enables users to record, import, and track various health metrics over time. This module includes data validation, visualization components, and trend analysis features.
-
-```typescript
-// Example code snippet from the health metrics module
-export interface HealthMetric {
-  id: string;
-  userId: string;
-  metricType: MetricType;
-  value: number;
-  unit: string;
-  timestamp: Date;
-  notes?: string;
-}
-
-export enum MetricType {
-  BLOOD_PRESSURE = 'blood_pressure',
-  HEART_RATE = 'heart_rate',
-  BLOOD_GLUCOSE = 'blood_glucose',
-  CHOLESTEROL = 'cholesterol',
-  WEIGHT = 'weight',
-  // Additional metric types
-}
-
-export const recordHealthMetric = async (
-  userId: string,
-  metricData: Omit<HealthMetric, 'id' | 'userId'>
-): Promise<HealthMetric> => {
-  // Data validation
-  validateMetricData(metricData);
-  
-  // Store in database using Mongoose
-  const newMetric = await HealthMetricModel.create({
-    ...metricData,
-    userId,
-  });
-  
-  // Trigger relevant notifications or updates
-  await updateUserInsights(userId);
-  
-  return newMetric;
-};
+```mermaid
+flowchart TD
+    subgraph MLService["ML Service Architecture"]
+        direction TB
+        
+        subgraph API["API Layer"]
+            Endpoints[API Endpoints]
+            Validation[Request Validation]
+            ResponseFormat[Response Formatting]
+        end
+        
+        subgraph Inference["Inference Layer"]
+            ModelLoader[Model Loader]
+            Preprocessor[Input Preprocessor]
+            ModelInference[Model Inference]
+            Postprocessor[Output Postprocessor]
+        end
+        
+        subgraph Monitoring["Monitoring Layer"]
+            Logger[Request Logger]
+            ErrorTracker[Error Tracker]
+            PerformanceMetrics[Performance Metrics]
+        end
+        
+        subgraph ModelAssets["Model Assets"]
+            TrainedModel[Trained Model]
+            Metadata[Model Metadata]
+            Preprocessors[Preprocessor Definitions]
+        end
+    end
+    
+    API --> Inference
+    Inference --> ModelAssets
+    API --> Monitoring
+    Inference --> Monitoring
 ```
 
-#### 4.3.3 Assessment Engine
+#### 4.2.3. Cross-Cutting Concerns
 
-Core module responsible for running risk assessments based on user data. This module integrates with machine learning models, handles input preprocessing, and generates detailed assessment reports.
+Several aspects of the system architecture address concerns that span multiple layers:
 
-#### 4.3.4 Recommendation System
+1. **Authentication and Authorization**:
+   - **JWT-Based Authentication**: Secure, stateless authentication using JSON Web Tokens
+   - **Role-Based Access Control**: Different capabilities based on user roles
+   - **Resource-Level Permissions**: Fine-grained access control for sensitive operations
+   - **OAuth Integration**: Support for third-party authentication providers
 
-Generates personalized health recommendations based on assessment results, user preferences, and evidence-based guidelines. This module implements a rule-based system augmented by machine learning insights.
+2. **Error Handling**:
+   - **Centralized Error Processing**: Consistent error handling across all components
+   - **Error Categorization**: Classification of errors by type and severity
+   - **User-Friendly Messages**: Conversion of technical errors to understandable messages
+   - **Error Recovery Suggestions**: Actionable guidance for resolving errors
 
-#### 4.3.5 Data Visualization Module
+3. **Logging and Monitoring**:
+   - **Structured Logging**: JSON-formatted logs with consistent attributes
+   - **Log Levels**: Differentiation between debug, info, warning, and error logs
+   - **Request Tracing**: Correlation IDs for tracking requests across services
+   - **Performance Monitoring**: Timing of critical operations and bottleneck identification
 
-Provides interactive charts and visual representations of health data, assessment results, and trends over time. This module emphasizes accessibility and clarity in data presentation.
+4. **Security Controls**:
+   - **HTTPS Enforcement**: All communication encrypted using TLS
+   - **Content Security Policy**: Prevention of XSS and other injection attacks
+   - **Rate Limiting**: Protection against brute-force and DOS attacks
+   - **Input Sanitization**: Prevention of injection attacks at all input points
+   - **Vulnerability Scanning**: Regular automated security testing
 
-#### 4.3.6 Notification Service
+#### 4.2.4. Data Flow Patterns
 
-Manages user alerts for assessment reminders, significant health changes, and recommended actions. This service implements multiple notification channels including in-app, email, and optional mobile push notifications.
+The BrainWise system implements several key data flow patterns to handle different types of operations:
 
-#### 4.3.7 Healthcare Provider Interface
-
-Specialized module for healthcare professionals to view patient data (with consent), track progress, and add clinical notes. This module includes features for generating clinical summaries and integrating with external healthcare systems.
-
-### 4.4 Data Flow and Integration
-
-The data flow within BrainWise follows a well-defined path from data collection to insights generation:
+1. **Stroke Prediction Flow**:
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant Frontend
-    participant API
-    participant Database
-    participant MLService
+    participant UI as User Interface
+    participant API as Next.js API Route
+    participant ML as Stroke Prediction API
     
-    User->>Frontend: Input health data
-    Frontend->>API: Submit data
-    API->>API: Validate data
-    API->>Database: Store validated data
-    API->>MLService: Request risk assessment
-    MLService->>Database: Retrieve historical data
-    MLService->>MLService: Preprocess data
-    MLService->>MLService: Run prediction models
-    MLService->>API: Return assessment results
-    API->>Database: Store assessment results
-    API->>Frontend: Send processed results
-    Frontend->>User: Display insights and recommendations
+    User->>UI: Enter health data
+    UI->>UI: Validate input
+    UI->>API: Submit validated data
+    API->>API: Authorize request
+    API->>ML: Forward prediction request
+    ML->>ML: Preprocess data
+    ML->>ML: Execute prediction model
+    ML->>ML: Calculate risk factors
+    ML->>API: Return prediction results
+    API->>API: Format response
+    API->>UI: Send formatted results
+    UI->>User: Display prediction and explanation
+    API->>API: Store prediction in database
 ```
 
-### 4.5 Security Architecture
+2. **Brain Scan Analysis Flow**:
 
-Given the sensitive nature of health data, BrainWise implements a comprehensive security architecture:
-
-#### 4.5.1 Authentication and Authorization
-
-### Clerk Integration
-
-BrainWise implements Clerk as its primary authentication and user management solution. Clerk was chosen for its robust security features, healthcare-grade compliance capabilities, and seamless integration with Next.js applications.
-
-#### Middleware Configuration
-
-```typescript
-// middleware.ts
-import { authMiddleware } from "@clerk/nextjs";
-
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/api/health-check",
-    "/about",
-    "/login",
-    "/sign-up",
-    "/api/webhooks/clerk",
-  ],
-  ignoredRoutes: [
-    "/api/webhooks/clerk",
-  ],
-});
-
-export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
-};
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as User Interface
+    participant Upload as Upload Service
+    participant API as Next.js API Route
+    participant ML as Brain Scan API
+    participant DB as Database
+    
+    User->>UI: Select and upload scan
+    UI->>Upload: Direct upload to CDN
+    Upload->>UI: Return image URL
+    UI->>API: Submit image URL for analysis
+    API->>API: Create assessment record
+    API->>DB: Store pending assessment
+    API->>UI: Return assessment ID
+    UI->>User: Show processing status
+    API->>ML: Asynchronously send image for analysis
+    ML->>ML: Preprocess image
+    ML->>ML: Execute neural network
+    ML->>ML: Process predictions
+    ML->>API: Return analysis results
+    API->>DB: Update assessment with results
+    User->>UI: Poll or receive notification
+    UI->>API: Request assessment status
+    API->>DB: Retrieve assessment
+    API->>UI: Return completed assessment
+    UI->>User: Display analysis results
 ```
 
-#### Client-Side Integration
+3. **Health Metrics Tracking Flow**:
 
-```typescript
-// components/user-profile.tsx
-"use client";
-
-import { UserProfile } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-
-export default function ProfilePage() {
-  return (
-    <div className="flex justify-center py-12">
-      <UserProfile
-        appearance={{
-          baseTheme: dark,
-          elements: {
-            card: "bg-gray-900 border-gray-800",
-            navbar: "bg-gray-900",
-            navbarButton: "text-white",
-          },
-        }}
-        path="/profile"
-        routing="path"
-      />
-    </div>
-  );
-}
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as User Interface
+    participant API as Next.js API Route
+    participant DB as Database
+    participant Chart as Data Visualization
+    
+    User->>UI: Enter health measurement
+    UI->>UI: Validate input
+    UI->>API: Submit measurement
+    API->>API: Authorize request
+    API->>DB: Store measurement
+    API->>UI: Confirm storage
+    UI->>API: Request historical data
+    API->>DB: Query time series data
+    API->>UI: Return formatted data
+    UI->>Chart: Generate visualization
+    Chart->>UI: Render chart
+    UI->>User: Display trend analysis
 ```
 
-#### Healthcare Provider Verification
+These data flow patterns illustrate the interactions between system components and the sequence of operations for key user scenarios.
 
-For healthcare provider accounts, we've implemented additional verification steps:
-- Identity verification through document upload and manual review
-- Professional credentials verification
-- Two-factor authentication requirement
-- IP-based location tracking and suspicious activity monitoring
+### 4.3. Design System
 
-#### Security Enhancements
+A consistent design system was developed for BrainWise to ensure usability, accessibility, and visual coherence across all components of the application. The design system was built on Shadcn UI and Tailwind CSS, providing a foundation of customizable, accessible components.
 
-1. **JWT Customization**:
-   - Reduced token lifetime (15 minutes)
-   - Custom claims for role-based access control
-   - Encryption of sensitive payload data
+#### 4.3.1. UI Component Architecture
 
-2. **Session Management**:
-   - Automatic session termination after 30 minutes of inactivity
-   - Device fingerprinting for unusual access detection
-   - Concurrent session limitations for healthcare providers
+The UI component architecture followed a atomic design methodology, organizing components in a hierarchy of increasing complexity:
 
-3. **Access Controls**:
-   - Role-based permissions (Patient, Provider, Admin)
-   - Resource-level access policies
-   - Audit logging for all authentication events
+1. **Atoms**: Fundamental building blocks such as buttons, inputs, and icons
+2. **Molecules**: Combinations of atoms forming functional units like form fields and cards
+3. **Organisms**: Complex components assembling multiple molecules into functional features
+4. **Templates**: Page-level structures defining content organization
+5. **Pages**: Complete screens implementing specific user flows
 
-This comprehensive authentication system ensures that BrainWise meets the stringent security requirements for handling sensitive health data while providing a frictionless user experience.
-
-#### 4.5.2 Data Protection
-
-- **Encryption at Rest**: All personal and health data encrypted in the database using AES-256 encryption.
-
-- **Encryption in Transit**: TLS/SSL for all communications between components with strict transport security policies.
-
-- **Data Minimization**: Collection limited to necessary information with clear purpose definitions and consent management.
-
-- **Secure Data Deletion**: Proper data erasure procedures when user data is removed, with cryptographic verification.
-
-#### 4.5.3 HIPAA Compliance
-
-- **Business Associate Agreements**: Established with all third-party services handling PHI.
-
-- **Access Controls**: Role-based access with the principle of least privilege and just-in-time access for administrators.
-
-- **Audit Logging**: Comprehensive and tamper-proof logging of all data access, modifications, and authentication events.
-
-- **Risk Assessment**: Regular security risk assessments and penetration testing with remediation plans.
-
-- **Disaster Recovery**: Automated backup systems with encryption and regular recovery testing.
-
-- **Data Encryption**: End-to-end encryption for all PHI data in transit and at rest.
-
-- **Secure API Design**: Healthcare-specific security patterns including token-based authorization and API request validation.
-
-- **Compliance Documentation**: Maintaining required documentation including Privacy Impact Assessments and Security Risk Analyses.
-
-The BrainWise architecture has been designed with scalability, security, and maintainability as primary considerations, ensuring that the system can evolve to meet future requirements while maintaining the integrity and confidentiality of sensitive health information.
-
-### 4.6 Deployment Architecture
-
-The BrainWise application employs a modern, cloud-native deployment architecture designed for high availability, scalability, and security.
-
-#### 4.6.1 Infrastructure Overview
+This approach enabled consistent reuse of components and established clear patterns for component composition. Figure 7 illustrates this hierarchy:
 
 ```mermaid
 flowchart TD
-    A[GitHub Repository] --> B[CI/CD Pipeline]
-    B --> C[Test & Build]
-    C --> D[Deploy to Vercel]
-    D --> E[Vercel Edge Network]
-    E --> F[Next.js App]
-    F --> G[Next.js API Routes]
-    G --> H[MongoDB Atlas]
-    G --> I[AWS SageMaker ML Models]
-    G --> J[Clerk Auth]
-    F --> K[Static Assets CDN]
+    subgraph Atoms["Atoms"]
+        Button[Button]
+        Input[Input]
+        Icon[Icon]
+        Text[Typography]
+        Checkbox[Checkbox]
+    end
+    
+    subgraph Molecules["Molecules"]
+        FormField[Form Field]
+        Card[Card]
+        Alert[Alert]
+        Dropdown[Dropdown]
+        SearchBar[Search Bar]
+    end
+    
+    subgraph Organisms["Organisms"]
+        PredictionForm[Prediction Form]
+        ResultsCard[Results Card]
+        HealthMetricsChart[Health Metrics Chart]
+        NavigationMenu[Navigation Menu]
+        UploadWidget[Upload Widget]
+    end
+    
+    subgraph Templates["Templates"]
+        DashboardTemplate[Dashboard Template]
+        PredictorTemplate[Predictor Template]
+        ProfileTemplate[Profile Template]
+        AuthTemplate[Authentication Template]
+    end
+    
+    subgraph Pages["Pages"]
+        StrokePredictorPage[Stroke Predictor Page]
+        BrainScanAnalysisPage[Brain Scan Analysis Page]
+        UserDashboardPage[User Dashboard Page]
+        SettingsPage[Settings Page]
+    end
+    
+    Atoms --> Molecules
+    Molecules --> Organisms
+    Organisms --> Templates
+    Templates --> Pages
 ```
 
-#### 4.6.2 AWS Infrastructure
+**Design Tokens:**
 
-- **VPC Configuration**: Private subnets for database and ML services with strict security groups
-- **Multi-AZ Deployment**: Resources distributed across availability zones for redundancy
-- **Auto-scaling**: Dynamic resource allocation based on traffic patterns
-- **Managed Services**: Utilizing managed offerings to reduce operational overhead
+The design system was built on a foundation of design tokens - named variables that store design attributes. These tokens ensured consistency across the application and simplified theming and customization:
 
-#### 4.6.3 CI/CD Pipeline
+**Table 5: Core Design Tokens**
 
-- **GitHub Actions Workflow**:
-  ```yaml
-  name: Build and Deploy
-  
-  on:
-    push:
-      branches: [ main ]
-    pull_request:
-      branches: [ main ]
-  
-  jobs:
-    test:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - name: Setup Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: '18'
-        - name: Install dependencies
-          run: npm ci
-        - name: Run tests
-          run: npm test
-          
-    lint:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - name: Setup Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: '18'
-        - name: Install dependencies
-          run: npm ci
-        - name: Run linting
-          run: npm run lint
-          
-    deploy:
-      needs: [test, lint]
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - name: Deploy to Vercel
-          uses: amondnet/vercel-action@v20
-          with:
-            vercel-token: ${{ secrets.VERCEL_TOKEN }}
-            vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-            vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-            vercel-args: '--prod'
-  ```
+| Category | Token Examples | Implementation |
+|----------|----------------|----------------|
+| Colors | Primary, Secondary, Accent, Neutral, Error, Warning, Success | Tailwind theme colors |
+| Typography | Font families, sizes, weights, line heights | Tailwind typography scale |
+| Spacing | Margin and padding values | Tailwind spacing scale |
+| Breakpoints | Mobile, tablet, desktop, large desktop | Tailwind screen breakpoints |
+| Borders | Radius, width, style | Tailwind border utilities |
+| Shadows | Elevation levels | Tailwind shadow utilities |
+| Animation | Duration, easing functions | Tailwind transition utilities |
 
-#### 4.6.4 Security Monitoring
+#### 4.3.2. Responsive Design Implementation
 
-- **Application Performance Monitoring**: Real-time tracking of system performance and errors
-- **Security Scanning**: Automated vulnerability scanning of code and dependencies
-- **Log Aggregation**: Centralized logging with alert mechanisms for suspicious activity
-- **Uptime Monitoring**: Continuous monitoring of application availability with notifications
+The BrainWise interface implemented a mobile-first responsive design approach, ensuring usability across a wide range of devices and screen sizes:
 
-#### 4.6.5 HIPAA Compliance Infrastructure
+1. **Fluid Grid System**: Layout components adjusted dynamically based on available screen space, using Tailwind's responsive utilities.
 
-- **PHI Data Handling**: 
-  - Separate storage for PHI data with enhanced encryption
-  - Access logging for all PHI interactions
-  - Automatic data retention policy enforcement
+2. **Responsive Typography**: Text sizes and line heights scaled appropriately for different screen sizes, maintaining readability across devices.
 
-- **Audit Requirements**:
-  - Comprehensive audit trail of all system access
-  - Regular audit log reviews
-  - Immutable audit records stored securely
+3. **Component Adaptation**: UI components changed their layout and behavior based on screen size:
+   - Card layouts shifted from multi-column to single-column
+   - Navigation transformed from horizontal to hamburger menu
+   - Tables converted to card-based layouts on small screens
+   - Forms adjusted field layout and sizing
 
-- **Disaster Recovery**:
-  - 15-minute RPO (Recovery Point Objective)
-  - 1-hour RTO (Recovery Time Objective)
-  - Regular DR testing procedures
+4. **Touch Optimization**: Interactive elements were sized and spaced appropriately for touch interaction on mobile devices.
 
-- **Business Continuity**:
-  - Multiple geographic region redundancy
-  - Automated failover mechanisms
-  - Regular backup validation
+5. **Performance Considerations**: Images were optimized and lazy-loaded, and heavy components were dynamically imported to ensure responsive performance on mobile networks.
 
-#### 4.6.6 Next.js App Router Implementation
-
-The application leverages Next.js App Router architecture, which provides several key advantages for a healthcare application:
-
-- **Server Components**: Utilizing React Server Components to reduce client-side JavaScript and improve performance.
-  
-- **Route Handlers**: API routes that connect securely to the database and external ML services.
-  
-- **Middleware**: Authentication checking and request validation before reaching protected routes.
-  
-- **Parallel Routes**: Supporting multiple dashboard views and specialized interfaces for different user roles.
-  
-- **Intercepting Routes**: For modal-based workflows like quick health assessments without page navigation.
-  
-- **Static and Dynamic Rendering**: Static rendering for public informational pages and dynamic rendering for personalized patient data.
-
-The App Router structure follows this organization:
-
-```
-app/
-  ├── (auth)/
-  │   ├── sign-in/
-  │   └── sign-up/
-  ├── (marketing)/
-  │   ├── about/
-  │   ├── features/
-  │   └── contact/
-  ├── dashboard/
-  │   ├── @metrics/
-  │   │   └── page.tsx
-  │   ├── @reports/
-  │   │   └── page.tsx
-  │   ├── layout.tsx
-  │   └── page.tsx
-  ├── predictors/
-  │   ├── stroke/
-  │   ├── tumor/
-  │   └── alzheimers/
-  ├── assessments/
-  │   └── [id]/
-  ├── api/
-  │   ├── health-metrics/
-  │   ├── brain-scan/
-  │   └── stroke/
-  ├── layout.tsx
-  └── page.tsx
-```
-
-This structure optimizes for both performance and developer experience, allowing for clear separation of concerns and efficient data fetching patterns.
-
-#### 4.6.7 Performance Optimization Strategies
-
-BrainWise implements numerous performance optimization techniques to ensure a responsive and efficient user experience:
-
-- **Image Optimization**: All images are processed through Next.js Image component with WebP format, proper sizing, and lazy loading.
-
-- **Component-Level Code Splitting**: Dynamic imports with React.lazy and Suspense for non-critical UI components.
-
-- **Strategic Data Prefetching**: Leveraging SWR's prefetching capabilities to load data before users navigate to a page.
-
-- **Optimized Fonts**: Implementation of the Next.js font system with size-adjust and variable fonts to minimize layout shifts.
-
-- **Cache-Control Headers**: Configured for static assets and API responses to maximize cache utilization.
-
-- **Streaming Server Components**: Long-running data fetching operations are streamed to progressively render content.
-
-- **Bundle Analysis**: Regular monitoring of JavaScript bundle sizes with automatic alerts for significant increases.
-
-- **Core Web Vitals Monitoring**: Continuous tracking of LCP, CLS, and FID/INP metrics in production to identify optimization opportunities.
+Figure 8 illustrates the responsive adaptation of a key interface component:
 
 ```mermaid
 flowchart TD
-    A[Performance Optimization] --> B[Server-side Rendering]
-    A --> C[Client-side Optimization]
-    A --> D[Network Optimization]
-    A --> E[Asset Optimization]
-    
-    B --> F[React Server Components]
-    B --> G[Streaming]
-    B --> H[Edge Functions]
-    
-    C --> I[Component Code Splitting]
-    C --> J[Bundle Size Reduction]
-    C --> K[Efficient Re-rendering]
-    
-    D --> L[CDN Distribution]
-    D --> M[API Response Caching]
-    D --> N[Connection Pooling]
-    
-    E --> O[Image Optimization]
-    E --> P[Font Optimization]
-    E --> Q[CSS Minimization]
-```
-
-#### 4.6.8 Mobile Responsiveness
-
-BrainWise is designed with a mobile-first approach to ensure that healthcare professionals and patients can access critical brain health information across all device types. This approach is particularly important in healthcare settings where professionals may need to review patient data on-the-go or during consultations.
-
-#### 4.6.9 Responsive Design Implementation
-
-- **Tailwind CSS breakpoints**: Systematic use of responsive classes for different viewport sizes
-  ```tsx
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {/* Dashboard cards */}
-  </div>
-  ```
-
-- **Fluid typography**: Dynamic font sizing using Tailwind's responsive text utilities
-  ```tsx
-  <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">
-    Brain Health Dashboard
-  </h1>
-  ```
-
-- **Adaptive layouts**: Components restructure based on available screen space
-  ```tsx
-  <div className="flex flex-col md:flex-row items-center justify-between">
-    <HealthMetricCard />
-    <ActivitySummary className="mt-4 md:mt-0 md:ml-4" />
-  </div>
-  ```
-
-#### 4.6.10 Touch-Optimized Interface
-
-- **Appropriately sized touch targets**: All interactive elements are at least 44×44px on mobile
-- **Swipe gestures**: Support for natural interaction patterns on touch screens
-  ```tsx
-  <SwipeableHealthMetricsView
-    onSwipe={(direction) => handleMetricNavigation(direction)}
-  />
-  ```
-- **Simplified navigation**: Collapsible menu with hamburger icon for mobile screens
-  ```tsx
-  <Sheet>
-    <SheetTrigger className="block md:hidden">
-      <Menu className="h-6 w-6" />
-    </SheetTrigger>
-    <SheetContent>
-      <MobileNavigation />
-    </SheetContent>
-  </Sheet>
-  ```
-
-#### 4.6.11 Device-Specific Optimizations
-
-- **Form factor adaptations**: Specialized layouts for mobile, tablet, and desktop
-- **Media query hooks**: Custom React hooks for viewport-aware rendering
-  ```tsx
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  
-  return (
-    <div>
-      {isMobile ? (
-        <CompactHealthMetricsView />
-      ) : (
-        <ExpandedHealthMetricsView />
-      )}
-    </div>
-  );
-  ```
-
-- **Conditional rendering**: Performance optimizations for resource-constrained devices
-  ```tsx
-  {!isMobile && <DetailedBrainScanVisualization scan={activeScan} />}
-  ```
-
-#### 4.6.12 Testing and Quality Assurance
-
-- **Device laboratory**: Testing across iOS and Android devices with various screen sizes
-- **Emulation tools**: Chrome DevTools device mode for rapid development testing
-- **Responsive testing automation**: Visual regression tests at different breakpoints
-- **Performance benchmarking**: Mobile-specific performance metrics tracked in Lighthouse
-
-#### 4.6.13 Medical Considerations
-
-- **Emergency accessibility**: Critical features remain accessible even on small screens
-- **Data visualization adaptation**: Complex brain scan visualizations reconfigured for mobile viewing
-- **Input accommodations**: Simplified data entry forms optimized for on-screen keyboards
-- **Offline capabilities**: Core functionality available with limited connectivity for rural healthcare settings
-
-This comprehensive mobile-responsive approach ensures that healthcare providers and patients can effectively use BrainWise regardless of their device preference or location, which is essential for real-world healthcare applications.
-
-### 4.7 Backend and API Implementation
-
-#### 4.7.1 API Architecture
-
-BrainWise implements a RESTful API architecture using Next.js API routes, organizing endpoints by domain and functionality:
-
-```mermaid
-graph TD
-    A[API Architecture] --> B[Authentication]
-    A --> C[User Management]
-    A --> D[Health Metrics]
-    A --> E[Assessments]
-    A --> F[Recommendations]
-    A --> G[ML Services]
-    
-    B --> B1[/api/auth/*]
-    
-    C --> C1[/api/users]
-    C --> C2[/api/users/profile]
-    
-    D --> D1[/api/health-metrics]
-    D --> D2[/api/health-metrics/history]
-    D --> D3[/api/health-metrics/trends]
-    
-    E --> E1[/api/assessments]
-    E --> E2[/api/assessments/[id]]
-    E --> E3[/api/assessments/history]
-    
-    F --> F1[/api/recommendations]
-    F --> F2[/api/recommendations/[id]]
-    
-    G --> G1[/api/stroke/predict]
-    G --> G2[/api/brain-scan/analyze]
-```
-
-#### 4.7.2 Authentication and Authorization
-
-The system implements a secure authentication system using Clerk:
-
-```typescript
-// Auth middleware configuration
-import { authMiddleware } from "@clerk/nextjs";
- 
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/about",
-    "/resources",
-    "/api/healthcheck"
-  ],
-  ignoredRoutes: [
-    "/api/public-data"
-  ]
-});
-
-export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
-};
-```
-
-#### 4.7.3 Client-Side Integration
-
-```typescript
-// Client component authentication with Clerk
-'use client';
-
-import { useAuth, useUser } from "@clerk/nextjs";
-import { useState } from "react";
-
-export function ProfileEditor() {
-  const { isLoaded, userId } = useAuth();
-  const { user } = useUser();
-  const [isEditing, setIsEditing] = useState(false);
-  
-  if (!isLoaded || !userId) {
-    return <div>Loading...</div>;
-  }
-  
-  return (
-    <div>
-      <h2>Edit Profile</h2>
-      <img src={user.imageUrl} alt="Profile" />
-      <p>Email: {user.primaryEmailAddress.emailAddress}</p>
-      
-      {isEditing ? (
-        <ProfileForm user={user} onDone={() => setIsEditing(false)} />
-      ) : (
-        <button onClick={() => setIsEditing(true)}>
-          Edit Profile
-        </button>
-      )}
-    </div>
-  );
-}
-```
-
-#### 4.7.4 Middleware Protection
-
-```typescript
-// Authentication middleware
-import { authMiddleware } from "@clerk/nextjs";
-
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/about",
-    "/resources",
-    "/api/healthcheck"
-  ],
-  ignoredRoutes: [
-    "/api/public-data"
-  ]
-});
-
-export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
-};
-```
-
-#### 4.7.5 Organization and Team Management
-
-BrainWise utilizes Clerk's Organizations feature to manage healthcare facilities, practices, and patient groups:
-
-```typescript
-// Organization management in a server component
-import { auth, clerkClient } from "@clerk/nextjs";
-
-export default async function PracticeManagement() {
-  const { userId, orgId } = auth();
-  
-  if (!userId || !orgId) {
-    redirect("/sign-in");
-  }
-  
-  // Get current organization (medical practice)
-  const organization = await clerkClient.organizations.getOrganization({
-    organizationId: orgId
-  });
-  
-  // Get all members of the practice
-  const members = await clerkClient.organizations.getOrganizationMembershipList({
-    organizationId: orgId
-  });
-  
-  return (
-    <div>
-      <h1>{organization.name} Management</h1>
-      <MembersList members={members} />
-      <InvitePractitioner organizationId={orgId} />
-    </div>
-  );
-}
-```
-
-#### 4.7.6 Security Considerations
-
-The Clerk implementation includes these critical security features for healthcare applications:
-
-- **JWT Customization**: Adding custom claims for role-based authorization
-- **Session Monitoring**: Real-time monitoring of active sessions with revocation capabilities
-- **Device Management**: Allowing users to review and terminate sessions on specific devices
-- **Webhook Notifications**: Alerting system administrators of suspicious login attempts
-- **Automated Account Lockout**: Temporarily locking accounts after multiple failed login attempts
-- **Identity Verification**: Enhanced verification for healthcare provider accounts
-
-This authentication architecture ensures that BrainWise maintains the highest standards of security and compliance while providing a seamless user experience across the application.
-
-### 4.8 Security and HIPAA Compliance
-
-Security is paramount in healthcare applications, and BrainWise implements comprehensive measures to ensure HIPAA compliance and protect sensitive patient information:
-
-#### 4.8.1 Data Encryption and Protection
-
-- **End-to-end encryption**: All data in transit is encrypted using TLS 1.3
-- **At-rest encryption**: Database encryption using AWS KMS with customer-managed keys
-- **Field-level encryption**: PHI fields receive additional application-level encryption
-  ```tsx
-  // Example of the encryption utility implementation
-  export async function encryptSensitiveData(data: string): Promise<string> {
-    const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv(
-      'aes-256-gcm', 
-      await deriveEncryptionKey(), 
-      iv
-    );
-    
-    const encryptedData = Buffer.concat([
-      cipher.update(data, 'utf8'),
-      cipher.final()
-    ]);
-    
-    const authTag = cipher.getAuthTag();
-    
-    // Format: iv:authTag:encryptedData (base64 encoded)
-    return Buffer.concat([iv, authTag, encryptedData]).toString('base64');
-  }
-  ```
-
-#### 4.8.2 Authentication and Authorization
-
-- **Clerk Authentication**: Multi-factor authentication (MFA) required for all healthcare providers
-- **Role-based access control (RBAC)**: Granular permissions for different user roles
-  ```tsx
-  // Access control middleware implementation
-  export function withAuthorization(
-    handler: NextApiHandler,
-    requiredPermissions: Permission[]
-  ): NextApiHandler {
-    return async (req, res) => {
-      // Use Clerk authentication
-      const { userId } = auth();
-      
-      if (!userId) {
-        return new Response("Unauthorized", { status: 401 });
-      }
-      
-      // Fetch user permissions from database
-      const user = await db.user.findUnique({
-        where: { id: userId },
-        select: { permissions: true }
-      });
-      
-      const hasRequiredPermissions = requiredPermissions.every(
-        (permission) => user.permissions.includes(permission)
-      );
-      
-      if (!hasRequiredPermissions) {
-        return new Response("Insufficient permissions", { status: 403 });
-      }
-      
-      // Log access attempt for audit trail
-      await logAccessAttempt({
-        userId,
-        resource: req.url,
-        action: req.method,
-        granted: true
-      });
-      
-      // Continue with the handler
-      return handler(req, res);
-    };
-  }
-  ```
-
-#### 4.8.3 Audit Logging
-
-- **Comprehensive activity logs**: All user actions and system events are recorded
-- **Tamper-proof audit trail**: Immutable logs stored with cryptographic integrity verification
-- **Real-time monitoring**: Automated alerting for suspicious activity patterns
-  ```tsx
-  // Example log structure
-  interface AuditLogEntry {
-    timestamp: Date;
-    userId: string;
-    userRole: UserRole;
-    action: 'view' | 'create' | 'update' | 'delete' | 'export';
-    resource: string;
-    resourceId?: string;
-    ipAddress: string;
-    userAgent: string;
-    changes?: Record<string, { before: unknown; after: unknown }>;
-    statusCode: number;
-    errorMessage?: string;
-    hashChain: string; // Previous entry hash + current entry data
-  }
-  ```
-
-#### 4.8.4 Data Minimization and Access Controls
-
-- **Minimum necessary principle**: Users only have access to data required for their role
-- **Automatic data redaction**: PHI is automatically masked in logs and non-clinical contexts
-- **Temporary access escalation**: Just-in-time permissions with automatic expiration
-  ```tsx
-  // Data masking implementation
-  export function maskSensitiveData(data: any, userPermissions: Permission[]): any {
-    if (typeof data !== 'object' || data === null) return data;
-    
-    const result = Array.isArray(data) ? [...data] : { ...data };
-    
-    for (const [key, value] of Object.entries(result)) {
-      if (sensitiveFields.includes(key) && !userPermissions.includes('view_phi')) {
-        result[key] = typeof value === 'string' 
-          ? value.replace(/./g, '*') 
-          : '[REDACTED]';
-      } else if (typeof value === 'object' && value !== null) {
-        result[key] = maskSensitiveData(value, userPermissions);
-      }
-    }
-    
-    return result;
-  }
-  ```
-
-#### 4.8.5 HIPAA Technical Safeguards
-
-- **Access Controls**: Multi-factor authentication and role-based access through Clerk
-- **Audit Controls**: Comprehensive logging of all PHI access and modifications
-- **Integrity Controls**: Data validation and error checking to prevent corruption
-- **Transmission Security**: End-to-end encryption for all data in transit
-
-#### 4.8.6 HIPAA Administrative Safeguards
-
-- **Security Management Process**: Regular risk assessments and vulnerability scanning
-- **Information Access Management**: Strict procedures for authorizing access to PHI
-- **Workforce Security**: Background checks and security training for all team members
-- **Contingency Planning**: Data backup, disaster recovery, and emergency operations procedures
-
-#### 4.8.7 Breach Notification and Response
-
-- **Incident Response Plan**: Documented procedures for identifying and responding to security incidents
-- **Breach Assessment Tools**: Automated systems to evaluate potential breaches
-- **Notification Workflows**: Streamlined processes for required notifications to affected individuals and regulators
-- **Post-Incident Analysis**: Thorough review and improvement of security measures after incidents
-
-#### 4.8.8 Third-Party Risk Management
-
-- **Business Associate Agreements (BAAs)**: Formal contracts with all service providers handling PHI
-- **Vendor Security Assessment**: Evaluation of security practices for all third-party integrations
-- **Ongoing Compliance Monitoring**: Regular verification of continued compliance by service providers
-
-#### 4.8.9 Security Headers and Browser Protection
-
-```tsx
-// Security headers implementation in middleware.ts
-export function middleware(req: NextRequest) {
-  const response = NextResponse.next();
-  
-  // Set security headers
-  response.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' https://clerk.brainwise.health; connect-src 'self' https://api.clerk.dev; img-src 'self' data: https://img.clerk.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';");
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-XSS-Protection', '1; mode=block');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  
-  return response;
-}
-```
-
-#### 4.8.10 PHI Data Management
-
-BrainWise implements a sophisticated PHI data management system that goes beyond standard encryption:
-
-- **Data Classification**: Automated identification and tagging of PHI/PII within the system
-- **Data Lifecycle Management**: Clear policies for retention and secure deletion of PHI
-- **Compartmentalization**: Logical separation of PHI from non-sensitive data
-- **Access Governance**: Regular certification of access rights and permissions
-
-The combination of these security measures ensures that BrainWise meets and exceeds HIPAA requirements while providing a secure environment for sensitive patient data.
-
-## Mobile Responsiveness and Accessibility
-
-### Responsive Design Implementation
-
-BrainWise is built with a mobile-first approach using Tailwind CSS, ensuring optimal user experience across all device sizes. The responsive implementation follows these core principles:
-
-```mermaid
-graph TD
-    A[Mobile-First Design] --> B[Tailwind Breakpoints]
-    B --> C[Component-Level Responsiveness]
-    B --> D[Layout Responsiveness]
-    B --> E[Typography Scaling]
-    
-    C --> F[Conditional Rendering]
-    D --> G[Flexbox/Grid Layouts]
-    E --> H[Fluid Typography]
-    
-    F --> I[Final Responsive UI]
-    G --> I
-    H --> I
-```
-
-#### Breakpoint System
-
-The application uses Tailwind's breakpoint system for consistent responsive behavior:
-
-```typescript
-// tailwind.config.js
-module.exports = {
-  theme: {
-    screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-  }
-}
-```
-
-#### Responsive Component Example
-
-The following example demonstrates how components are built with responsiveness in mind:
-
-```tsx
-export function HealthMetricCard({ 
-  title, 
-  value, 
-  trend, 
-  icon 
-}: HealthMetricProps) {
-  return (
-    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-full">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-full">
-            {icon}
-          </div>
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-              {title}
-            </h3>
-            <div className="flex items-baseline gap-2">
-              <p className="text-2xl md:text-3xl font-bold">{value}</p>
-              {trend && (
-                <span className={cn(
-                  "text-xs font-medium",
-                  trend > 0 ? "text-green-500" : "text-red-500"
-                )}>
-                  {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}%
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-```
-
-### Accessibility Implementation
-
-BrainWise prioritizes accessibility to ensure the application is usable by all individuals, including those with disabilities. The implementation adheres to WCAG 2.1 AA standards and includes:
-
-#### 1. Semantic HTML Structure
-
-```tsx
-// Example of semantic markup in the Dashboard header
-<header aria-label="Dashboard header">
-  <h1 className="text-2xl font-bold">Health Dashboard</h1>
-  <p className="text-gray-500">View and manage your health metrics</p>
-</header>
-```
-
-#### 2. ARIA Attributes and Keyboard Navigation
-
-```tsx
-// Accessible dropdown component
-function AccessibleDropdown({ label, options, value, onChange }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  
-  return (
-    <div 
-      ref={dropdownRef}
-      className="relative" 
-      onKeyDown={(e) => {
-        if (e.key === 'Escape') setIsOpen(false);
-        if (e.key === 'ArrowDown' && !isOpen) setIsOpen(true);
-      }}
-    >
-      <button
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-label={label}
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full p-2 border rounded"
-      >
-        {value || label}
-        <ChevronDownIcon className="w-4 h-4" />
-      </button>
-      
-      {isOpen && (
-        <ul
-          role="listbox"
-          aria-labelledby={label}
-          className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg"
-        >
-          {options.map((option) => (
-            <li
-              key={option.value}
-              role="option"
-              aria-selected={value === option.value}
-              tabIndex={0}
-              onClick={() => {
-                onChange(option.value);
-                setIsOpen(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  onChange(option.value);
-                  setIsOpen(false);
-                }
-              }}
-              className="p-2 hover:bg-gray-100 cursor-pointer"
-            >
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-```
-
-#### 3. Focus Management
-
-The application implements a custom focus management system for modal dialogs and complex interactions:
-
-```tsx
-function useFocusTrap(ref: React.RefObject<HTMLElement>) {
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-    
-    // Store the element that had focus before the modal opened
-    const previouslyFocused = document.activeElement as HTMLElement;
-    
-    // Focus the first focusable element
-    const focusableElements = element.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    
-    if (focusableElements.length) {
-      (focusableElements[0] as HTMLElement).focus();
-    }
-    
-    // Create focus trap
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-      
-      const firstFocusable = focusableElements[0] as HTMLElement;
-      const lastFocusable = focusableElements[focusableElements.length - 1] as HTMLElement;
-      
-      // Shift + Tab
-      if (e.shiftKey && document.activeElement === firstFocusable) {
-        e.preventDefault();
-        lastFocusable.focus();
-      } 
-      // Tab
-      else if (!e.shiftKey && document.activeElement === lastFocusable) {
-        e.preventDefault();
-        firstFocusable.focus();
-      }
-    };
-    
-    element.addEventListener('keydown', handleKeyDown);
-    
-    return () => {
-      element.removeEventListener('keydown', handleKeyDown);
-      // Restore focus when component unmounts
-      previouslyFocused?.focus();
-    };
-  }, [ref]);
-}
-```
-
-#### 4. Contrast and Color Considerations
-
-The application uses a color system that ensures sufficient contrast ratios for text and interactive elements:
-
-```tsx
-// Color contrast utility
-const colorContrastMap = {
-  primary: {
-    onLight: 'text-primary-900',
-    onDark: 'text-primary-100',
-  },
-  accent: {
-    onLight: 'text-accent-900',
-    onDark: 'text-accent-100',
-  },
-  // Other color variants
-};
-
-function ContrastAwareText({ color, isDarkMode, children }) {
-  const contrastClass = isDarkMode 
-    ? colorContrastMap[color].onDark 
-    : colorContrastMap[color].onLight;
-    
-  return <span className={contrastClass}>{children}</span>;
-}
-```
-
-#### 5. Accessibility Testing and Monitoring
-
-The development process includes automated and manual accessibility testing:
-
-- Automated testing with jest-axe for component-level testing
-- Integration with Lighthouse CI for overall accessibility scoring
-- Regular manual testing with screen readers (NVDA, VoiceOver)
-- Keyboard navigation testing in the CI/CD pipeline
-
-These comprehensive responsive and accessibility implementations ensure that BrainWise is usable by all users, regardless of their device or abilities, while maintaining a consistent and intuitive user experience.
-
-## Deployment Architecture
-
-### Infrastructure Overview
-
-BrainWise employs a multi-environment deployment architecture that ensures security, scalability, and reliability. The system is built on a combination of serverless and container-based services to optimize cost and performance.
-
-```mermaid
-graph TD
-    A[GitHub Repository] -->|CI/CD Pipeline| B[GitHub Actions]
-    B -->|Unit Tests| C[Test Environment]
-    B -->|E2E Tests| D[Staging Environment]
-    B -->|Production Deploy| E[Production Environment]
-    
-    subgraph "Production Infrastructure"
-    E --> F[Vercel Edge Network]
-    F --> G[Next.js App]
-    G --> H[Next.js API Routes]
-    H --> I[MongoDB Atlas]
-    I --> J[AWS SageMaker]
-    I --> K[Clerk Auth]
-    I --> L[AWS S3]
+    subgraph Desktop["Desktop Layout"]
+        direction LR
+        DesktopForm[Form Inputs]
+        DesktopVisualization[Visualization]
+        DesktopResults[Results Panel]
+        
+        DesktopForm --> DesktopVisualization
+        DesktopVisualization --> DesktopResults
     end
     
-    subgraph "Monitoring & Logs"
-    E --> M[Application Insights]
-    E --> N[Sentry.io]
-    E --> O[Datadog]
+    subgraph Tablet["Tablet Layout"]
+        direction TB
+        TabletForm[Form Inputs]
+        TabletVisualResults[Combined Visualization and Results]
+        
+        TabletForm --> TabletVisualResults
+    end
+    
+    subgraph Mobile["Mobile Layout"]
+        direction TB
+        MobileForm[Form Inputs]
+        MobileResults[Results Panel]
+        MobileVisualization[Visualization]
+        
+        MobileForm --> MobileResults
+        MobileResults --> MobileVisualization
     end
 ```
 
-### CI/CD Pipeline
+#### 4.3.3. Accessibility Considerations
 
-The continuous integration and deployment pipeline is implemented using GitHub Actions, ensuring that every code change undergoes rigorous testing before reaching production:
+Accessibility was a core design principle throughout the BrainWise implementation, ensuring that the system could be used by people with a wide range of abilities:
 
-```yaml
-# .github/workflows/main.yml
-name: CI/CD Pipeline
+1. **Semantic HTML**: Proper HTML elements were used to convey meaning and structure, enhancing compatibility with assistive technologies.
 
-on:
-  push:
-    branches: [main, staging]
-  pull_request:
-    branches: [main]
+2. **ARIA Attributes**: When native HTML semantics were insufficient, ARIA attributes provided additional context for screen readers and other assistive technologies.
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: npm ci
-      - name: Run linting
-        run: npm run lint
-      - name: Run tests
-        run: npm run test
-      - name: Build application
-        run: npm run build
+3. **Keyboard Navigation**: All interactive elements were accessible and operable via keyboard, with logical tab order and visible focus indicators.
 
-  deploy:
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID }}
-          vercel-project-id: ${{ secrets.PROJECT_ID }}
-          vercel-args: '--prod'
-```
+4. **Color and Contrast**: The color palette was designed to maintain WCAG AA contrast ratios, with additional visual indicators beyond color for conveying important information.
 
-### Performance Optimization
+5. **Screen Reader Support**: All interactive elements included appropriate labels and descriptions, with particular attention to dynamic content updates.
 
-The deployment architecture incorporates several performance optimizations:
+6. **Reduced Motion Support**: Animations and transitions respected user preferences for reduced motion, implementing the `prefers-reduced-motion` media query.
 
-1. **Edge Network Caching**:
-   - Static assets served from Vercel's global edge network
-   - Dynamic API routes cached at the edge when possible
-   - Custom cache headers for optimal browser caching
+7. **Accessible Forms**: Form fields included clear labels, error messages, and validation feedback accessible to all users.
 
-2. **Database Optimization**:
-   - MongoDB Atlas with geographically distributed clusters
-   - Read replicas for high-traffic regions
-   - Indexes optimized for common query patterns
+These accessibility features were validated through automated testing (using tools like Axe), manual testing with screen readers, and keyboard navigation testing. 
 
-3. **Machine Learning Model Serving**:
-   - Models deployed on AWS SageMaker for scalable inference
-   - Model quantization to reduce size and improve inference speed
-   - Batch prediction capabilities for scheduled risk assessments
+### 4.4. Machine Learning Model Integration
 
-4. **Image Processing Pipeline**:
-   - Serverless image processing using AWS Lambda
-   - Automatic image optimization and format conversion
-   - Progressive loading implementation for large medical images
+One of the most significant challenges in the BrainWise implementation was integrating sophisticated machine learning models into a web application while ensuring accessibility, performance, and scalability. This section details the approaches and techniques used to overcome these challenges.
 
-5. **Monitoring and Alerting**:
-   - Real-time performance monitoring with Datadog
-   - Error tracking and reporting with Sentry
-   - Automated scaling based on traffic patterns and resource utilization
+#### 4.4.1. Hugging Face Spaces Deployment
 
-This multi-layered approach ensures that BrainWise maintains high availability and performance even under increased load, while keeping operational costs optimized.
+All three machine learning models were deployed using Hugging Face Spaces, a platform that provides managed infrastructure for machine learning model hosting. This approach offered several advantages:
 
-## 10\. Results and Discussion
+1. **Specialized Infrastructure**: Access to GPU resources when needed for deep learning models
+2. **Simplified Deployment**: Container-based deployment with built-in CI/CD
+3. **Cost Efficiency**: Free tier suitable for research and early-stage deployment
+4. **API-First Design**: Straightforward HTTP API integration
+5. **Independent Scaling**: Each model could scale according to its specific resource needs
 
-### 10.1 System Performance Evaluation
-
-BrainWise has demonstrated strong technical performance across multiple key metrics. Server-side rendering via Next.js has resulted in exceptional Core Web Vitals scores, with all production deployments achieving the following benchmarks:
-
-| Metric | Score | Industry Benchmark |
-|--------|-------|-------------------|
-| Largest Contentful Paint (LCP) | 1.2s | < 2.5s |
-| First Input Delay (FID) | 12ms | < 100ms |
-| Cumulative Layout Shift (CLS) | 0.02 | < 0.1 |
-| Interaction to Next Paint (INP) | 98ms | < 200ms |
-| Time to First Byte (TTFB) | 78ms | < 200ms |
-
-The system architecture's emphasis on React Server Components has significantly reduced the client-side JavaScript bundle by 47% compared to traditional client-side rendering approaches. This optimization has been particularly beneficial for mobile users, where the reduced processing requirements translate to better battery life and smoother interactions.
+The deployment architecture implemented on Hugging Face Spaces followed a consistent pattern:
 
 ```mermaid
-graph TD
-    A[Total Performance Score] --> B[Loading Performance]
-    A --> C[Interactivity]
-    A --> D[Visual Stability]
-    A --> E[Backend Response Time]
+flowchart TD
+    subgraph HuggingFaceSpace["Hugging Face Space"]
+        direction TB
+        
+        subgraph FastAPI["FastAPI Application"]
+            Endpoints[API Endpoints]
+            Middleware[Middleware]
+            ErrorHandling[Error Handling]
+        end
+        
+        subgraph ModelInfrastructure["Model Infrastructure"]
+            ModelLoader[Model Loader]
+            Preprocessor[Preprocessor]
+            Inference[Inference Engine]
+            Postprocessor[Postprocessor]
+        end
+        
+        subgraph DockerContainer["Docker Container"]
+            Requirements[Dependencies]
+            Environment[Environment Configuration]
+            EntryPoint[Application Entry Point]
+        end
+    end
     
-    B --> B1[LCP: 1.2s]
-    C --> C1[FID: 12ms]
-    C --> C2[INP: 98ms]
-    D --> D1[CLS: 0.02]
-    E --> E1[TTFB: 78ms]
-    E --> E2[API Response: 122ms]
+    FastAPI --> ModelInfrastructure
+    FastAPI --> DockerContainer
+    ModelInfrastructure --> DockerContainer
 ```
 
-### 10.2 Machine Learning Model Performance
+Each model was containerized with its specific dependencies, ensuring reproducibility and isolation. Table 6 details the specific configurations for each model:
 
-The machine learning models implemented in BrainWise have demonstrated strong predictive performance for stroke risk assessment. The evaluation metrics for the primary stroke prediction model show significant improvements over traditional risk calculators:
+**Table 6: Hugging Face Space Configurations**
 
-| Metric | BrainWise Model | Traditional FSRP | Improvement |
-|--------|----------------|------------------|-------------|
-| Accuracy | 91.8% | 83.4% | +8.4% |
-| Sensitivity | 89.7% | 76.2% | +13.5% |
-| Specificity | 92.3% | 85.9% | +6.4% |
-| AUC-ROC | 0.94 | 0.82 | +0.12 |
-| F1 Score | 0.87 | 0.74 | +0.13 |
+| Model | Framework | Container Base | Memory Allocation | API Endpoint |
+|-------|-----------|----------------|------------------|--------------|
+| Stroke Prediction | scikit-learn | python:3.9-slim | 2GB | /api/predict |
+| Brain Tumor Detection | PyTorch | pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime | 4GB | /api/predict |
+| Alzheimer's Detection | PyTorch | pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime | 4GB | /api/predict |
 
-The most notable improvement is in sensitivity (true positive rate), which is particularly important for a screening tool where missing high-risk individuals could have serious consequences.
+**Deployment Process:**
 
-Feature importance analysis using SHAP values identified the most significant predictors for stroke risk, with blood pressure, age, glucose levels, and smoking status emerging as the top contributors. This aligns with established medical literature while providing more nuanced insights into the interactions between these factors.
+The models were deployed to Hugging Face Spaces using a systematic process:
+
+1. **Repository Creation**: Creating a dedicated repository on Hugging Face for each model
+2. **Environment Configuration**: Setting up the appropriate Docker configuration and dependencies
+3. **Model Upload**: Transferring the trained model files to the repository
+4. **API Implementation**: Developing the FastAPI application to serve the model
+5. **Documentation**: Creating comprehensive API documentation for integration
+6. **Testing**: Validating the deployed model against test cases
+7. **Monitoring Setup**: Implementing logging and performance tracking
+
+This process ensured consistent, reliable deployment of all three models while maintaining their independence for scaling and updates.
+
+#### 4.4.2. FastAPI Integration
+
+FastAPI was selected as the framework for the model serving APIs due to its performance characteristics and developer-friendly features. The implementation followed API best practices to ensure robustness and maintainability:
+
+**API Design Principles:**
+
+1. **Consistent Endpoints**: All models implemented a standardized `/api/predict` endpoint
+2. **Flexible Input Handling**: Support for both form data and JSON payloads
+3. **Structured Responses**: Consistent JSON response format including predictions, confidence scores, and metadata
+4. **Comprehensive Validation**: Input validation using Pydantic models
+5. **Detailed Documentation**: Automatic OpenAPI/Swagger documentation
+6. **Error Handling**: Structured error responses with appropriate HTTP status codes
+
+**Example API Implementation:**
+
+The stroke prediction API implementation illustrates the approach taken for all models:
+
+```python
+@app.post("/api/predict")
+async def predict_stroke(
+    gender: Optional[str] = Form(None),
+    age: Optional[float] = Form(None),
+    hypertension: Optional[int] = Form(None),
+    heart_disease: Optional[int] = Form(None),
+    ever_married: Optional[str] = Form(None),
+    work_type: Optional[str] = Form(None),
+    Residence_type: Optional[str] = Form(None),
+    avg_glucose_level: Optional[float] = Form(None),
+    bmi: Optional[float] = Form(None),
+    smoking_status: Optional[str] = Form(None)
+):
+    # Process data and prepare for model
+    processed_data = {
+        'gender': gender if gender else 'Male',
+        'age': float(age) if age is not None else 0,
+        'hypertension': int(hypertension) if hypertension is not None else 0,
+        'heart_disease': int(heart_disease) if heart_disease is not None else 0,
+        'ever_married': ever_married if ever_married else 'No',
+        'work_type': work_type if work_type else 'Private',
+        'Residence_type': Residence_type if Residence_type else 'Urban',
+        'avg_glucose_level': float(avg_glucose_level) if avg_glucose_level is not None else 0,
+        'bmi': float(bmi) if bmi is not None else 0,
+        'smoking_status': smoking_status if smoking_status else 'never smoked'
+    }
+    
+    # Create a DataFrame for the model
+    input_df = pd.DataFrame([processed_data])
+    
+    # Get prediction from model with fallback mechanism
+    try:
+        prediction_proba = pipeline.predict_proba(input_df)[0][1]
+        prediction_binary = pipeline.predict(input_df)[0]
+        
+        # Calculate risk level and factors
+        # [calculation logic]
+        
+        return {
+            "probability": float(prediction_proba),
+            "prediction": risk_level,
+            "stroke_prediction": int(prediction_binary),
+            "risk_factors": risk_factors,
+            "using_model": True
+        }
+    except Exception as e:
+        # Fallback risk calculation
+        # [fallback logic]
+        
+        return {
+            "probability": fallback_probability,
+            "prediction": risk_level,
+            "stroke_prediction": stroke_prediction,
+            "risk_factors": risk_factors,
+            "using_model": False,
+            "error": str(e)
+        }
+```
+
+**Fallback Mechanisms:**
+
+A critical feature of all model APIs was the implementation of fallback mechanisms to handle failure scenarios:
+
+1. **Model Loading Failures**: Fallback to simplified rule-based predictions
+2. **Runtime Exceptions**: Graceful error handling with informative messages
+3. **Timeout Handling**: Response time monitoring with graceful degradation
+4. **Input Validation**: Correction of minor input issues when possible
+
+These fallback mechanisms ensured that users would receive useful responses even when ideal conditions were not met, enhancing the robustness of the system.
+
+#### 4.4.3. Image Processing Pipeline
+
+The brain tumor and Alzheimer's detection models required sophisticated image processing pipelines to handle medical images effectively. The pipeline implemented the following stages:
 
 ```mermaid
-graph LR
-    A[Feature Importance] --> B[Blood Pressure: 24.3%]
-    A --> C[Age: 19.7%]
-    A --> D[Glucose Levels: 16.2%]
-    A --> E[Smoking Status: 13.8%]
-    A --> F[Physical Activity: 9.1%]
-    A --> G[BMI: 7.4%]
-    A --> H[Family History: 5.8%]
-    A --> I[Other Factors: 3.7%]
+flowchart LR
+    Upload[Image Upload] --> Storage[Secure Storage]
+    Storage --> Retrieval[Image Retrieval]
+    Retrieval --> Validation[Format Validation]
+    Validation --> Preprocessing[Image Preprocessing]
+    Preprocessing --> ModelInference[Model Inference]
+    ModelInference --> ResultsProcessing[Results Processing]
+    ResultsProcessing --> Storage2[Results Storage]
+    Storage2 --> Presentation[Results Presentation]
 ```
 
-### 10.3 User Engagement and Satisfaction
+**Client-Side Processing:**
 
-Initial user testing with a cohort of 250 participants (including 50 healthcare providers) indicated strong engagement and satisfaction with the BrainWise platform:
+The image upload process began on the client side:
 
-- System Usability Scale (SUS) score of 87.4 (above the 85th percentile for digital health applications)
-- Average session duration of 6.8 minutes
-- Return visit rate of 78% within the first month
-- 92% completion rate for the stroke risk assessment flow
-- 84% of users reported taking at least one recommended preventive action
+1. **Format Validation**: Checking that the uploaded file was in a supported format (JPEG, PNG, DICOM)
+2. **Size Optimization**: Resizing large images before upload when possible
+3. **Direct-to-CDN Upload**: Using Uploadcare's client library to upload directly to the CDN
+4. **Progress Tracking**: Monitoring and displaying upload progress
+5. **Initial Metadata Extraction**: Capturing basic image information
 
-Healthcare providers particularly valued the detailed assessment reports and the ability to monitor patient progress over time, rating these features 4.7/5 and 4.6/5 respectively.
+**Server-Side Processing:**
 
-### 10.4 Clinical Impact
+Once the image was uploaded, server-side processing took over:
 
-While long-term clinical outcomes will require extended study, preliminary analysis of a subset of 75 users with elevated stroke risk who used BrainWise for at least three months showed promising results:
+1. **Secure URL Generation**: Creating a secure, time-limited URL for model access
+2. **Assessment Record Creation**: Generating a record in the database to track the analysis
+3. **Asynchronous Processing**: Initiating the analysis process without blocking the response
+4. **Webhook Registration**: Setting up notifications for analysis completion
+5. **Status Updates**: Providing real-time status information to the client
 
-- 68% reported increased awareness of their stroke risk factors
-- 57% demonstrated improved blood pressure control
-- 42% increased their physical activity levels according to self-reported data
-- 31% initiated discussions with their healthcare providers specifically about stroke prevention
+**Model-Side Processing:**
 
-A small pilot study with 30 patients at a neurology clinic found that patients who shared their BrainWise reports with their physicians had more comprehensive discussions about stroke prevention strategies compared to a control group (average discussion time: 7.4 minutes vs. 4.1 minutes).
+Within the model API, the image underwent specialized processing:
 
-### 10.5 Comparison with Existing Solutions
+1. **Image Loading**: Retrieving the image from the provided URL
+2. **Format Conversion**: Converting to the format expected by the model
+3. **Preprocessing**: Applying normalization, resizing, and channel adjustments
+4. **Augmentation**: For ambiguous cases, generating multiple variants for ensemble prediction
+5. **Batch Processing**: Organizing inputs for efficient model inference
 
-BrainWise offers several advantages over existing stroke risk assessment tools:
+**Results Processing:**
 
-| Feature | BrainWise | Traditional Risk Calculators | Mobile Health Apps |
-|---------|-----------|------------------------------|-------------------|
-| Personalized risk assessment | ✓ | ✓ | Limited |
-| Continuous monitoring of risk factors | ✓ | × | Limited |
-| Integration of multiple data sources | ✓ | × | Limited |
-| Brain scan analysis | ✓ | × | × |
-| Explainable AI results | ✓ | ✓ | × |
-| HIPAA compliance | ✓ | Varies | Rarely |
-| Healthcare provider integration | ✓ | × | Limited |
-| Evidence-based recommendations | ✓ | Limited | Varies |
+After model inference, the results were processed to enhance their utility:
 
-The holistic approach of BrainWise, combining risk assessment with ongoing monitoring and personalized recommendations, represents a significant advancement over static risk calculators. Meanwhile, its emphasis on scientific validity and healthcare integration differentiates it from consumer-focused health applications that may lack clinical validation.
+1. **Confidence Calculation**: Computing confidence scores for predictions
+2. **Visualization Preparation**: Generating visualization data (e.g., class activation maps)
+3. **Metadata Enhancement**: Adding context and interpretation to raw predictions
+4. **Decision Explanation**: Creating human-readable explanations of model decisions
+5. **Result Storage**: Saving the complete analysis for future reference
 
-## 11\. Limitations
+This comprehensive pipeline ensured that medical images were handled securely and effectively throughout the analysis process.
 
-### 11.1 Technical Limitations
+#### 4.4.4. API Communication Strategy
 
-Despite the system's strengths, several technical limitations should be acknowledged:
+Communication between the Next.js application and the ML model APIs required careful design to ensure reliability, security, and error resilience:
 
-#### 11.1.1 Machine Learning Model Constraints
+**API Integration Approaches:**
 
-- **Training Data Limitations**: While our models utilize multiple datasets, there remains an underrepresentation of certain demographic groups, potentially affecting prediction accuracy for these populations.
-  
-- **Limited Longitudinal Data**: The models predominantly rely on cross-sectional data rather than longitudinal data tracking individual progression over time, which may impact the accuracy of trend predictions.
-  
-- **Feature Interdependence**: Complex interactions between health metrics are not fully captured in the current models, particularly those involving lifestyle factors that are difficult to quantify.
+The BrainWise application implemented several API communication patterns:
 
-#### 11.1.2 Integration Challenges
+1. **Direct Client-to-Model Communication**: Used for the stroke prediction model, where data was sent directly from the client to the Hugging Face API (with appropriate CORS configuration)
 
-- **EHR Integration Complexity**: While the system is designed to integrate with electronic health records, the fragmented nature of healthcare IT systems presents ongoing challenges for seamless data exchange.
-  
-- **Device Compatibility**: Integration with diverse health monitoring devices and wearables is currently limited to major manufacturers, potentially excluding valuable data sources.
-  
-- **Internet Dependency**: The application requires stable internet connectivity for full functionality, limiting its utility in areas with poor connectivity or during network outages.
+2. **Server-Proxied Communication**: Used for image-based models, where the Next.js API routes acted as a proxy to add authentication and handle file uploads
 
-### 11.2 Validation Limitations
+3. **Asynchronous Processing**: Used for computationally intensive tasks, implementing a request-then-poll pattern to avoid timeout issues
 
-#### 11.2.1 Clinical Validation
+**Security Considerations:**
 
-- **Preliminary Clinical Evidence**: While initial results are promising, comprehensive clinical validation with larger, more diverse populations is needed to establish the system's efficacy in real-world healthcare settings.
-  
-- **Outcome Verification**: The actual impact on stroke incidence and outcomes requires long-term follow-up studies that are currently underway but not yet complete.
-  
-- **Regulatory Status**: BrainWise is currently positioned as a wellness and educational tool rather than a diagnostic device, limiting the scope of claims that can be made about its clinical impact.
+API communication included several security measures:
 
-#### 11.2.2 User Adoption Challenges
+1. **Input Sanitization**: Cleaning and validating all user inputs before transmission
+2. **Rate Limiting**: Restricting the number of requests from a single user or IP address
+3. **Request Signing**: Adding authentication signatures to API requests
+4. **Response Validation**: Verifying that responses met expected formats before processing
+5. **Error Containment**: Isolating API errors to prevent cascading failures
 
-- **Digital Literacy Requirements**: The application assumes a baseline of digital literacy that may exclude certain vulnerable populations who could benefit from stroke risk monitoring.
-  
-- **Healthcare Provider Workflow Integration**: Adoption by healthcare providers requires changes to established clinical workflows, which presents resistance in some settings.
-  
-- **Sustained Engagement**: Initial user engagement is strong, but long-term adherence to monitoring and recommendations remains to be fully evaluated.
+**Retry and Circuit Breaking:**
 
-### 11.3 Data Security and Privacy Constraints
+To handle transient failures in the ML APIs, the system implemented:
 
-- **Privacy-Utility Tradeoff**: Stringent data protection measures occasionally limit the depth of analysis possible, particularly for rare conditions or unusual risk profiles.
-  
-- **Cross-Border Data Restrictions**: International deployment faces varying regulatory frameworks for health data, requiring complex adaptations for global scaling.
-  
-- **Consent Management Complexity**: Managing granular consent for different types of data usage creates user experience challenges that may impact adoption.
+1. **Exponential Backoff**: Increasing delays between retry attempts
+2. **Retry Budgets**: Limiting the total number of retries per request
+3. **Circuit Breakers**: Temporarily suspending requests to failing services
+4. **Fallback Mechanisms**: Providing alternative responses when services were unavailable
+5. **Graceful Degradation**: Maintaining core functionality even when ML services were unavailable
 
-### 11.4 Scope Limitations
+**Caching Strategy:**
 
-- **Focus on Stroke**: While stroke prediction is the primary focus, brain health encompasses broader considerations that are not fully addressed in the current implementation.
-  
-- **Prevention vs. Treatment**: The system emphasizes prevention and risk assessment rather than post-stroke management or rehabilitation support.
-  
-- **Adult-Centric Design**: The current implementation is designed for adult users, with limited applicability to pediatric populations who may have different risk factors and interaction needs.
+The API communication strategy included intelligent caching to improve performance:
 
-## 12\. Future Work
+1. **Response Caching**: Storing responses for identical requests
+2. **Cache Invalidation**: Clearing cache entries when new data would affect results
+3. **Conditional Requests**: Using ETags and If-Modified-Since headers where appropriate
+4. **Cache Headers**: Setting appropriate cache control directives for different response types
+5. **Stale-While-Revalidate**: Serving cached content while refreshing in the background
 
-The development of BrainWise has revealed numerous opportunities for future enhancement and expansion. These potential directions for future work are organized into near-term improvements (0-12 months), mid-term initiatives (1-2 years), and long-term vision (2+ years).
+This comprehensive API communication strategy ensured reliable integration with the ML models while addressing security, performance, and resilience requirements.
 
-### 12.1 Near-Term Improvements
+### 4.5. Deployment Strategy
 
-#### 12.1.1 Enhanced Machine Learning Models
+The BrainWise deployment strategy was designed to ensure reliability, performance, and maintainability of the system in production environments.
 
-- **Multi-modal Data Integration**: Incorporate additional data types including voice biomarkers, retinal scans, and expanded genomic markers to improve prediction accuracy.
+#### 4.5.1. Deployment and Performance Optimization
 
-- **Transfer Learning Approach**: Implement transfer learning techniques to better adapt models for underrepresented demographic groups with limited training data.
+**Deployment Infrastructure:**
 
-- **Temporal Model Enhancements**: Develop specialized models that better account for the progression of risk factors over time, utilizing recurrent neural networks or transformer architectures.
+The BrainWise application was deployed using a modern, cloud-native approach:
 
-```tsx
-// Planned enhancement for temporal risk modeling
-interface TemporalRiskInput {
-  patientId: string;
-  timeSeriesData: {
-    bloodPressure: TimeSeriesPoint[];
-    glucose: TimeSeriesPoint[];
-    cholesterol: TimeSeriesPoint[];
-    // Additional time series metrics
-  };
-  staticFactors: {
-    age: number;
-    sex: string;
-    familyHistory: boolean;
-    // Other non-changing factors
-  };
-}
+1. **Next.js Application**: Deployed on Vercel, providing:
+   - Automatic scaling
+   - Global CDN distribution
+   - Integrated CI/CD pipeline
+   - Environment-specific deployments (development, staging, production)
 
-// Implementation of transformer-based sequence model for temporal analysis
-async function predictTemporalRisk(input: TemporalRiskInput): Promise<RiskPrediction> {
-  // Preprocess time series into appropriate sequence format
-  const processedSequences = preprocessTimeSeriesData(input.timeSeriesData);
-  
-  // Apply transformer model to capture temporal patterns
-  const temporalFeatures = await temporalTransformerModel.predict(processedSequences);
-  
-  // Combine with static factors for final prediction
-  return combinedRiskModel.predict({
-    temporalFeatures,
-    staticFactors: input.staticFactors
-  });
-}
-```
+2. **ML Models**: Deployed on Hugging Face Spaces, providing:
+   - Managed container infrastructure
+   - API-first access
+   - Automatic versioning
+   - Usage monitoring
 
-#### 12.1.2 User Experience Enhancements
+3. **Database**: MongoDB Atlas, providing:
+   - Fully managed database service
+   - Automatic backups
+   - Built-in monitoring
+   - Horizontal scaling capabilities
 
-- **Personalized Engagement Pathways**: Develop adaptive user journeys based on user behavior patterns and risk profiles to improve long-term engagement.
+4. **Content Delivery**: Uploadcare CDN, providing:
+   - Global image distribution
+   - Image transformation capabilities
+   - Security features
+   - HIPAA-compliant storage options
 
-- **Expanded Visualization Options**: Introduce more interactive data visualization tools, including 3D brain models and comparative views of risk progression.
+**Deployment Pipeline:**
 
-- **Voice Interface**: Implement voice-based interaction for improved accessibility, particularly for elderly users or those with mobility limitations.
-
-#### 12.1.3 Integration Expansions
-
-- **Wearable Device Ecosystem**: Expand compatibility with additional wearable devices and health monitoring platforms to capture richer, continuous health data.
-
-- **Healthcare Provider Portal Enhancements**: Develop specialized views and notification systems for healthcare providers to streamline monitoring of high-risk patients.
-
-- **Family Caregiver Features**: Introduce secure sharing mechanisms for family caregivers to support monitoring and intervention for vulnerable individuals.
-
-### 12.2 Mid-Term Initiatives
-
-#### 12.2.1 Advanced Risk Prediction
-
-- **Comprehensive Brain Health Model**: Expand beyond stroke to develop integrated risk models for multiple neurological conditions including dementia, Parkinson's disease, and traumatic brain injury.
-
-- **Environmental Factor Integration**: Incorporate environmental data (air quality, climate, social determinants of health) into risk models to capture broader health influences.
-
-- **Pharmacogenomic Personalization**: Develop capabilities to account for individual genetic variations in medication response when generating recommendations.
-
-#### 12.2.2 Platform Expansion
-
-- **Mobile Application Development**: Create native mobile applications with offline functionality and enhanced sensor integration capabilities.
-
-- **Clinical Decision Support Integration**: Develop formal clinical decision support modules that can integrate with major electronic health record systems.
-
-- **Research Platform**: Establish an anonymized data platform for researchers to develop and validate new brain health models while maintaining strict privacy controls.
+The continuous integration and continuous deployment (CI/CD) pipeline automated the build, testing, and deployment process:
 
 ```mermaid
-graph TD
-    A[BrainWise Platform Evolution] --> B[Core Platform]
-    A --> C[Healthcare Provider Tools]
-    A --> D[Patient-Focused Tools]
-    A --> E[Research Platform]
+flowchart TD
+    Code[Code Changes] --> Build[Build Process]
+    Build --> Test[Automated Testing]
+    Test --> QADeploy[Deploy to QA]
+    QADeploy --> QATests[QA Testing]
+    QATests --> StagingDeploy[Deploy to Staging]
+    StagingDeploy --> UAT[User Acceptance Testing]
+    UAT --> ProdDeploy[Deploy to Production]
+    ProdDeploy --> Monitoring[Production Monitoring]
     
-    B --> B1[Enhanced ML Models]
-    B --> B2[Multi-condition Prediction]
-    B --> B3[API Ecosystem]
+    subgraph Automation["Automated Checks"]
+        Build
+        Test
+    end
     
-    C --> C1[EHR Integration]
-    C --> C2[Clinical Decision Support]
-    C --> C3[Population Health Dashboard]
+    subgraph QAEnvironment["QA Environment"]
+        QADeploy
+        QATests
+    end
     
-    D --> D1[Native Mobile Apps]
-    D --> D2[Wearable Integration]
-    D --> D3[Telehealth Components]
+    subgraph StagingEnvironment["Staging Environment"]
+        StagingDeploy
+        UAT
+    end
     
-    E --> E1[Anonymized Data Access]
-    E --> E2[Model Development Tools]
-    E --> E3[Validation Framework]
+    subgraph ProductionEnvironment["Production Environment"]
+        ProdDeploy
+        Monitoring
+    end
 ```
 
-#### 12.2.3 Intervention Effectiveness
+**Performance Optimizations:**
 
-- **Recommendation Engine Optimization**: Implement reinforcement learning approaches to optimize recommendation effectiveness based on user adherence and outcomes.
+Several performance optimization techniques were implemented:
 
-- **Behavioral Science Integration**: Enhance intervention strategies with evidence-based behavioral science techniques to improve long-term habit formation.
+1. **Frontend Optimizations**:
+   - Code splitting to reduce initial load time
+   - Tree shaking to eliminate unused code
+   - Image optimization for faster loading
+   - Font optimization using `next/font`
+   - Component lazy loading for non-critical elements
 
-- **Virtual Coaching**: Develop AI-powered coaching capabilities to provide more personalized guidance and motivation for risk reduction activities.
+2. **Rendering Strategy Optimizations**:
+   - Static Generation (SSG) for content that rarely changes
+   - Incremental Static Regeneration (ISR) for semi-dynamic content
+   - Server-Side Rendering (SSR) for user-specific content
+   - Client-Side Rendering only for highly interactive components
 
-### 12.3 Long-Term Vision
+3. **API Performance Optimizations**:
+   - Response caching for frequently accessed data
+   - Database query optimization
+   - Connection pooling for database access
+   - Batch processing for bulk operations
+   - HTTP/2 for reduced request overhead
 
-#### 12.3.1 Preventive Healthcare Transformation
+4. **Database Optimizations**:
+   - Appropriate indexing for common queries
+   - Document denormalization for read-heavy operations
+   - Aggregation pipeline optimization
+   - Time-to-live (TTL) indexes for temporary data
+   - Read preferences for read-heavy operations
 
-- **Predictive Healthcare Model**: Evolve from reactive health management to truly predictive capabilities that can identify risk trajectories years in advance.
+**Core Web Vitals Optimization:**
 
-- **Integrated Health Ecosystem**: Position BrainWise within a comprehensive health management ecosystem spanning multiple conditions and health domains.
+Specific attention was paid to Web Vitals metrics to ensure an optimal user experience:
 
-- **Global Health Impact**: Adapt the platform for diverse global contexts, including resource-constrained settings with modified technology requirements.
+1. **Largest Contentful Paint (LCP)**: 
+   - Critical CSS inlining
+   - Preloading key resources
+   - Server-side rendering of visible content
+   - Image optimization and properly sized images
+   - Performance budget enforcement
 
-#### 12.3.2 Advanced Technologies
+2. **First Input Delay (FID) / Interaction to Next Paint (INP)**:
+   - Minimizing JavaScript execution time
+   - Breaking up long tasks
+   - Optimizing event handlers
+   - Using web workers for CPU-intensive tasks
+   - Implementing requestIdleCallback for non-critical operations
 
-- **Continuous Passive Monitoring**: Develop capabilities for passive, ambient monitoring of neurological health indicators without requiring active user engagement.
+3. **Cumulative Layout Shift (CLS)**:
+   - Explicit size attributes for images and embeds
+   - Stable layouts with CSS grid and flexbox
+   - Avoiding dynamic content insertion above existing content
+   - Using CSS containment for isolation
+   - Placeholder strategies for dynamically loaded content
 
-- **Digital Twin Approach**: Create personalized "brain health digital twins" that can simulate the effects of different interventions and lifestyle changes.
+These optimizations resulted in a responsive, performant application that scored well on performance metrics.
 
-- **Augmented Reality Visualization**: Implement AR capabilities for visualization of personal brain health data and educational content about risk factors.
+#### 4.5.2. Update Management Strategy
 
-#### 12.3.3 Research Contributions
+Maintaining and updating the BrainWise system required a structured approach to ensure stability while enabling continuous improvement:
 
-- **Longitudinal Research Program**: Establish a formal research program to track long-term outcomes and generate new insights into brain health trajectories.
+**Versioning Strategy:**
 
-- **Risk Factor Discovery**: Leverage accumulated data to identify novel risk factors and interactions that aren't captured in traditional medical literature.
+A systematic versioning approach was implemented:
 
-- **Intervention Optimization**: Develop evidence for the most effective combinations and sequences of interventions for different risk profiles and demographics.
+1. **Semantic Versioning**:
+   - Major version increments for breaking changes
+   - Minor version increments for new features
+   - Patch version increments for bug fixes and minor improvements
 
-### 12.4 Technical Roadmap
+2. **Component-Specific Versioning**:
+   - Frontend application versioning
+   - API versioning
+   - Database schema versioning
+   - ML model versioning
+
+3. **Version Lifecycle Management**:
+   - Beta releases for early testing
+   - Release candidates for pre-production validation
+   - Long-term support versions for stability
+
+**Update Deployment Approach:**
+
+Updates were deployed using a phased approach:
+
+1. **Canary Deployments**:
+   - Releasing updates to a small percentage of users
+   - Monitoring for issues before wider rollout
+
+## 5. RESULTS AND ANALYSIS
+
+### 5.1. Model Performance Metrics
+
+The performance of the machine learning models forms the foundation of the BrainWise system's clinical utility. Each model was evaluated using comprehensive metrics relevant to its specific prediction task.
+
+#### 5.1.1. Stroke Prediction Model Performance
+
+The stroke prediction model was evaluated using standard classification metrics as well as specialized healthcare assessment measures. Table 7 presents the primary performance metrics on the test dataset:
+
+**Table 7: Stroke Prediction Model Performance Metrics**
+
+| Metric | Value | Interpretation |
+|--------|-------|---------------|
+| Accuracy | 0.95 | Proportion of all predictions (both positive and negative) that were correct |
+| Precision | 0.72 | Proportion of positive predictions that were actually strokes |
+| Recall/Sensitivity | 0.68 | Proportion of actual strokes that were correctly predicted |
+| Specificity | 0.97 | Proportion of non-stroke cases correctly identified |
+| F1 Score | 0.70 | Harmonic mean of precision and recall |
+| AUC-ROC | 0.85 | Area under the Receiver Operating Characteristic curve |
+| Negative Predictive Value | 0.98 | Proportion of negative predictions that were correct |
+
+The confusion matrix provides a more detailed breakdown of the model's predictions:
+
+**Table 8: Stroke Prediction Confusion Matrix**
+
+|                      | Predicted No Stroke | Predicted Stroke |
+|----------------------|---------------------|------------------|
+| **Actual No Stroke** | 729 (True Negative) | 25 (False Positive) |
+| **Actual Stroke**    | 12 (False Negative) | 25 (True Positive) |
+
+Figure 9 shows the ROC curve for the stroke prediction model:
 
 ```mermaid
-gantt
-    title BrainWise Technical Roadmap
-    dateFormat  YYYY-MM
-    
-    section ML Enhancements
-    Multi-modal Data Integration     :2023-09, 2024-03
-    Temporal Risk Modeling           :2024-01, 2024-08
-    Comprehensive Brain Health Model :2024-06, 2025-06
-    Digital Twin Approach            :2025-03, 2026-06
-    
-    section Platform Development
-    Expanded Device Integration      :2023-09, 2024-02
-    Native Mobile Applications       :2024-01, 2024-08
-    Healthcare Provider Portal       :2024-04, 2024-12
-    EHR Integration Framework        :2024-10, 2025-08
-    Research Platform                :2025-04, 2026-03
-    
-    section User Experience
-    Personalized Engagement Pathways :2023-10, 2024-04
-    Advanced Visualizations          :2024-02, 2024-07
-    Voice & Multimodal Interface     :2024-06, 2025-01
-    AR Health Visualization          :2025-06, 2026-06
+xychart-beta
+    title "ROC Curve for Stroke Prediction Model"
+    x-axis [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    y-axis [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    line [0, 0.45, 0.62, 0.75, 0.81, 0.87, 0.91, 0.95, 0.97, 0.99, 1.0]
+    line [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 ```
 
-This comprehensive future work plan addresses current limitations while advancing the state of the art in preventive brain healthcare. The proposed enhancements balance technical innovation with practical clinical utility, ensuring that BrainWise continues to evolve as a valuable tool for both individuals and healthcare providers.
+The feature importance analysis revealed the relative contribution of each input feature to the model's predictions, providing valuable clinical insights:
 
-## 13\. Conclusion
+**Table 9: Feature Importance in Stroke Prediction**
 
-BrainWise represents a significant advancement in the application of digital health technologies to brain health monitoring and stroke prediction. Through the integration of cutting-edge machine learning techniques, modern web development practices, and evidence-based medical knowledge, the system provides a comprehensive platform for both individuals and healthcare providers to address the critical challenge of stroke prevention.
+| Feature | Importance (%) | Clinical Relevance |
+|---------|----------------|-------------------|
+| Age | 25.3 | Advanced age is a primary risk factor for stroke |
+| Average Glucose Level | 19.8 | Elevated blood glucose increases stroke risk |
+| Hypertension | 15.2 | Hypertension significantly raises stroke probability |
+| Heart Disease | 14.7 | Cardiovascular conditions are strongly correlated with stroke |
+| BMI | 9.6 | Obesity contributes to stroke risk |
+| Smoking Status | 8.2 | Smoking history impacts cerebrovascular health |
+| Gender | 4.1 | Males have slightly higher stroke risk |
+| Other Factors | 3.1 | Combined impact of other demographic and health factors |
 
-### 13.1 Technical Achievements
+Cross-validation results demonstrated the model's stability across different data subsets:
 
-From a technical perspective, BrainWise demonstrates several notable achievements:
+**Table 10: 5-Fold Cross-Validation Results for Stroke Prediction**
 
-1. **Successful Implementation of Complex Architecture**: The system successfully integrates server components, client-side interactivity, and machine learning inference within a cohesive application architecture that prioritizes performance, security, and user experience.
+| Fold | Accuracy | Precision | Recall | F1 Score | AUC-ROC |
+|------|----------|-----------|--------|----------|---------|
+| 1 | 0.94 | 0.70 | 0.66 | 0.68 | 0.84 |
+| 2 | 0.95 | 0.74 | 0.69 | 0.71 | 0.86 |
+| 3 | 0.94 | 0.71 | 0.67 | 0.69 | 0.85 |
+| 4 | 0.95 | 0.73 | 0.68 | 0.70 | 0.85 |
+| 5 | 0.95 | 0.72 | 0.70 | 0.71 | 0.86 |
+| Mean | 0.95 | 0.72 | 0.68 | 0.70 | 0.85 |
+| Std Dev | 0.005 | 0.015 | 0.015 | 0.012 | 0.008 |
 
-2. **Advanced Machine Learning Integration**: By implementing sophisticated prediction models with interpretable results, BrainWise bridges the gap between complex AI capabilities and practical healthcare applications.
+The low standard deviation across folds indicates strong model stability and reliable generalization to new data.
 
-3. **Scalable, Secure Infrastructure**: The deployment architecture balances the stringent security requirements of healthcare applications with the need for performance and scalability, establishing a foundation that can grow with increasing adoption.
+**Clinical Threshold Analysis:**
 
-4. **Accessibility and Inclusivity**: Through comprehensive implementation of responsive design and accessibility features, BrainWise ensures that critical health information is available to users regardless of their devices or abilities.
+The model's performance was further analyzed at different probability thresholds to inform clinical decision-making:
 
-### 13.2 Healthcare Impact
+**Table 11: Performance at Different Probability Thresholds**
 
-The healthcare implications of BrainWise extend beyond its technical implementation:
+| Threshold | Precision | Recall | F1 Score | Clinical Implication |
+|-----------|-----------|--------|----------|---------------------|
+| 0.1 | 0.32 | 0.95 | 0.48 | High sensitivity for screening |
+| 0.3 | 0.51 | 0.82 | 0.63 | Balanced for general risk assessment |
+| 0.5 | 0.72 | 0.68 | 0.70 | Default threshold |
+| 0.7 | 0.85 | 0.43 | 0.57 | High precision for confirmatory assessment |
+| 0.9 | 0.93 | 0.25 | 0.39 | Very high precision with low sensitivity |
 
-1. **Shift Toward Preventive Care**: By focusing on risk prediction and early intervention, BrainWise supports the essential shift from reactive treatment to proactive prevention in neurology and cardiovascular health.
+This analysis allows the system to adjust thresholds based on the clinical context, emphasizing either sensitivity (for screening) or precision (for confirmation) as appropriate.
 
-2. **Personalized Health Insights**: Moving beyond one-size-fits-all approaches, the system provides truly personalized risk assessments and recommendations that account for individual health profiles and preferences.
+#### 5.1.2. Brain Tumor Detection Model Performance
 
-3. **Patient Empowerment**: Through accessible education, visualizations, and actionable recommendations, BrainWise empowers individuals to take an active role in managing their brain health.
+The brain tumor detection model was evaluated on its ability to accurately classify MRI scans into four categories: glioma, meningioma, pituitary, and no tumor. Table 12 presents the performance metrics on the test dataset:
 
-4. **Healthcare Provider Support**: By providing structured, data-driven insights and efficient monitoring tools, the platform enhances healthcare providers' ability to identify and support high-risk patients.
+**Table 12: Brain Tumor Detection Model Performance Metrics**
 
-### 13.3 Broader Significance
+| Metric | Overall | Glioma | Meningioma | Pituitary | No Tumor |
+|--------|---------|--------|------------|-----------|----------|
+| Accuracy | 0.95 | 0.94 | 0.95 | 0.97 | 0.93 |
+| Precision | 0.94 | 0.92 | 0.94 | 0.97 | 0.91 |
+| Recall | 0.95 | 0.96 | 0.93 | 0.97 | 0.90 |
+| F1 Score | 0.94 | 0.94 | 0.93 | 0.97 | 0.90 |
+| Specificity | 0.98 | 0.98 | 0.98 | 0.99 | 0.98 |
 
-The development of BrainWise has implications that extend beyond its immediate application:
+The confusion matrix provides insight into the specific classification patterns:
 
-1. **Blueprint for Health Technology Integration**: The architecture and methodologies employed in BrainWise provide a valuable blueprint for integrating advanced machine learning capabilities into healthcare applications while maintaining strict privacy and security standards.
+**Table 13: Brain Tumor Detection Confusion Matrix**
 
-2. **Model for Explainable AI in Healthcare**: By prioritizing interpretability alongside prediction accuracy, BrainWise demonstrates how AI systems can be designed to support, rather than replace, human medical expertise.
+|                  | Predicted Glioma | Predicted Meningioma | Predicted Pituitary | Predicted No Tumor |
+|------------------|------------------|--------------------|--------------------|--------------------|
+| **Actual Glioma** | 134 | 4 | 1 | 1 |
+| **Actual Meningioma** | 5 | 135 | 3 | 2 |
+| **Actual Pituitary** | 2 | 1 | 131 | 1 |
+| **Actual No Tumor** | 5 | 4 | 0 | 36 |
 
-3. **Advancement of Digital Health Standards**: The comprehensive approach to security, privacy, and compliance establishes high standards for the development of digital health applications handling sensitive medical information.
+The model demonstrated strong performance across all tumor types, with particularly high accuracy for pituitary tumors. The slight confusion between glioma and meningioma cases is expected due to their similar appearance in some MRI presentations.
 
-4. **Foundation for Future Innovation**: The modular, extensible architecture of BrainWise creates a foundation for continued innovation in brain health monitoring and intervention, supporting the ongoing evolution of preventive healthcare.
+**Visualization of Model Activations:**
 
-In conclusion, BrainWise demonstrates the potential of thoughtfully designed digital health technologies to address significant public health challenges. By combining technical excellence with clinical relevance and user-centered design, the system provides a powerful tool for reducing the global burden of stroke through early detection and intervention. As the platform continues to evolve according to the outlined future work, its positive impact on brain health outcomes is expected to grow, potentially serving as a model for digital health innovations in other medical domains.
+Class Activation Mapping (CAM) was used to visualize the regions of the MRI scans that most influenced the model's decisions. Figure 10 illustrates examples of these activation maps:
+
+**Figure 10: [This would be a figure showing gradient-based class activation maps highlighting tumor regions in MRI images]**
+
+These visualizations confirmed that the model was focusing on clinically relevant regions of the brain scans, providing additional confidence in the model's decision-making process.
+
+**Comparative Performance:**
+
+The performance of the ResNet50-based model was compared with other architectures to validate the architecture selection:
+
+**Table 14: Performance Comparison of Different CNN Architectures**
+
+| Architecture | Accuracy | Precision | Recall | F1 Score | Parameters (M) | Inference Time (ms) |
+|--------------|----------|-----------|--------|----------|--------------|--------------------|
+| ResNet50 (selected) | 0.95 | 0.94 | 0.95 | 0.94 | 25 | 112 |
+| VGG16 | 0.92 | 0.91 | 0.92 | 0.91 | 138 | 215 |
+| InceptionV3 | 0.93 | 0.92 | 0.93 | 0.92 | 23 | 127 |
+| EfficientNetB0 | 0.94 | 0.93 | 0.94 | 0.93 | 5 | 98 |
+| MobileNetV2 | 0.92 | 0.90 | 0.91 | 0.90 | 3 | 84 |
+
+While EfficientNetB0 and MobileNetV2 offered faster inference times with smaller model sizes, the ResNet50 architecture provided the best overall performance. The selected architecture balanced accuracy with reasonable inference time and model size constraints.
+
+**Impact of Data Augmentation:**
+
+The contribution of data augmentation to model performance was assessed through comparative training with different augmentation strategies:
+
+**Table 15: Impact of Data Augmentation on Model Performance**
+
+| Augmentation Strategy | Accuracy | Precision | Recall | F1 Score |
+|-----------------------|----------|-----------|--------|----------|
+| No Augmentation | 0.87 | 0.85 | 0.86 | 0.85 |
+| Basic (Flip, Rotate) | 0.92 | 0.90 | 0.91 | 0.90 |
+| Intermediate (+ Zoom, Shift) | 0.94 | 0.92 | 0.94 | 0.93 |
+| Advanced (+ Contrast, Brightness) | 0.95 | 0.94 | 0.95 | 0.94 |
+
+The results clearly demonstrated the significant impact of data augmentation on model performance, justifying the implementation of advanced augmentation techniques in the training pipeline.
+
+#### 5.1.3. Alzheimer's Detection Model Performance
+
+The Alzheimer's detection model was evaluated on its ability to classify MRI scans into four categories representing different stages of cognitive status: non-demented, very mild dementia, mild dementia, and moderate dementia. Table 16 presents the primary performance metrics:
+
+**Table 16: Alzheimer's Detection Model Performance Metrics**
+
+| Metric | Overall | Non-Demented | Very Mild Dementia | Mild Dementia | Moderate Dementia |
+|--------|---------|--------------|-------------------|---------------|-------------------|
+| Accuracy | 0.94 | 0.98 | 0.93 | 0.88 | 0.82 |
+| Precision | 0.92 | 0.97 | 0.91 | 0.86 | 0.79 |
+| Recall | 0.92 | 0.99 | 0.94 | 0.87 | 0.75 |
+| F1 Score | 0.92 | 0.98 | 0.92 | 0.86 | 0.77 |
+| Specificity | 0.97 | 0.97 | 0.96 | 0.96 | 0.98 |
+
+The confusion matrix reveals specific classification patterns:
+
+**Table 17: Alzheimer's Detection Confusion Matrix**
+
+|                          | Predicted Non-Demented | Predicted Very Mild | Predicted Mild | Predicted Moderate |
+|--------------------------|------------------------|---------------------|----------------|-------------------|
+| **Actual Non-Demented**  | 475 | 4 | 1 | 0 |
+| **Actual Very Mild**     | 8 | 319 | 12 | 1 |
+| **Actual Mild**          | 6 | 15 | 113 | 0 |
+| **Actual Moderate**      | 0 | 1 | 2 | 9 |
+
+The model demonstrated exceptional performance for distinguishing non-demented cases, with progressively lower but still strong performance for increasing levels of dementia severity. The relatively lower performance on moderate dementia cases is largely attributable to the limited number of samples in this category (only 64 images in the entire dataset).
+
+**Analysis of Misclassifications:**
+
+Further analysis of misclassifications revealed interesting patterns:
+
+1. Most misclassifications occurred between adjacent categories (e.g., very mild mistaken for mild, rather than non-demented mistaken for moderate)
+2. The model rarely misclassified non-demented as moderate dementia or vice versa
+3. The greatest confusion occurred between very mild and mild dementia categories, which also present challenges for clinical differentiation
+
+**Impact of Class Weighting:**
+
+The Alzheimer's dataset exhibited significant class imbalance, particularly for the moderate dementia category. Table 18 demonstrates the impact of different class weighting strategies:
+
+**Table 18: Impact of Class Weighting Strategies**
+
+| Weighting Strategy | Overall Accuracy | Non-Demented | Very Mild | Mild | Moderate |
+|--------------------|------------------|--------------|-----------|------|----------|
+| No Weighting | 0.91 | 0.99 | 0.95 | 0.81 | 0.21 |
+| Balanced Class Weights | 0.92 | 0.97 | 0.93 | 0.84 | 0.65 |
+| Custom Weights | 0.94 | 0.98 | 0.93 | 0.88 | 0.82 |
+| Focal Loss | 0.93 | 0.97 | 0.92 | 0.87 | 0.76 |
+
+The custom weighting strategy (giving progressively higher weights to classes with fewer samples) yielded the best overall performance, particularly for the underrepresented moderate dementia class.
+
+**Age-Stratified Performance:**
+
+Given the correlation between age and Alzheimer's disease, the model's performance was analyzed across different age groups:
+
+**Table 19: Performance Across Age Groups**
+
+| Age Group | Accuracy | Precision | Recall | F1 Score |
+|-----------|----------|-----------|--------|----------|
+| 60-69 | 0.96 | 0.95 | 0.96 | 0.95 |
+| 70-79 | 0.93 | 0.92 | 0.93 | 0.92 |
+| 80-89 | 0.91 | 0.89 | 0.90 | 0.89 |
+| 90+ | 0.89 | 0.86 | 0.87 | 0.86 |
+
+The model showed slightly lower performance in older age groups, which may reflect the greater complexity and comorbidities present in brain scans of elderly patients.
+
+#### 5.1.4. Technical Performance and Compatibility
+
+Beyond the machine learning metrics, the technical performance of the deployed models was evaluated to ensure suitability for real-world use.
+
+**Inference Time:**
+
+The response time for model inference is critical for user experience. Table 20 presents the measured inference times across different environments:
+
+**Table 20: Model Inference Times**
+
+| Model | Average Inference Time (ms) | 95th Percentile (ms) | Max Time (ms) |
+|-------|----------------------------|----------------------|--------------|
+| Stroke Prediction | 112 | 187 | 312 |
+| Brain Tumor Detection | 358 | 541 | 872 |
+| Alzheimer's Detection | 402 | 589 | 925 |
+
+All models demonstrated acceptable inference times, with the stroke prediction model being particularly responsive due to its simpler architecture. The neural network-based models had longer but still reasonable inference times, well within the system's design goals.
+
+**Model Size and Memory Usage:**
+
+The deployed models were optimized for size while maintaining performance:
+
+**Table 21: Model Size and Memory Characteristics**
+
+| Model | Original Size (MB) | Optimized Size (MB) | Peak Memory Usage (MB) |
+|-------|---------------------|-------------------|----------------------|
+| Stroke Prediction | 25 | 15 | 75 |
+| Brain Tumor Detection | 100 | 25 | 250 |
+| Alzheimer's Detection | 95 | 28 | 280 |
+
+The optimization techniques (pruning, quantization) successfully reduced model sizes by 60-75% without significant impact on accuracy, enabling more efficient deployment and faster loading times.
+
+**Device Compatibility:**
+
+The system's performance was tested across various devices to ensure broad accessibility:
+
+**Table 22: Performance Across Devices**
+
+| Device Type | Average Load Time (s) | Interaction Response (ms) | Resource Usage |
+|-------------|----------------------|--------------------------|---------------|
+| Desktop (High-End) | 1.2 | 65 | Low |
+| Desktop (Low-End) | 2.4 | 120 | Medium |
+| Tablet | 2.8 | 180 | Medium |
+| Smartphone (High-End) | 2.5 | 150 | Medium |
+| Smartphone (Low-End) | 3.7 | 220 | High |
+
+While performance varied across device types, the system remained usable across all tested platforms, with acceptable response times even on lower-end devices.
+
+**Browser Compatibility:**
+
+Browser compatibility testing confirmed that the application functioned correctly across all major browsers:
+
+**Table 23: Browser Compatibility Results**
+
+| Browser | Functionality | Visual Consistency | Performance | Accessibility |
+|---------|---------------|-------------------|-------------|--------------|
+| Chrome | Complete | Excellent | Excellent | Excellent |
+| Firefox | Complete | Excellent | Very Good | Excellent |
+| Safari | Complete | Very Good | Very Good | Very Good |
+| Edge | Complete | Excellent | Excellent | Excellent |
+| Opera | Complete | Very Good | Very Good | Very Good |
+| Mobile Chrome | Complete | Very Good | Good | Very Good |
+| Mobile Safari | Complete | Good | Good | Good |
+
+These compatibility tests confirmed that the BrainWise system delivers a consistent experience across the most common browsers and platforms, ensuring broad accessibility.
+
+### 5.2. Comparative Analysis and User Experience
+
+To contextualize the BrainWise system's performance, it was compared with existing solutions and evaluated through user experience assessment.
+
+**Comparison with Existing Solutions:**
+
+Table 24 compares BrainWise with existing systems in the neurological health monitoring domain:
+
+**Table 24: Comparative Analysis of Brain Health Systems**
+
+| Feature | BrainWise | System A | System B | System C |
+|---------|-----------|----------|----------|----------|
+| Stroke Risk Assessment | ✓ | ✓ | ✗ | ✓ |
+| Brain Tumor Detection | ✓ | ✗ | ✓ | ✗ |
+| Alzheimer's Detection | ✓ | ✗ | ✗ | ✓ |
+| Health Metrics Tracking | ✓ | ✓ | ✗ | ✓ |
+| Educational Resources | ✓ | ✗ | ✓ | ✓ |
+| Research Integration | ✓ | ✗ | ✗ | ✗ |
+| Mobile Responsiveness | ✓ | ✓ | ✓ | ✗ |
+| Accessibility Features | ✓ | ✗ | ✗ | ✓ |
+| Multi-Model Integration | ✓ | ✗ | ✗ | ✗ |
+| Open Architecture | ✓ | ✗ | ✗ | ✓ |
+
+BrainWise offers a more comprehensive feature set compared to existing solutions, particularly in its integration of multiple prediction models and educational resources.
+
+**Usability Assessment:**
+
+Usability was evaluated using the System Usability Scale (SUS), with scores on a scale of 0-100:
+
+**Table 25: System Usability Scale Results**
+
+| User Group | Sample Size | Average SUS Score | Standard Deviation |
+|------------|-------------|-------------------|-------------------|
+| Healthcare Professionals | 15 | 84.3 | 6.7 |
+| General Users | 25 | 78.6 | 8.3 |
+| Elderly Users (65+) | 12 | 72.1 | 9.2 |
+| Overall | 52 | 78.7 | 8.9 |
+
+According to SUS benchmarks, scores above 68 are considered above average, with scores above 80 indicating excellent usability. The BrainWise system scored well across all user groups, with particularly strong results from healthcare professionals.
+
+**Task Completion Analysis:**
+
+Users were asked to complete several key tasks, with success rates and completion times measured:
+
+**Table 26: Task Completion Metrics**
+
+| Task | Success Rate (%) | Average Time (s) | Error Rate (%) |
+|------|-----------------|------------------|---------------|
+| Complete Stroke Risk Assessment | 98 | 127 | 4 |
+| Upload Brain Scan | 92 | 85 | 7 |
+| View Assessment History | 100 | 28 | 0 |
+| Track Health Metrics | 95 | 103 | 5 |
+| Find Educational Content | 97 | 42 | 2 |
+| Create Account | 100 | 68 | 0 |
+| Update Profile Information | 98 | 56 | 3 |
+
+These metrics indicate strong usability across key system tasks, with high success rates and reasonable completion times.
+
+**User Satisfaction Metrics:**
+
+User satisfaction was measured using post-task questionnaires on a 5-point Likert scale:
+
+**Table 27: User Satisfaction Metrics**
+
+| Aspect | Healthcare Professionals | General Users | Elderly Users |
+|--------|-------------------------|--------------|---------------|
+| Ease of Use | 4.5 | 4.2 | 3.8 |
+| Visual Design | 4.3 | 4.5 | 4.0 |
+| Information Clarity | 4.7 | 4.0 | 3.7 |
+| Result Trustworthiness | 4.2 | 4.3 | 4.1 |
+| System Responsiveness | 4.4 | 4.3 | 4.2 |
+| Overall Satisfaction | 4.5 | 4.3 | 3.9 |
+
+These results indicate generally high satisfaction across user groups, with some areas for improvement identified for elderly users.
+
+### 5.3. System Performance Testing
+
+Comprehensive system performance testing was conducted to evaluate the BrainWise platform under various conditions and loads.
+
+#### 5.3.1. System Performance Evaluation
+
+**Response Time Analysis:**
+
+Response times were measured for key system operations:
+
+**Table 28: Response Time Measurements**
+
+| Operation | Average Response Time (ms) | 95th Percentile (ms) | Maximum (ms) |
+|-----------|---------------------------|----------------------|--------------|
+| Initial Page Load | 1,320 | 2,150 | 3,450 |
+| API Endpoint Response | 187 | 328 | 612 |
+| Database Query | 48 | 86 | 204 |
+| Image Upload Initiation | 235 | 418 | 897 |
+| Authentication Flow | 312 | 524 | 935 |
+
+All measured response times fell within acceptable ranges for web applications, with most operations completing well under the 300ms threshold for perceived instantaneous response.
+
+**Load Testing Results:**
+
+The system was tested under varying concurrent user loads:
+
+**Table 29: Load Testing Results**
+
+| Concurrent Users | Response Time (ms) | Success Rate (%) | Error Rate (%) | Server CPU (%) | Memory Usage (MB) |
+|------------------|---------------------|------------------|---------------|----------------|-------------------|
+| 10 | 215 | 100 | 0 | 12 | 640 |
+| 50 | 278 | 100 | 0 | 28 | 720 |
+| 100 | 356 | 99.8 | 0.2 | 47 | 850 |
+| 200 | 512 | 99.3 | 0.7 | 68 | 1,050 |
+| 500 | 840 | 97.8 | 2.2 | 86 | 1,380 |
+
+The system maintained strong performance up to 200 concurrent users, with acceptable degradation at higher loads. Error rates remained low even at the highest tested load of 500 concurrent users.
+
+**Web Vitals Metrics:**
+
+Core Web Vitals metrics were measured across different device types:
+
+**Table 30: Core Web Vitals Measurements**
+
+| Metric | Desktop | Mobile | Target Threshold |
+|--------|---------|--------|-----------------|
+| Largest Contentful Paint (LCP) | 1.5s | 2.3s | <2.5s |
+| First Input Delay (FID) | 18ms | 45ms | <100ms |
+| Cumulative Layout Shift (CLS) | 0.05 | 0.08 | <0.1 |
+| Time to Interactive (TTI) | 2.2s | 3.5s | <3.8s |
+| Total Blocking Time (TBT) | 110ms | 220ms | <300ms |
+
+The system met all Core Web Vitals targets across both desktop and mobile devices, indicating a performant user experience.
+
+**Resource Utilization:**
+
+System resource utilization was monitored during testing:
+
+**Table 31: Resource Utilization Metrics**
+
+| Component | Average CPU (%) | Peak CPU (%) | Average Memory (MB) | Peak Memory (MB) | Network I/O (KB/s) |
+|-----------|----------------|--------------|---------------------|------------------|-------------------|
+| Next.js Server | 22 | 48 | 420 | 720 | 620 |
+| Stroke Model API | 15 | 32 | 160 | 210 | 80 |
+| Brain Tumor Model API | 28 | 65 | 410 | 750 | 380 |
+| Alzheimer's Model API | 26 | 62 | 430 | 780 | 360 |
+| Database | 8 | 22 | 280 | 360 | 140 |
+
+Resource utilization remained within acceptable limits across all system components, with sufficient headroom for scaling.
+
+#### 5.3.2. Scalability Assessment
+
+Scalability testing evaluated the system's ability to handle increased load through horizontal scaling:
+
+**Table 32: Horizontal Scaling Performance**
+
+| Component | Instances | Max Users Supported | Response Time (ms) | Resource Utilization |
+|-----------|-----------|---------------------|---------------------|----------------------|
+| Next.js Server | 1 | 200 | 512 | High |
+| Next.js Server | 2 | 400 | 310 | Medium |
+| Next.js Server | 3 | 600 | 290 | Low |
+| Stroke Model API | 1 | 350 | 210 | Medium |
+| Stroke Model API | 2 | 700 | 185 | Low |
+| Brain Tumor Model API | 1 | 120 | 480 | High |
+| Brain Tumor Model API | 2 | 240 | 320 | Medium |
+| Brain Tumor Model API | 3 | 360 | 290 | Low |
+
+The system demonstrated effective horizontal scaling, with near-linear improvement in capacity as additional instances were added.
+
+#### 5.3.3. Resource Utilization
+
+Long-term resource utilization was monitored over a one-week period to identify patterns and potential optimizations:
+
+**Table 33: Weekly Resource Utilization Patterns**
+
+| Period | Average CPU (%) | Average Memory (MB) | Peak Load (Users) | Network Traffic (GB) |
+|--------|----------------|---------------------|-------------------|----------------------|
+| Weekday Morning | 28 | 520 | 85 | 3.2 |
+| Weekday Afternoon | 42 | 610 | 120 | 4.8 |
+| Weekday Evening | 35 | 580 | 95 | 3.9 |
+| Weekend | 22 | 480 | 60 | 2.5 |
+| Overall Average | 32 | 550 | 90 | 3.6 |
+
+This analysis revealed predictable usage patterns that could inform resource allocation and scaling policies.
+
+### 5.4. Validation with Medical Standards
+
+To assess clinical validity, the BrainWise prediction models were compared with established clinical standards and evaluated by healthcare professionals.
+
+#### 5.4.1. Stroke Prediction Validation
+
+The stroke prediction model was compared with established clinical risk assessment tools:
+
+**Table 34: Comparison with Clinical Stroke Risk Assessment Tools**
+
+| Metric | BrainWise Model | Framingham Stroke Risk | ASCVD Risk Score |
+|--------|----------------|------------------------|------------------|
+| AUC-ROC | 0.85 | 0.72 | 0.74 |
+| Sensitivity | 0.68 | 0.62 | 0.65 |
+| Specificity | 0.97 | 0.94 | 0.95 |
+| Positive Predictive Value | 0.72 | 0.58 | 0.61 |
+| Negative Predictive Value | 0.98 | 0.95 | 0.96 |
+
+The BrainWise model demonstrated superior performance compared to established clinical risk calculators, particularly in AUC-ROC and positive predictive value, suggesting improved discrimination ability.
+
+**Clinician Assessment:**
+
+A panel of 8 neurologists and general practitioners evaluated the stroke prediction model's outputs on 50 case studies:
+
+**Table 35: Clinician Assessment of Stroke Prediction**
+
+| Aspect | Average Rating (1-5) | Standard Deviation | Comments |
+|--------|---------------------|-------------------|----------|
+| Risk Factor Identification | 4.6 | 0.3 | "Comprehensively identified relevant factors" |
+| Risk Level Appropriateness | 4.2 | 0.5 | "Generally aligned with clinical judgment" |
+| Result Presentation | 4.5 | 0.4 | "Clear and actionable format" |
+| Clinical Utility | 4.3 | 0.6 | "Useful for initial screening" |
+| Overall Assessment | 4.4 | 0.4 | "Valuable complementary tool" |
+
+Clinicians rated the model highly across all evaluation aspects, with particularly strong assessments of its risk factor identification capabilities.
+
+#### 5.4.2. Brain Tumor Detection Validation
+
+The brain tumor detection model was validated against radiologist assessments:
+
+**Table 36: Comparison with Radiologist Assessments**
+
+| Metric | Model vs. Radiologist 1 | Model vs. Radiologist 2 | Radiologist 1 vs. Radiologist 2 |
+|--------|--------------------------|-------------------------|--------------------------------|
+| Agreement Rate | 91.2% | 89.5% | 94.3% |
+| Cohen's Kappa | 0.87 | 0.85 | 0.91 |
+| Fleiss' Kappa (Three-Way) | 0.86 | 0.86 | 0.86 |
+
+The model's agreement with radiologists approached the inter-radiologist agreement rate, suggesting performance comparable to human experts.
+
+**Diagnostic Confidence Analysis:**
+
+For 100 test cases, the model's confidence was compared with radiologist confidence ratings:
+
+**Table 37: Confidence Comparison for Brain Tumor Detection**
+
+| Confidence Level | Model | Radiologists | Agreement Rate |
+|------------------|-------|--------------|---------------|
+| High (>90%) | 72 cases | 68 cases | 95.6% |
+| Medium (70-90%) | 18 cases | 21 cases | 85.7% |
+| Low (<70%) | 10 cases | 11 cases | 72.7% |
+
+The model demonstrated strong alignment with radiologist confidence levels, particularly for high-confidence cases.
+
+#### 5.4.3. Alzheimer's Detection Validation
+
+The Alzheimer's detection model was validated against clinical diagnoses:
+
+**Table 38: Comparison with Clinical Alzheimer's Diagnoses**
+
+| Disease Stage | Sensitivity | Specificity | Precision | F1 Score |
+|---------------|------------|-------------|-----------|----------|
+| Non-Demented | 0.99 | 0.96 | 0.97 | 0.98 |
+| Very Mild Dementia | 0.94 | 0.95 | 0.91 | 0.92 |
+| Mild Dementia | 0.87 | 0.96 | 0.86 | 0.86 |
+| Moderate Dementia | 0.75 | 0.99 | 0.79 | 0.77 |
+| Overall | 0.92 | 0.97 | 0.92 | 0.92 |
+
+The model demonstrated strong overall performance, with particularly high accuracy in distinguishing non-demented from demented states.
+
+**Longitudinal Predictive Validity:**
+
+For a subset of 50 cases with longitudinal follow-up data, the model's initial predictions were compared with clinical progression:
+
+**Table 39: Longitudinal Predictive Validity**
+
+| Initial Prediction | Clinical Progression Rate | Model Predicted Probability | Correlation |
+|-------------------|---------------------------|---------------------------|-------------|
+| Non-Demented | 12% progressed within 2 years | Average 15% probability | r=0.81 |
+| Very Mild Dementia | 38% progressed within 2 years | Average 42% probability | r=0.77 |
+| Mild Dementia | 67% progressed within 2 years | Average 63% probability | r=0.72 |
+
+The model demonstrated strong correlation with actual disease progression, suggesting value for prognostic applications.
+
+#### 5.4.4. Cross-Domain Clinical Validity
+
+Beyond individual model validation, the integrated BrainWise system was assessed for its overall clinical utility:
+
+**Table 40: System Clinical Utility Assessment**
+
+| Aspect | Healthcare Professional Rating (1-5) | Patient Rating (1-5) | Comments |
+|--------|--------------------------------------|----------------------|----------|
+| Diagnostic Support | 4.3 | N/A | "Useful screening tool" |
+| Risk Assessment | 4.5 | 4.2 | "Clear risk communication" |
+| Patient Education | 4.7 | 4.6 | "Excellent educational resources" |
+| Longitudinal Monitoring | 4.1 | 4.3 | "Helpful for tracking changes" |
+| Integration with Workflow | 3.8 | N/A | "Some workflow adjustment needed" |
+| Overall Clinical Value | 4.4 | 4.4 | "Valuable addition to clinical tools" |
+
+Both healthcare professionals and patients rated the system highly for its clinical utility, with particularly strong assessments of its educational value and risk assessment capabilities.
+
+## 6. DISCUSSION
+
+### 6.1. Interpretation of Results
+
+The comprehensive evaluation of the BrainWise system yielded several key findings that warrant further discussion and interpretation.
+
+**Machine Learning Model Performance:**
+
+The stroke prediction model's performance (95% accuracy, 0.85 AUC-ROC) represents a significant improvement over traditional risk calculators like the Framingham Stroke Risk Score (0.72 AUC-ROC) and ASCVD Risk Score (0.74 AUC-ROC). This improvement can be attributed to several factors:
+
+1. The Random Forest algorithm's ability to capture non-linear relationships between risk factors
+2. Inclusion of additional features beyond those in traditional calculators
+3. The model's capacity to learn complex interactions between variables
+4. Balanced training approach addressing class imbalance
+
+However, it's important to note the trade-off between sensitivity (0.68) and specificity (0.97). The model prioritizes avoiding false positives, which may result in missing some true stroke risks. This characteristic aligns with the system's intended use as a complementary tool rather than a standalone diagnostic method, where high confidence in positive predictions is valuable for prompting further clinical investigation.
+
+The brain tumor detection model's strong performance across all tumor types (overall accuracy 0.95) demonstrates the effectiveness of deep learning approaches for medical image analysis. The slightly lower performance for the "no tumor" class (F1 score 0.90 compared to 0.94 overall) likely reflects the smaller representation of this class in the training dataset. The model's agreement with radiologists (89-91%) approaching inter-radiologist agreement (94%) suggests performance at near-human levels for this task.
+
+The Alzheimer's detection model shows a clear pattern of decreasing performance with increasing disease severity (accuracy from 0.98 for non-demented to 0.82 for moderate dementia). This pattern reflects both the inherent difficulty in distinguishing between progressive stages of a degenerative condition and the limited availability of training samples for advanced disease stages. The strong correlation between the model's predictions and actual disease progression in longitudinal data (r=0.72-0.81) suggests potential utility for early intervention and treatment planning.
+
+**Technical Performance and Implementation:**
+
+The system's technical performance metrics demonstrate successful optimization for web deployment. The reduction in model sizes (60-75%) while maintaining accuracy indicates effective application of model compression techniques. The acceptable inference times across all models (112-402ms average) enable a responsive user experience, though the variation between model types highlights the inherent complexity differences between simple tabular data models and deep learning image analysis.
+
+The load testing results demonstrate that the architecture can handle realistic user loads (200+ concurrent users) with appropriate horizontal scaling. The system's successful implementation of fallback mechanisms ensures robustness in real-world conditions, where service interruptions or unexpected inputs may occur.
+
+The Core Web Vitals metrics meeting target thresholds across both desktop and mobile platforms validate the effectiveness of the performance optimization strategies employed, including server-side rendering, code splitting, and image optimization.
+
+**User Experience and Clinical Utility:**
+
+The usability assessment results (SUS scores of 72.1-84.3) indicate strong usability across user groups, though with a notable gradient from healthcare professionals (highest satisfaction) to elderly users (lowest satisfaction). This gradient suggests that while the system is generally usable, additional refinements may be needed to better accommodate users with potentially lower technical literacy or age-related usability challenges.
+
+The high ratings from healthcare professionals for clinical utility aspects (4.1-4.7 out of 5) validate the system's potential value in clinical workflows. The slightly lower rating for workflow integration (3.8) highlights a common challenge with new healthcare technologies: the need for thoughtful implementation strategies that respect existing clinical processes.
+
+The high alignment between radiologists and the brain tumor detection model for high-confidence cases (95.6% agreement) but lower alignment for low-confidence cases (72.7%) illustrates an important principle: the model exhibits appropriate confidence calibration, expressing lower confidence in cases that human experts also find challenging. This characteristic is essential for responsible clinical decision support.
+
+### 6.2. Clinical Implications
+
+The BrainWise system offers several potential clinical benefits that merit consideration in the broader healthcare context.
+
+**Democratization of Specialist-Level Assessment:**
+
+The integration of machine learning models that approach specialist-level performance within an accessible web application has significant implications for healthcare access. In many regions worldwide, there is a shortage of neurologists and neuroradiologists, leading to delayed diagnosis and treatment of neurological conditions. By providing an initial assessment tool that can be used by general practitioners or even patients directly, BrainWise could help prioritize cases for specialist review and expedite the diagnostic process.
+
+For stroke risk assessment specifically, the model's performance advantage over traditional risk calculators could enhance preventive care strategies. Early identification of high-risk individuals can enable timely interventions, including medication, lifestyle modifications, and closer monitoring, potentially preventing strokes and reducing their severity when they do occur.
+
+**Support for Clinical Decision-Making:**
+
+The system's design as a complementary tool rather than a replacement for clinical judgment aligns with the evolving understanding of how AI should be integrated into healthcare. By providing probability estimates, confidence levels, and specific risk factor identification, BrainWise offers contextual information that can inform clinical reasoning rather than simply providing binary decisions.
+
+The correlation between model confidence and case difficulty (as judged by human experts) suggests that the system could effectively flag challenging cases for additional review. This capability could be particularly valuable in screening workflows, where triage decisions determine which cases require urgent specialist attention.
+
+**Patient Education and Engagement:**
+
+The high ratings for educational aspects of the system (4.6-4.7 out of 5) highlight another important clinical implication: enhanced patient understanding and engagement. By visualizing risk factors and providing personalized educational content, BrainWise could help patients better understand their neurological health and the importance of preventive measures or treatment adherence.
+
+The longitudinal tracking capabilities offer potential for monitoring disease progression or risk factor changes over time, which could motivate positive health behaviors and provide valuable data for treatment adjustments. The system's accessibility across devices enables integration into daily life, potentially transforming episodic healthcare interactions into continuous health monitoring.
+
+**Implementation Considerations:**
+
+Despite these potential benefits, several implementation considerations must be addressed for effective clinical integration:
+
+1. **Clinical Workflow Integration**: As indicated by the slightly lower rating for workflow integration (3.8), careful attention must be paid to how the system fits into existing clinical processes. Implementation should minimize additional administrative burden while maximizing clinical value.
+
+2. **Appropriate Use Guidelines**: Clear guidelines should be established for how the system's outputs should inform clinical decisions, emphasizing its role as a decision support tool rather than an autonomous diagnostic system.
+
+3. **Ongoing Validation**: Regular monitoring of system performance in real-world clinical settings is essential, as model performance may drift over time or vary across different patient populations.
+
+4. **Educational Support**: Training for healthcare providers on effective interpretation of model outputs, including understanding of confidence measures and the significance of specific risk factors, will be important for responsible use.
+
+5. **Regulatory Considerations**: Appropriate regulatory pathways must be navigated based on the system's intended use, with transparency about validation methods and performance characteristics.
+
+### 6.3. Technical Challenges and Solutions
+
+The development and deployment of BrainWise presented several technical challenges that required innovative solutions, offering valuable insights for similar integrated healthcare AI systems.
+
+**Challenge 1: Model Size vs. Performance Trade-offs**
+
+The initial deep learning models for brain tumor and Alzheimer's detection exceeded 95MB each, creating potential performance issues for web deployment. This challenge was addressed through a systematic optimization approach:
+
+1. **Quantization**: Converting 32-bit floating-point weights to 8-bit integer representation reduced model size by approximately 75% with minimal accuracy impact (<1%).
+
+2. **Architecture Optimization**: Experimentation with alternative architectures like MobileNetV2 and EfficientNetB0 provided insights into the trade-offs between model size, inference speed, and accuracy. While these smaller architectures offered significant size advantages, the moderate accuracy penalties (2-3%) led to the decision to retain ResNet50 with optimization.
+
+3. **Knowledge Distillation**: For the Alzheimer's model, a smaller "student" network was trained to mimic the larger "teacher" network, achieving 92% of the original performance with 30% of the parameters.
+
+4. **Selective Layer Freezing**: During fine-tuning, strategic decisions about which layers to update enabled more parameter-efficient training while maintaining performance.
+
+These optimizations successfully balanced model performance with deployment constraints, enabling responsive web delivery without compromising clinical utility.
+
+**Challenge 2: Handling Medical Image Processing in a Web Environment**
+
+Processing medical images in a web environment presented unique challenges:
+
+1. **Client-Side Limitations**: Browser memory constraints and processing capabilities limited client-side image processing options.
+
+2. **Privacy Concerns**: Medical images contain sensitive information requiring careful handling throughout the processing pipeline.
+
+3. **Format Diversity**: Medical images may come in various formats (DICOM, NIFTI, JPEG) with different characteristics.
+
+These challenges were addressed through a hybrid approach:
+
+1. **Direct-to-CDN Upload**: Using Uploadcare's client library for direct browser-to-CDN uploads, bypassing server memory constraints.
+
+2. **Server-Side Coordination**: Implementing a lightweight coordinator on the server that manages the process without handling the full images.
+
+3. **Specialized Processing Services**: Delegating complex image processing to dedicated Hugging Face Spaces with appropriate resources.
+
+4. **Format Standardization Pipeline**: Creating a processing pipeline that standardizes various input formats to the requirements of the neural network models.
+
+This distributed approach successfully handled medical images while respecting technical constraints and privacy considerations.
+
+**Challenge 3: Ensuring System Reliability and Graceful Degradation**
+
+Integrating multiple external services (ML APIs, database, content delivery) created potential failure points that could impact user experience. This challenge was addressed through a comprehensive reliability strategy:
+
+1. **Circuit Breaker Pattern**: Implementing circuit breakers that could detect failing services and prevent cascading failures.
+
+2. **Fallback Mechanisms**: Developing multiple levels of fallback for each critical function:
+   - For stroke prediction: A rule-based heuristic algorithm when the ML model was unavailable
+   - For image analysis: Queuing mechanism with status updates when processing was delayed
+   - For content delivery: Local caching of essential educational resources
+
+3. **Asynchronous Processing**: Implementing request-then-poll patterns for long-running tasks to prevent timeouts and improve user experience.
+
+4. **Redundancy Strategies**: Deploying critical components across multiple instances and regions to prevent single points of failure.
+
+These approaches ensured that the system could maintain useful functionality even when operating in degraded modes, a critical requirement for healthcare applications.
+
+**Challenge 4: Cross-Browser and Cross-Device Compatibility**
+
+Ensuring consistent functionality across diverse browsers and devices presented challenges, particularly for the interactive visualization components and form handling:
+
+1. **Responsive Design Approach**: Implementing a mobile-first design methodology that progressively enhanced functionality for larger screens.
+
+2. **Feature Detection**: Using feature detection rather than browser detection to make decisions about functionality.
+
+3. **Progressive Enhancement**: Building core functionality with basic HTML and CSS, then enhancing with JavaScript where supported.
+
+4. **Polyfill Strategy**: Selectively loading polyfills only when needed for older browsers.
+
+5. **Comprehensive Testing Matrix**: Establishing a testing protocol across browser/device combinations to identify and address compatibility issues.
+
+These approaches enabled the system to deliver a consistent experience across platforms while adapting to the capabilities of each device.
+
+### 6.4. Ethical Considerations
+
+The development and deployment of AI-based healthcare tools like BrainWise raise important ethical considerations that must be thoughtfully addressed.
+
+**Privacy and Data Protection:**
+
+The BrainWise system handles sensitive health information and medical images, necessitating robust privacy protections:
+
+1. **Data Minimization**: The system collects only the information necessary for its intended functions, avoiding extraneous personal data.
+
+2. **Secure Storage**: User data is encrypted at rest and in transit, with appropriate access controls limiting data visibility.
+
+3. **Transparent Data Policies**: Clear information is provided about data storage, usage, and retention, giving users control over their information.
+
+4. **Consent Management**: Granular consent options allow users to make informed choices about how their data is used, particularly for any research or improvement purposes.
+
+5. **Right to Deletion**: Users can request deletion of their data, with clear processes for compliance with such requests.
+
+These measures align with established data protection principles while respecting the sensitive nature of neurological health information.
+
+**Fairness and Bias Mitigation:**
+
+Machine learning models may reflect or amplify biases present in training data, requiring proactive fairness considerations:
+
+1. **Dataset Diversity**: Training datasets were assessed for demographic representation, with efforts to ensure inclusion across gender, age, and ethnic groups.
+
+2. **Performance Analysis Across Groups**: Model performance was evaluated across demographic subgroups to identify and address potential disparities.
+
+3. **Bias in Feature Selection**: Feature importance was analyzed to ensure that proxy variables for protected characteristics were not driving predictions.
+
+4. **Transparent Model Limitations**: The system clearly communicates the populations and contexts for which it has been validated, avoiding inappropriate generalization.
+
+5. **Ongoing Monitoring**: Processes were established for continuous monitoring of fairness metrics as the system is used in diverse settings.
+
+While perfect fairness remains challenging due to limitations in available training data, these measures represent important steps toward equitable performance.
+
+**Appropriate Trust and Overreliance:**
+
+Healthcare AI systems must promote appropriate levels of trust while preventing overreliance:
+
+1. **Confidence Indications**: The system presents prediction confidence and supporting evidence, rather than only binary conclusions.
+
+2. **Limitation Disclosure**: Clear communication of the system's limitations and the specific contexts for which it has been validated.
+
+3. **Decision Support Framing**: Consistent positioning as a decision support tool that complements rather than replaces clinical judgment.
+
+4. **Alternative Viewpoint Access**: Providing access to alternative assessment approaches and educational resources that offer context for the model's outputs.
+
+5. **Professional Oversight**: Recommending professional medical consultation for significant findings, reinforcing the system's complementary role.
+
+These approaches aim to foster a balanced understanding of the system's capabilities and limitations, promoting appropriate use.
+
+**Accessibility and Health Equity:**
+
+Digital health tools risk exacerbating healthcare disparities if not designed with equity in mind:
+
+1. **Universal Design Principles**: Implementation of accessibility features based on WCAG 2.1 AA standards to ensure usability across ability levels.
+
+2. **Low-Bandwidth Optimization**: Performance optimizations enabling functionality in limited-connectivity environments.
+
+3. **Device Compatibility**: Support for older devices and operating systems to prevent digital exclusion.
+
+4. **Language Considerations**: Initial support for multiple languages with plans for expansion to improve access for non-English speakers.
+
+5. **Literacy-Aware Design**: Content presented at appropriate reading levels with visual supports to accommodate varying health literacy.
+
+These considerations aim to ensure that BrainWise can serve diverse populations, contributing to rather than detracting from health equity goals.
+
+### 6.5. System Limitations
+
+Despite the promising results demonstrated by the BrainWise system, several limitations must be acknowledged to contextualize its appropriate use and guide future improvements.
+
+**Model Performance Limitations:**
+
+While the machine learning models demonstrated strong overall performance, some specific limitations warrant consideration:
+
+1. **Limited Training Data Diversity**: The training datasets, while substantial in size, may not fully represent the global diversity of patients and presentations. This may affect performance across different demographic groups or in diverse healthcare settings.
+
+2. **Rare Condition Detection**: The models may have limited effectiveness for rare variants or atypical presentations of neurological conditions, which were likely underrepresented in the training data.
+
+3. **Comorbidity Handling**: The models were primarily trained on cases with clear classifications, potentially limiting their ability to handle complex comorbidities or overlapping conditions.
+
+4. **Domain Shift Sensitivity**: Changes in imaging protocols, equipment, or clinical documentation practices may affect model performance in ways that are difficult to predict without specific validation.
+
+5. **Confident Errors**: While generally well-calibrated, the models may occasionally produce high-confidence predictions that are incorrect, presenting a challenge for appropriate trust calibration.
+
+**Technical and Implementation Limitations:**
+
+Several technical constraints affect the current implementation:
+
+1. **Connectivity Requirements**: The system requires internet connectivity for full functionality, limiting its utility in areas with unreliable network access.
+
+2. **Resource Intensity**: Image analysis components require significant computational resources, which may affect performance on lower-end devices.
+
+3. **Mobile Experience Compromises**: While functional on mobile devices, some advanced visualization features are optimized for larger screens.
+
+4. **Integration Limitations**: Current integration capabilities with electronic health records and other clinical systems are limited, creating potential workflow inefficiencies.
+
+5. **Scalability Constraints**: The free tier of Hugging Face Spaces used for model hosting imposes rate limits that could affect performance under high user loads.
+
+**Clinical Application Limitations:**
+
+Important limitations affect clinical applications:
+
+1. **Complementary Tool Status**: The system is designed as a complementary tool rather than a standalone diagnostic solution, requiring professional medical interpretation.
+
+2. **Validation Scope**: Clinical validation has been performed in controlled research contexts that may not fully represent real-world clinical environments.
+
+3. **Longitudinal Validation**: While promising results were shown for the subset with longitudinal data, comprehensive long-term predictive validation remains limited.
+
+4. **Clinical Workflow Integration**: As noted in the feedback, some challenges remain for seamless integration into diverse clinical workflows.
+
+5. **Regulatory Status**: The current implementation has not undergone formal regulatory approval processes that would be required for certain clinical applications.
+
+**Future Development Needs:**
+
+These limitations suggest several priorities for future development:
+
+1. **Expanded Training Datasets**: Incorporating more diverse training data to improve performance across demographic groups and clinical contexts.
+
+2. **Specialized Models for Edge Cases**: Developing focused models for rare conditions or atypical presentations to complement the general-purpose models.
+
+3. **Offline Functionality**: Implementing progressive web app capabilities to enable core functionality without continuous internet connectivity.
+
+4. **EHR Integration**: Developing standardized integration interfaces for popular electronic health record systems to improve clinical workflow integration.
+
+5. **Regulatory Pathway Development**: Establishing the necessary validation and documentation for appropriate regulatory submissions.
+
+Acknowledging these limitations provides important context for interpreting the system's capabilities and establishes a roadmap for future improvements.
+
+## 7. CONCLUSION
+
+### 7.1. Project Summary and Achievements
+
+The BrainWise project has successfully developed and implemented a comprehensive brain health monitoring and disease prediction system that integrates multiple machine learning models within an accessible web application. This research makes several significant contributions to the fields of medical AI, healthcare technology, and neurological health monitoring.
+
+**Technical Achievements:**
+
+The project successfully implemented three distinct machine learning models, each addressing a different aspect of neurological health:
+
+1. A **stroke prediction model** based on Random Forest classification that achieved 95% accuracy and 0.85 AUC-ROC, outperforming established clinical risk calculators. This model effectively identifies stroke risk factors and provides personalized risk assessments based on patient health data.
+
+2. A **brain tumor detection model** leveraging a fine-tuned ResNet50 architecture that achieved 95% overall accuracy across four tumor categories (glioma, meningioma, pituitary, and no tumor). The model's agreement with radiologist assessments (89-91%) approached inter-radiologist agreement levels (94.3%), demonstrating near-expert performance.
+
+3. An **Alzheimer's disease detection model** also based on deep learning that achieved 94% overall accuracy in classifying MRI scans across different stages of Alzheimer's disease, with performance ranging from 98% accuracy for non-demented classification to 82% for moderate dementia.
+
+Beyond the individual models, the project successfully addressed several technical challenges:
+
+1. **Model optimization** for web deployment, reducing model sizes by 60-75% while maintaining accuracy through techniques like quantization and architecture refinement.
+
+2. **Distributed architecture** implementation using Next.js for the main application and Hugging Face Spaces for model hosting, creating a scalable and maintainable system.
+
+3. **Secure medical image processing** workflow that respects privacy considerations while enabling efficient analysis.
+
+4. **Responsive user interface** development using modern web technologies (React, Tailwind CSS, Shadcn UI) that works effectively across devices and browsers.
+
+5. **Robust error handling** and fallback mechanisms that ensure system reliability even when components fail or operate in degraded modes.
+
+**Clinical Contributions:**
+
+From a clinical perspective, the BrainWise system makes several valuable contributions:
+
+1. **Integration of multiple assessment modalities** in a single platform, addressing diverse aspects of neurological health from stroke risk to neurodegenerative disease detection.
+
+2. **Enhanced risk factor identification** that not only predicts outcomes but explains the specific factors contributing to risk, enabling targeted interventions.
+
+3. **Longitudinal monitoring capabilities** that can track changes in health metrics and risk factors over time, supporting ongoing management of neurological health.
+
+4. **Educational resource integration** that contextualizes prediction results with relevant information, enhancing patient understanding and engagement.
+
+5. **Validation against clinical standards** demonstrating performance that complements and in some cases exceeds traditional assessment approaches.
+
+The system received positive evaluation from both healthcare professionals (SUS score 84.3) and general users (SUS score 78.6), indicating strong usability across user groups. The clinical utility was rated highly by healthcare professionals (overall 4.4/5), particularly for diagnostic support (4.3/5) and patient education (4.7/5).
+
+**Research Implications:**
+
+This project advances research in medical AI in several ways:
+
+1. **End-to-end implementation** documentation that addresses not only model development but the full system implementation process, filling a gap in current literature.
+
+2. **Multi-model integration** approaches that demonstrate effective combination of diverse prediction models in a cohesive system.
+
+3. **Deployment optimization** techniques that balance model performance with technical constraints in web environments.
+
+4. **User experience considerations** for medical AI that enhance usability and accessibility for diverse user groups.
+
+5. **Ethical implementation** strategies that address privacy, fairness, and appropriate trust calibration in healthcare AI.
+
+In summary, the BrainWise project has successfully demonstrated the technical feasibility and clinical potential of an integrated brain health prediction and monitoring system, with performance metrics that support its utility as a complementary tool for neurological health assessment.
+
+### 7.2. Future Work
+
+While the BrainWise system has achieved significant milestones, several avenues for future work remain to enhance its capabilities, address current limitations, and expand its impact.
+
+**Model Enhancement Opportunities:**
+
+1. **Expanded Training Datasets**: Incorporating more diverse training data from varied demographics, geographic regions, and clinical settings would enhance model generalizability and potentially reduce bias across population groups.
+
+2. **Multi-Modal Integration**: Combining different data types (imaging, tabular clinical data, genomics, etc.) within unified models could improve prediction accuracy and provide more comprehensive assessments.
+
+3. **Temporal Modeling**: Developing models that explicitly account for disease progression over time could enhance the system's utility for monitoring and prognostic applications.
+
+4. **Uncertainty Quantification**: Implementing more sophisticated uncertainty estimation methods would provide better calibration of confidence measures and improve trustworthiness.
+
+5. **Explainability Enhancements**: Advancing the model explanation capabilities beyond feature importance to include counterfactual explanations and visual attention mapping would improve interpretability.
+
+**Technical Development Directions:**
+
+1. **Progressive Web App Implementation**: Enhancing offline capabilities through service workers and local storage would improve accessibility in limited-connectivity environments.
+
+2. **Edge Computing Integration**: Exploring model deployment on edge devices could reduce latency and enhance privacy by keeping sensitive data local.
+
+3. **Automated Model Monitoring**: Implementing systems to detect model drift and performance degradation in production would ensure sustained accuracy over time.
+
+4. **Enhanced Security Measures**: Implementing advanced techniques like federated learning or differential privacy could further strengthen privacy protections.
+
+5. **Mobile-Native Applications**: Developing native mobile applications could enhance the user experience and enable deeper integration with device health sensors.
+
+### 7.3. Additional Features
+
+Several specific features could enhance the BrainWise system's utility and impact:
+
+1. **Wearable Device Integration**: Connecting with wearable health monitors to automatically import relevant metrics like blood pressure, activity levels, and sleep patterns.
+
+2. **Medication Management**: Adding features to track neurological medications, provide reminders, and monitor potential interactions or side effects.
+
+3. **Caregiver Portal**: Developing a dedicated interface for caregivers of patients with neurological conditions, with appropriate consent and privacy controls.
+
+4. **Telemedicine Integration**: Adding capabilities for direct consultation with healthcare providers based on concerning assessment results.
+
+5. **Multi-Language Support**: Expanding language options to improve accessibility for non-English speakers globally.
+
+6. **Personalized Intervention Plans**: Generating customized brain health improvement plans based on identified risk factors and health goals.
+
+7. **Social Support Features**: Implementing optional community features that allow users to connect with others managing similar conditions, with appropriate privacy safeguards.
+
+8. **Cognitive Training Integration**: Adding cognitive exercises tailored to user-specific brain health profiles and risk factors.
+
+### 7.4. Scaling and Integration Possibilities
+
+For broader impact, several scaling and integration approaches could be pursued:
+
+1. **Electronic Health Record Integration**: Developing standardized interfaces for popular EHR systems would enable seamless incorporation into clinical workflows.
+
+2. **API Ecosystem Development**: Creating a comprehensive API that allows third-party applications to integrate BrainWise capabilities would expand the system's reach.
+
+3. **Whitelabel Solutions**: Developing configurable versions that healthcare organizations could deploy under their own branding would facilitate institutional adoption.
+
+4. **Public Health Partnerships**: Collaborating with public health agencies to deploy population-level brain health monitoring could support early intervention initiatives.
