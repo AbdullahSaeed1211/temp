@@ -17,6 +17,7 @@ Recent advances in artificial intelligence (AI) and machine learning have demons
 
 BrainWise emerges in this context as a comprehensive brain health monitoring and disease prediction platform. By leveraging state-of-the-art machine learning algorithms and a user-friendly web interface, BrainWise aims to bridge the gap between advanced AI technologies and everyday healthcare needs, making sophisticated neurological risk assessment accessible to both healthcare providers and individuals.
 
+
 ### 1.2. Problem Statement
 
 Despite advances in medical technology and increasing awareness of brain health, significant challenges persist in the early detection and management of neurological disorders:
